@@ -6,7 +6,7 @@ your_domain.com {
         max_size 20MB
     }
 
-    reverse_proxy image-gen:3000 {
+    reverse_proxy image-gen:4000 {
         transport http {
             read_timeout  300s
             write_timeout 300s

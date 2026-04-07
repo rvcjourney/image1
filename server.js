@@ -370,7 +370,7 @@ app.post('/proxy/replicate/generate', async (req, res) => {
 
 
 
-const PORT = 3000;
+const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
     console.log(`Open http://localhost:${PORT}/imagemodel.html`);
