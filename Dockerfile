@@ -14,8 +14,8 @@ RUN npm ci --omit=dev
 COPY server.js ./
 COPY imagemodel.html ./
 
-# App runs on port 3000
-EXPOSE 3000
+# App runs on port 4000
+EXPOSE 4000
 
 # Start the server
 CMD ["node", "server.js"]
