@@ -1,0 +1,13 @@
+# Environment — NEVER commit
+.env
+
+# Dependencies — reinstalled on server
+node_modules/
+
+# Caddy data — generated on server
+caddy_data/
+caddy_config/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,2853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Generator</title>
+    <style>
+        /* ── Design Tokens ─────────────────────────────────────────── */
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --bg: #f0f2f8;
+            --panel: #ffffff;
+            --border: #e2e5ec;
+            --text: #1a1d27;
+            --text-muted: #6b7280;
+            --radius: 10px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ── Reset ─────────────────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #1a1d3a 0%, #2d2060 50%, #1a1d3a 100%);
+            min-height: 100vh;
+            padding: 24px 20px;
+            color: var(--text);
+        }
+
+        /* ── Layout ─────────────────────────────────────────────────── */
+        .page-header {
+            max-width: 1380px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .page-header-text h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .page-header-text p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.55);
+            margin-top: 1px;
+        }
+
+        .page-layout {
+            display: flex;
+            gap: 20px;
+            max-width: 1380px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        .container {
+            background: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px 26px;
+            flex: 0 0 660px;
+            min-width: 0;
+        }
+
+        .result-panel {
+            background: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 22px;
+            flex: 1;
+            min-width: 300px;
+            position: sticky;
+            top: 24px;
+        }
+
+        /* ── Section Headers ────────────────────────────────────────── */
+        .section-header {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin: 22px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-header::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ── Form Elements ──────────────────────────────────────────── */
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 7px;
+            font-size: 13px;
+            font-family: inherit;
+            background: #fff;
+            color: var(--text);
+            transition: border-color 0.18s, box-shadow 0.18s;
+            appearance: none;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1.5px solid var(--border);
+            border-radius: 7px;
+            font-size: 12px;
+            font-family: inherit;
+            background: #fafbfc;
+            cursor: pointer;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
+        }
+
+        textarea {
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        input[readonly] {
+            background: #f9fafb;
+            color: #6b7280;
+        }
+
+        /* Prompt textarea wrapper */
+        .prompt-wrapper {
+            position: relative;
+        }
+
+        .char-counter {
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            font-size: 11px;
+            color: #9ca3af;
+            pointer-events: none;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        .char-counter.warn {
+            color: var(--warning);
+        }
+
+        .char-counter.limit {
+            color: var(--danger);
+        }
+
+        /* ── Buttons ─────────────────────────────────────────────────── */
+        button {
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 13px;
+            transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
+        }
+
+        button:hover:not(:disabled) {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.48;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 18px;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 9px 14px;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+            padding: 10px 18px;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .btn-sm {
+            padding: 6px 11px;
+            font-size: 12px;
+        }
+
+        /* ── Spinner ─────────────────────────────────────────────────── */
+        .spinner {
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.65s linear infinite;
+            margin-right: 7px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Campaign Section ───────────────────────────────────────── */
+        .campaign-section {
+            background: #f8f9ff;
+            border: 1.5px solid #dde2ff;
+            border-radius: 9px;
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+
+        .campaign-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 16px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .campaign-toggle:hover {
+            background: #f2f3ff;
+        }
+
+        .campaign-toggle-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .campaign-badge {
+            font-size: 10px;
+            font-weight: 600;
+            background: rgba(79, 70, 229, 0.12);
+            color: var(--primary);
+            padding: 2px 7px;
+            border-radius: 20px;
+        }
+
+        .campaign-toggle-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .campaign-toggle-arrow {
+            font-size: 10px;
+            color: #9ca3af;
+            transition: transform 0.22s;
+        }
+
+        .campaign-toggle-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .campaign-body {
+            display: none;
+            padding: 0 16px 16px;
+            border-top: 1.5px solid #dde2ff;
+        }
+
+        .campaign-body.open {
+            display: block;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 8px;
+            padding-top: 14px;
+        }
+
+        .search-row input {
+            flex: 1;
+        }
+
+        #campaignSearchBtn {
+            width: auto;
+            margin-top: 0;
+            padding: 9px 18px;
+        }
+
+        #campaignManualBtn {
+            width: auto;
+            margin-top: 0;
+            padding: 9px 14px;
+            font-size: 12px;
+        }
+
+        .campaign-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+            gap: 11px;
+            margin-top: 14px;
+        }
+
+        .fg {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .fg label {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+
+        .fg-full {
+            grid-column: 1 / -1;
+        }
+
+        /* Campaign status */
+        .campaign-status {
+            font-size: 12px;
+            margin-top: 10px;
+            padding: 9px 12px;
+            border-radius: 7px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .campaign-status.success {
+            background: #f0fdf4;
+            color: #15803d;
+            border-left: 3px solid #22c55e;
+            display: flex;
+        }
+
+        .campaign-status.error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border-left: 3px solid #ef4444;
+            display: flex;
+        }
+
+        .campaign-status.info {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-left: 3px solid #3b82f6;
+            display: flex;
+        }
+
+        #campaignGenerateBtn {
+            width: auto;
+            margin-top: 14px;
+        }
+
+        /* Prompts */
+        .prompts-section {
+            margin-top: 14px;
+            border-top: 1.5px solid #e8eaf6;
+            padding-top: 14px;
+        }
+
+        .prompts-section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #4b5563;
+            margin-bottom: 10px;
+        }
+
+        .prompt-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px;
+        }
+
+        .prompt-card {
+            background: #fff;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .prompt-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1);
+        }
+
+        .prompt-card-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .prompt-card-text {
+            font-size: 12px;
+            color: #374151;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-bottom: 10px;
+        }
+
+        .prompt-card-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-use-prompt {
+            flex: 1;
+            background: var(--primary);
+            color: #fff;
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            width: auto;
+            margin-top: 0;
+        }
+
+        .btn-copy-prompt {
+            background: #f3f4f6;
+            color: #4b5563;
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            width: auto;
+            margin-top: 0;
+        }
+
+        .btn-copy-prompt.copied {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .prompt-card-badge {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--success);
+            background: rgba(22, 163, 74, 0.1);
+            border: 1px solid rgba(22, 163, 74, 0.2);
+            border-radius: 4px;
+            padding: 1px 5px;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        /* ── Content Card (below generated image) ────────────────────── */
+        .content-card {
+            margin-top: 14px;
+            background: #f8f9ff;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .content-card-platform {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            background: var(--primary);
+            border-radius: 20px;
+            padding: 3px 10px;
+            margin-bottom: 12px;
+        }
+
+        .content-card-section {
+            margin-bottom: 10px;
+        }
+
+        .content-card-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 4px;
+        }
+
+        .content-card-value {
+            font-size: 12.5px;
+            color: var(--text);
+            line-height: 1.55;
+        }
+
+        .content-card-body {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.65;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .content-card-highlights {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .content-card-highlights li {
+            font-size: 12px;
+            color: #374151;
+            padding: 3px 0 3px 18px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .content-card-highlights li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .content-card-cta {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            background: rgba(79, 70, 229, 0.08);
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            border-radius: 6px;
+            padding: 5px 12px;
+        }
+
+        .content-card-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-copy-content {
+            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: background 0.15s, color 0.15s;
+            width: auto;
+            margin-top: 0;
+        }
+
+        .btn-copy-content:hover {
+            background: #f3f4f6;
+            color: var(--text);
+        }
+
+        .btn-copy-content.copied {
+            background: #dcfce7;
+            color: #15803d;
+            border-color: #86efac;
+        }
+
+        .content-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            color: #d1d5db;
+            font-size: 12px;
+            text-align: center;
+            gap: 10px;
+            border: 2px dashed #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+
+        /* ── Model Selector ─────────────────────────────────────────── */
+        .model-selector-wrap {
+            position: relative;
+        }
+
+        .model-selector-wrap::after {
+            content: '▾';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        /* ── Universal Select Arrow ──────────────────────────────────── */
+        .select-wrap {
+            position: relative;
+        }
+
+        .select-wrap::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 9px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .select-wrap select {
+            padding-right: 28px;
+        }
+
+        #modelSelect {
+            border: 2px solid var(--primary);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            padding-right: 30px;
+            background: #f5f3ff;
+        }
+
+        /* ── Options Box ────────────────────────────────────────────── */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 11px;
+            padding: 14px;
+            background: #fafbfc;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 14px;
+        }
+
+        .options-grid .form-group {
+            margin-bottom: 0;
+        }
+
+        /* Model panels */
+        #replicateOptions {
+            display: block;
+        }
+
+        #klingOptions {
+            display: none;
+        }
+
+        #geminiOptions {
+            display: none;
+        }
+
+        #claudeOptions {
+            display: none;
+        }
+
+        .model-note {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 6px;
+            font-style: italic;
+            padding: 6px 10px;
+            background: #fffbeb;
+            border-radius: 5px;
+            border-left: 3px solid #fbbf24;
+        }
+
+        /* File preview */
+        .file-preview {
+            display: none;
+            margin-top: 7px;
+            position: relative;
+            width: fit-content;
+        }
+
+        .file-preview.show {
+            display: inline-block;
+        }
+
+        .file-preview img {
+            max-height: 56px;
+            max-width: 100%;
+            border-radius: 5px;
+            border: 1.5px solid var(--border);
+            display: block;
+        }
+
+        .file-preview-remove {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 18px;
+            height: 18px;
+            padding: 0;
+            background: var(--danger);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid #fff;
+            margin-top: 0;
+            width: auto;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ── Generate Button ────────────────────────────────────────── */
+        #generateBtn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: #fff;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 9px;
+            margin-top: 10px;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
+        }
+
+        #generateBtn:hover:not(:disabled) {
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45);
+        }
+
+        /* ── Error Message ──────────────────────────────────────────── */
+        .error-box {
+            display: none;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-left: 4px solid var(--danger);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-top: 14px;
+        }
+
+        .error-box-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .error-box-msg {
+            font-size: 13px;
+            color: #b91c1c;
+            flex: 1;
+        }
+
+        .error-box-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .btn-retry {
+            background: var(--danger);
+            color: #fff;
+            padding: 5px 12px;
+            font-size: 12px;
+            border-radius: 5px;
+            width: auto;
+            margin-top: 0;
+        }
+
+        .btn-dismiss {
+            background: transparent;
+            color: #9ca3af;
+            padding: 5px 8px;
+            font-size: 12px;
+            border-radius: 5px;
+            border: 1px solid #e5e7eb;
+            width: auto;
+            margin-top: 0;
+        }
+
+        /* ── Result Panel ───────────────────────────────────────────── */
+        .result-heading {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 14px;
+            padding-bottom: 11px;
+            border-bottom: 1.5px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .result-status-badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-idle {
+            background: #f3f4f6;
+            color: #9ca3af;
+        }
+
+        .badge-loading {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .badge-done {
+            background: #f0fdf4;
+            color: #15803d;
+        }
+
+        .badge-error {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .result-panel-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            color: #d1d5db;
+            font-size: 13px;
+            text-align: center;
+            gap: 12px;
+            border: 2px dashed #e5e7eb;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        /* Loading state on result panel */
+        .result-panel-loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            gap: 16px;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            background: #fafbff;
+        }
+
+        .result-panel-loading.show {
+            display: flex;
+        }
+
+        .result-spinner {
+            width: 42px;
+            height: 42px;
+            border: 3px solid #e0e7ff;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .result-loading-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .result-loading-sub {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .result-loading-timer {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .result-section {
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+        }
+
+        .image-wrap {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-wrap img {
+            width: 100%;
+            display: block;
+            cursor: zoom-in;
+            transition: opacity 0.2s;
+        }
+
+        .image-wrap img:hover {
+            opacity: 0.94;
+        }
+
+        .image-actions {
+            display: flex;
+            gap: 8px;
+            padding: 10px;
+            background: #f9fafb;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-download {
+            flex: 1;
+            background: var(--success);
+            color: #fff;
+            padding: 9px;
+            font-size: 13px;
+            border-radius: 6px;
+            margin-top: 0;
+            width: auto;
+        }
+
+        .btn-regen {
+            flex: 1;
+            background: var(--primary);
+            color: #fff;
+            padding: 9px;
+            font-size: 13px;
+            border-radius: 6px;
+            margin-top: 0;
+            width: auto;
+        }
+
+        /* ── Toast Notification ─────────────────────────────────────── */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+            animation: slideIn 0.25s ease;
+            min-width: 280px;
+            max-width: 380px;
+        }
+
+        .toast.success {
+            background: #15803d;
+        }
+
+        .toast.error {
+            background: #b91c1c;
+        }
+
+        .toast.info {
+            background: #1d4ed8;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+        }
+
+        /* ── Modal ──────────────────────────────────────────────────── */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .modal-content img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            margin-top: 0;
+            width: auto;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* ── Reference Image Popup ──────────────────────────────────── */
+        .ref-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .ref-modal.show { display: flex; }
+
+        .ref-modal-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px;
+            width: 960px;
+            max-width: 95vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .ref-modal-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 18px;
+        }
+
+        .ref-modal-tabs {
+            display: flex;
+            gap: 0;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .ref-tab-btn {
+            flex: 1;
+            padding: 9px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            background: #f9fafb;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            width: auto;
+            margin-top: 0;
+            border-radius: 0;
+        }
+        .ref-tab-btn:first-child { border-right: 1.5px solid var(--border); }
+        .ref-tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .ref-tab-pane { display: none; }
+        .ref-tab-pane.active { display: block; }
+
+        /* Gallery tab */
+        .ref-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-height: 560px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        .ref-gallery-item {
+            position: relative;
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 3px solid transparent;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            height: 240px;
+            background: #f3f4f6;
+        }
+        .ref-gallery-item:hover {
+            box-shadow: 0 6px 20px rgba(79,70,229,0.18);
+        }
+        .ref-gallery-item:hover { border-color: var(--primary); }
+        .ref-gallery-item.selected { border-color: var(--primary); }
+        .ref-gallery-item.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 6px; right: 6px;
+            background: var(--primary);
+            color: #fff;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .ref-gallery-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .ref-gallery-label {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.55);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            padding: 3px 4px;
+            letter-spacing: 0.4px;
+        }
+
+        .ref-gallery-label-only {
+            position: static;
+            background: #f3f4f6;
+            color: var(--text);
+            font-size: 13px;
+            padding: 16px 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .ref-zoom-btn {
+            position: absolute;
+            top: 7px; left: 7px;
+            background: rgba(0,0,0,0.55);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            width: 28px; height: 28px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0;
+            transition: opacity 0.15s;
+            padding: 0; margin: 0; width: auto; min-width: 28px;
+        }
+        .ref-gallery-item:hover .ref-zoom-btn { opacity: 1; }
+
+        .ref-lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 11000;
+            background: rgba(0,0,0,0.92);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(6px);
+        }
+        .ref-lightbox.show { display: flex; }
+        .ref-lightbox img {
+            max-width: 90vw;
+            max-height: 88vh;
+            border-radius: 10px;
+            object-fit: contain;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .ref-lightbox-label {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 20px;
+        }
+        .ref-lightbox-close {
+            position: absolute;
+            top: 20px; right: 24px;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 38px; height: 38px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            padding: 0; margin: 0; width: auto; min-width: 38px;
+        }
+        .ref-lightbox-close:hover { background: rgba(255,255,255,0.3); }
+
+        .ref-gallery-empty {
+            grid-column: 1/-1;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            padding: 30px 0;
+        }
+
+        /* Upload tab */
+        .ref-upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .ref-upload-zone:hover, .ref-upload-zone.dragover {
+            border-color: var(--primary);
+            background: rgba(79,70,229,0.03);
+        }
+        .ref-upload-zone-icon { font-size: 32px; margin-bottom: 8px; }
+        .ref-upload-zone-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .ref-upload-zone-sub { font-size: 11px; color: var(--text-muted); }
+
+        .ref-upload-preview {
+            display: none;
+            margin-top: 14px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1.5px solid var(--border);
+        }
+        .ref-upload-preview img {
+            width: 100%;
+            max-height: 180px;
+            object-fit: contain;
+            display: block;
+            background: #f9fafb;
+        }
+        .ref-upload-preview-remove {
+            position: absolute;
+            top: 6px; right: 6px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 24px; height: 24px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex; align-items: center; justify-content: center;
+            margin-top: 0; width: auto; padding: 0 6px;
+        }
+
+        .ref-upload-status {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+            min-height: 18px;
+            text-align: center;
+        }
+        .ref-upload-status.success { color: var(--success); }
+        .ref-upload-status.error   { color: var(--danger); }
+
+        .ref-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .ref-btn-cancel {
+            padding: 8px 18px;
+            font-size: 13px;
+            border: 1.5px solid var(--border);
+            border-radius: 7px;
+            background: #fff;
+            color: var(--text-muted);
+            cursor: pointer;
+            width: auto; margin-top: 0;
+        }
+        .ref-btn-cancel:hover { background: #f3f4f6; }
+
+        .ref-btn-confirm {
+            padding: 8px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 7px;
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            width: auto; margin-top: 0;
+        }
+        .ref-btn-confirm:hover { background: var(--primary-dark); }
+        .ref-btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* ── Font Preview ───────────────────────────────────────────── */
+        .font-preview {
+            margin-top: 6px;
+            padding: 7px 10px;
+            background: #f5f3ff;
+            border: 1.5px solid #dde2ff;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text);
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            transition: font-family 0.2s;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        /* ── Responsive ─────────────────────────────────────────────── */
+        @media (max-width: 1100px) {
+            .page-layout {
+                flex-direction: column;
+                max-width: 720px;
+            }
+
+            .container {
+                flex: none;
+                width: 100%;
+            }
+
+            .result-panel {
+                position: static;
+                width: 100%;
+                min-width: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toast-container" id="toastContainer"></div><!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-icon">🎨</div>
+        <div class="page-header-text">
+            <h1>AI Image Generator</h1>
+            <p>AI models — Replicate, Gemini, Kling &amp; more</p>
+        </div>
+    </div>
+    <div class="page-layout"> <!-- ── LEFT: Controls ──────────────────────────────────────── -->
+        <div class="container"> <!-- Campaign Data (collapsible) -->
+            <div class="campaign-section">
+                <div class="campaign-toggle" onclick="toggleCampaign()" role="button" tabindex="0"
+                    onkeydown="if(event.key==='Enter'||event.key===' ')toggleCampaign()">
+                    <div class="campaign-toggle-left">
+                        <span>🏢</span> Company Data
+                    </div>
+                    <div class="campaign-toggle-right"> <span class="campaign-toggle-arrow" id="campaignArrow">▼</span>
+                    </div>
+                </div>
+                <div class="campaign-body" id="campaignBody"> <label
+                        style="font-size:12px;color:#6b7280;margin-top:14px;display:block;">Search by Company ID to
+                        auto-fill all details</label>
+                    <div class="search-row"> <input type="number" id="campaignCompanyId"
+                            placeholder="Enter Company ID..." min="1"
+                            onkeydown="if(event.key==='Enter') searchCampaignCompany()"> <button id="campaignSearchBtn"
+                            class="btn-primary" onclick="searchCampaignCompany()">Search</button> <button
+                            id="campaignManualBtn" class="btn-secondary" onclick="showCampaignManual()">Manual</button>
+                    </div>
+                    <div id="campaignStatus" class="campaign-status"></div>
+                    <div id="campaignForm" style="display:none;">
+                        <div class="campaign-form-grid">
+                            <div class="fg"><label>Company Name</label><input type="text" id="cf_company_name"
+                                    placeholder="e.g. Acme Corp"></div>
+                            <div class="fg"><label>Industry</label><input type="text" id="cf_industry"
+                                    placeholder="e.g. Manufacturing"></div>
+                            <div class="fg"><label>Product / Service</label><input type="text"
+                                    id="cf_product_service_name" placeholder="e.g. Running Shoes"></div>
+                            <div class="fg"><label>Brand Colors</label><input type="text" id="cf_brand_colors"
+                                    placeholder="e.g. Blue, White"></div>
+                            <div class="fg"> <label>Logo Position</label> <select id="cf_logo_position">
+                                    <option value="">Select...</option>
+                                    <option value="Top-Left">Top-Left</option>
+                                    <option value="Top-Right">Top-Right</option>
+                                    <option value="Bottom-Left">Bottom-Left</option>
+                                    <option value="Bottom-Right">Bottom-Right</option>
+                                    <option value="Center">Center</option>
+                                    <option value="No Logo">No Logo</option>
+                                </select> </div>
+                            <div class="fg fg-full">
+                                <label>Font Styles</label>
+                                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:4px;">
+                                    <!-- Heading -->
+                                    <div>
+                                        <div style="font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:3px;">Heading</div>
+                                        <select id="cf_heading_font" onchange="previewFont(this,'prev_heading','Heading Style')">
+                                            <option value="">Select...</option>
+                                            <option value="Montserrat Bold">Montserrat Bold </option>
+                                            <option value="Bebas Neue">Bebas Neue</option>
+                                            <option value="Oswald Bold">Oswald Bold</option>
+                                            <option value="Playfair Display Bold">Playfair Display Bold</option>
+                                            <option value="Raleway Bold">Raleway Bold</option>
+                                            <option value="Poppins Bold">Poppins Bold</option>
+                                            <option value="Lato Black">Lato Black</option>
+                                            <option value="Roboto Bold">Roboto Bold</option>
+                                            <option value="Futura Bold">Futura Bold</option>
+                                            <option value="Impact">Impact</option>
+                                            <option value="Helvetica Bold">Helvetica Bold</option>
+                                            <option value="Georgia Bold">Georgia Bold</option>
+                                            <option value="Nunito ExtraBold">Nunito ExtraBold</option>
+                                            <option value="Inter Bold">Inter Bold</option>
+                                        </select>
+                                        <div id="prev_heading" class="font-preview">Heading Style</div>
+                                    </div>
+                                    <!-- Sub-Heading -->
+                                    <div>
+                                        <div style="font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:3px;">Sub-Heading</div>
+                                        <select id="cf_subheading_font" onchange="previewFont(this,'prev_subheading','Sub-Heading Style')">
+                                            <option value="">Select...</option>
+                                            <option value="Poppins SemiBold">Poppins SemiBold</option>
+                                            <option value="Montserrat SemiBold">Montserrat SemiBold</option>
+                                            <option value="Raleway SemiBold">Raleway SemiBold</option>
+                                            <option value="Open Sans SemiBold">Open Sans SemiBold</option>
+                                            <option value="Lato Bold">Lato Bold</option>
+                                            <option value="Roboto Medium">Roboto Medium</option>
+                                            <option value="Oswald Regular">Oswald Regular</option>
+                                            <option value="Nunito SemiBold">Nunito SemiBold</option>
+                                            <option value="Inter SemiBold">Inter SemiBold</option>
+                                            <option value="Source Sans Pro Bold">Source Sans Pro Bold</option>
+                                            <option value="Playfair Display Regular">Playfair Display Regular</option>
+                                            <option value="Helvetica Regular">Helvetica Regular</option>
+                                        </select>
+                                        <div id="prev_subheading" class="font-preview">Sub-Heading Style</div>
+                                    </div>
+                                    <!-- Body -->
+                                    <div>
+                                        <div style="font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:3px;">Body</div>
+                                        <select id="cf_body_font" onchange="previewFont(this,'prev_body','Body text looks like this.')">
+                                            <option value="">Select...</option>
+                                            <option value="Open Sans Regular">Open Sans Regular</option>
+                                            <option value="Lato Regular">Lato Regular</option>
+                                            <option value="Roboto Regular">Roboto Regular</option>
+                                            <option value="Poppins Regular">Poppins Regular</option>
+                                            <option value="Noto Sans Regular">Noto Sans Regular</option>
+                                            <option value="Inter Regular">Inter Regular</option>
+                                            <option value="Nunito Regular">Nunito Regular</option>
+                                            <option value="Source Sans Pro Regular">Source Sans Pro Regular</option>
+                                            <option value="Montserrat Regular">Montserrat Regular</option>
+                                            <option value="Raleway Regular">Raleway Regular</option>
+                                            <option value="Georgia Regular">Georgia Regular</option>
+                                            <option value="Helvetica Light">Helvetica Light</option>
+                                        </select>
+                                        <div id="prev_body" class="font-preview">Body text looks like this.</div>
+                                    </div>
+                                    <!-- CTA -->
+                                    <div>
+                                        <div style="font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:3px;">CTA</div>
+                                        <select id="cf_cta_font" onchange="previewFont(this,'prev_cta','Buy Now!')">
+                                            <option value="">Select...</option>
+                                            <option value="Raleway ExtraBold">Raleway ExtraBold</option>
+                                            <option value="Montserrat ExtraBold">Montserrat ExtraBold</option>
+                                            <option value="Poppins Bold">Poppins Bold</option>
+                                            <option value="Oswald Bold">Oswald Bold</option>
+                                            <option value="Bebas Neue">Bebas Neue</option>
+                                            <option value="Lato Black">Lato Black</option>
+                                            <option value="Roboto Bold">Roboto Bold</option>
+                                            <option value="Nunito ExtraBold">Nunito ExtraBold</option>
+                                            <option value="Inter ExtraBold">Inter ExtraBold</option>
+                                            <option value="Futura Bold">Futura Bold</option>
+                                            <option value="Impact">Impact</option>
+                                            <option value="Helvetica Bold">Helvetica Bold</option>
+                                        </select>
+                                        <div id="prev_cta" class="font-preview">Buy Now!</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fg"><label>Brand Tone</label><input type="text" id="cf_brand_tone"
+                                    placeholder="e.g. Professional"></div>
+                            <div class="fg"> <label>Product Image Position</label> <select
+                                    id="cf_product_image_position">
+                                    <option value="">Select...</option>
+                                    <option value="Left">Left</option>
+                                    <option value="Right">Right</option>
+                                    <option value="Center">Center</option>
+                                    <option value="Top">Top</option>
+                                    <option value="Bottom">Bottom</option>
+                                </select> </div>
+                            <div class="fg"> <label>Product Border</label> <select id="cf_product_border">
+                                    <option value="">Select...</option>
+                                    <option value="Thin">Thin</option>
+                                    <option value="Thick">Thick</option>
+                                    <option value="Rounded">Rounded</option>
+                                    <option value="Shadow">Shadow</option>
+                                    <option value="Glow">Glow</option>
+                                </select> </div>
+                            <div class="fg"> <label>Image Size / Aspect Ratio</label> <select id="cf_image_size">
+                                    <option value="1:1">1:1 — Square</option>
+                                    <option value="9:16">9:16 — Portrait (Stories)</option>
+                                    <option value="16:9">16:9 — Landscape (Banner)</option>
+                                    <option value="4:3">4:3 — Standard</option>
+                                    <option value="3:4">3:4 — Portrait (Pinterest)</option>
+                                    <option value="4:5">4:5 — Instagram Feed</option>
+                                    <option value="1.91:1">1.91:1 — Wide (Facebook)</option>
+                                </select> </div> <input type="hidden" id="cf_logo_url" value="">
+                            <div class="fg"> <label>Logo Uploaded</label> <select id="cf_logo_uploaded">
+                                    <option value="true" selected>Yes</option>
+                                    <option value="false">No</option>
+                                </select> </div>
+                            <div class="fg"> <label>Product Image Uploaded</label> <select
+                                    id="cf_product_image_uploaded">
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select> </div>
+                            <div class="fg"> <label>Reference Image Uploaded</label> <select
+                                    id="cf_reference_image_uploaded" onchange="onReferenceImageToggle(this.value)">
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                                <input type="hidden" id="cf_reference_image_id" value="">
+                                <input type="hidden" id="cf_ref_layout" value="">
+                                <div id="refImageChosen" style="display:none;margin-top:6px;font-size:11px;color:var(--success);font-weight:600;"></div>
+                            </div>
+                            <div class="fg">
+                                <label>Image For</label>
+                                <select id="cf_image_for">
+                                    <option value="">Select...</option>
+                                    <option value="Linkedin">Linkedin</option>
+                                    <option value="Whatsapp">Whatsapp</option>
+                                </select>
+                            </div>
+                            <div class="fg">
+                                <label>Need Content</label>
+                                    <select id="content">
+                                    <option value="">Select...</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <div class="fg">
+                                <label>Website URL</label>
+                                   <input type="text" id="web_url" placeholder="www.example.com"/>
+                            </div>
+                            <div class="fg fg-full"> <label>Campaign Scenario</label> <textarea id="cf_scenario"
+                                    rows="2"
+                                    placeholder="Describe your campaign, e.g. Diwali Festival Poster for LinkedIn with 30% off promotion..."></textarea>
+                            </div>
+                        </div> <button id="campaignGenerateBtn" class="btn-success" onclick="generateCampaignPrompts()">
+                            ✦ Generate Image Prompts </button>
+                        <div id="campaignPromptsSection" class="prompts-section" style="display:none;">
+                            <div class="prompts-section-title">✦ Generated Prompts — click "Use" to load into generator
+                            </div>
+                            <div id="campaignPromptsGrid" class="prompt-cards-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Image Prompt -->
+            <div class="section-header">Image Prompt</div>
+            <div class="form-group">
+                <div class="prompt-wrapper"> <textarea id="prompt" rows="4"
+                        placeholder="Describe the image you want to generate... (Ctrl+Enter to generate)"
+                        maxlength="2000" oninput="updateCharCounter()"></textarea> <span class="char-counter"
+                        id="charCounter">0 / 2000</span> </div>
+            </div> <!-- AI Model -->
+            <div class="section-header">AI Model</div>
+            <div class="form-group">
+                <div class="model-selector-wrap"> <select id="modelSelect" onchange="switchModel(this.value)">
+                        <option value="replicate">Replicate - Multi-Model</option>
+                        <option value="kling">Kling AI — v3</option>
+                        <option value="gemini">Gemini — Google</option>
+                        <option value="claude">Claude SVG/HTML</option>
+                    </select> </div>
+            </div> <!-- Model Options --> <!-- Claude Options -->
+            <div id="claudeOptions">
+                <div class="options-grid">
+                    <div class="form-group"><label>Model</label> <select id="claudeModel">
+                            <option value="claude-sonnet-4-6">Claude Sonnet 4.6 (Best)</option>
+                            <option value="claude-opus-4-6">Claude Opus 4.6 (Premium)</option>
+                            <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (Fast)</option>
+                        </select> </div>
+                    <div class="form-group"><label>Output Format</label> <select id="claudeFormat">
+                            <option value="canvas">HTML Canvas (Best quality)</option>
+                            <option value="svg">SVG (Scalable)</option>
+                        </select> </div>
+                    <div class="form-group"> <label>Logo <span
+                                style="font-weight:400;color:#9ca3af;">(optional)</span></label> <input type="file"
+                            id="claudeLogo" accept="image/*">
+                        <div id="claudeLogoPreview" class="file-preview"> <img id="claudeLogoImg" alt="Logo preview">
+                            <button class="file-preview-remove" onclick="removeFile('claude','Logo')"
+                                title="Remove">&times;</button>
+                        </div>
+                    </div>
+                    <div class="form-group"> <label>Product Image <span
+                                style="font-weight:400;color:#9ca3af;">(optional)</span></label> <input type="file"
+                            id="claudeProduct" accept="image/*">
+                        <div id="claudeProductPreview" class="file-preview"> <img id="claudeProductImg"
+                                alt="Product preview"> <button class="file-preview-remove"
+                                onclick="removeFile('claude','Product')" title="Remove">&times;</button> </div>
+                    </div>
+                </div>
+            </div> <!-- Gemini Options -->
+            <div id="geminiOptions">
+                <div class="options-grid">
+                    <div class="form-group"><label>Model</label>
+                        <select id="geminiModel">
+                            <option value="gemini-2.5-flash-image">Gemini 2.5 Flash ($0.039)</option>
+                            <option value="gemini-3.1-flash-image-preview">Gemini 3.1 Flash Preview</option>
+                            <option value="gemini-3-pro-image-preview">Gemini 3 Pro ($0.134)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Logo <span style="font-weight:400;color:#9ca3af;">(optional)</span></label>
+                        <input type="file" id="geminiLogo" accept="image/*">
+                        <div id="geminiLogoPreview" class="file-preview">
+                            <img id="geminiLogoImg" alt="Logo preview">
+                            <button class="file-preview-remove" onclick="removeGeminiLogo()" title="Remove">&times;</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Image <span style="font-weight:400;color:#9ca3af;">(optional)</span></label>
+                        <input type="file" id="geminiProduct" accept="image/*">
+                        <div id="geminiProductPreview" class="file-preview">
+                            <img id="geminiProductImg" alt="Product preview">
+                            <button class="file-preview-remove" onclick="removeFile('gemini','Product')" title="Remove">&times;</button>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Kling Options -->
+            <div id="klingOptions">
+                <div class="options-grid">
+                    <div class="form-group"><label>Model</label> <select id="klingModel">
+                            <option value="kling-v3-omni">Kling v3 Omni (Best)</option>
+                            <option value="kling-image-o1">Kling Image o1</option>
+                            <option value="kling-v3">Kling v3</option>
+                            <option value="kling-v2-1">Kling v2.1</option>
+                            <option value="kling-v2">Kling v2</option>
+                            <option value="kling-v1-5">Kling v1.5</option>
+                            <option value="kling-v1">Kling v1</option>
+                        </select> </div>
+                    <div class="form-group"><label>Aspect Ratio</label> <select id="klingAspect">
+                            <option value="1:1">1:1 (Square)</option>
+                            <option value="16:9">16:9 (Landscape)</option>
+                            <option value="9:16">9:16 (Portrait)</option>
+                            <option value="4:3">4:3</option>
+                            <option value="3:4">3:4</option>
+                        </select> </div>
+                    <div class="form-group"><label>Negative Prompt</label> <input type="text" id="klingNegative"
+                            placeholder="What to avoid..."> </div>
+                </div>
+            </div> <!-- Replicate Options -->
+            <div id="replicateOptions">
+                <div class="options-grid">
+                    <div class="form-group"><label>Model</label> <select id="replicateModel">
+                            <optgroup label="── FLUX Family ──">
+                                <option value="flux-2-max">Flux 2 Max — Best Quality (img+)</option>
+                                <option value="flux-2-pro">Flux 2 Pro — High Volume(img+)</option>
+                                <option value="flux-2-flex">Flux 2 Flex — Typography(img+)</option>
+                                <option value="flux-1.1-pro">Flux 1.1 Pro</option>
+                                <option value="flux-pro">Flux Pro</option>
+                                <option value="flux-dev">Flux Dev</option>
+                                <option value="flux-schnell">Flux Schnell — Fast(img)</option>
+                            </optgroup>
+                            <optgroup label="── Seedream ──">
+                                <option value="seedream-4">Seedream 4(img+)</option>
+                                <option value="seedream-4.5">Seedream 4.5 — Cinematic(img+)</option>
+                                <option value="seedream-5">Seedream 5(img+)</option>
+                                <option value="seedream-5-lite">Seedream 5 Lite — Fast(img+)</option>
+                            </optgroup>
+                            <optgroup label="── Google Gemini ──">
+                                <option value="gemini-2.5-flash-image">Gemini 2.5 Flash Image</option>
+                                <option value="nano-banana">Nano Banana (Gemini 2.5)</option>
+                                <option value="nano-banana-2">Nano Banana 2 (Gemini 2.5)</option>
+                                <option value="nano-banana-pro">Nano Banana Pro (Gemini 3 Pro)</option>
+                            </optgroup>
+                            <optgroup label="── Design & Text ──">
+                                <option value="ideogram-v3-turbo">Ideogram v3 Turbo ($0.03)</option>
+                                <option value="recraft-v4">Recraft v4 — Brand Assets</option>
+                                <option value="recraft-v4-svg">Recraft v4 SVG — Vector</option>
+                            </optgroup>
+
+                        </select> </div>
+                    <div class="form-group" id="seedreamSizeGroup" style="display:none;"><label>Seedream Size</label>
+                        <select id="replicateSeedreamSize">
+                            <option value="1K">1K(seedream-4 only)</option>
+                            <option value="2K">2K (Default)</option>
+                            <option value="4K">4K (High Quality)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Aspect Ratio</label> <select id="replicateAspect">
+                            <option value="1:1">1:1 (Square)</option>
+                            <option value="16:9">16:9 (Landscape)</option>
+                            <option value="9:16">9:16 (Portrait)</option>
+                            <option value="4:3">4:3</option>
+                            <option value="3:4">3:4</option>
+                        </select> </div>
+                    <div class="form-group"><label>Output Format</label> <select id="replicateFormat">
+                            <option value="png">PNG</option>
+                            <option value="webp">WebP</option>
+                            <option value="jpg">JPG</option>
+                        </select> </div>
+                    <div class="form-group">
+                        <label>Logo <span style="font-weight:400;color:#9ca3af;">(optional)</span></label>
+                        <input type="file" id="replicateLogo" accept="image/*">
+                        <div id="replicateLogoPreview" class="file-preview">
+                            <img id="replicateLogoImg" alt="Logo preview">
+                            <button class="file-preview-remove" onclick="removeFile('replicate','Logo')" title="Remove">&times;</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Image <span style="font-weight:400;color:#9ca3af;">(optional)</span></label>
+                        <input type="file" id="replicateProduct" accept="image/*">
+                        <div id="replicateProductPreview" class="file-preview">
+                            <img id="replicateProductImg" alt="Product preview">
+                            <button class="file-preview-remove" onclick="removeFile('replicate','Product')" title="Remove">&times;</button>
+                        </div>
+                    </div>
+                </div>
+            </div> <button id="generateBtn" onclick="generateImage()">⚡ Generate Image</button> <!-- Error Box -->
+            <div id="errorMsg" class="error-box">
+                <div class="error-box-header"> <span class="error-box-msg" id="errorText"></span> </div>
+                <div class="error-box-actions"> <button class="btn-retry" onclick="generateImage()">↺ Retry</button>
+                    <button class="btn-dismiss" onclick="hideError()">Dismiss</button>
+                </div>
+            </div>
+        </div> <!-- ── RIGHT: Result Panel ──────────────────────────────────── -->
+        <div class="result-panel">
+            <div class="result-heading"> Generated Image <span class="result-status-badge badge-idle"
+                    id="resultBadge">Idle</span> </div> <!-- Placeholder -->
+            <div id="resultPlaceholder" class="result-panel-placeholder"> <svg width="52" height="52"
+                    viewBox="0 0 64 64" fill="none">
+                    <rect x="4" y="4" width="56" height="56" rx="10" stroke="#e5e7eb" stroke-width="2" fill="none" />
+                    <circle cx="22" cy="22" r="6" stroke="#e5e7eb" stroke-width="2" fill="none" />
+                    <path d="M4 44 L18 30 L28 42 L38 32 L60 52" stroke="#e5e7eb" stroke-width="2" fill="none"
+                        stroke-linejoin="round" />
+                </svg> <span>Your generated image will appear here</span> </div> <!-- Loading State -->
+            <div id="resultLoading" class="result-panel-loading">
+                <div class="result-spinner"></div>
+                <div class="result-loading-timer" id="loadingTimer">0s</div>
+                <div class="result-loading-text">Generating your image...</div>
+                <div class="result-loading-sub" id="loadingModelName"></div>
+            </div> <!-- Result -->
+            <div id="resultSection" class="result-section">
+                <div class="image-wrap"> <img id="generatedImg" src="" alt="Generated Image"
+                        onclick="openModal(this.src)">
+                    <div class="image-actions"> <button class="btn-download" onclick="downloadImage()">⬇
+                            Download</button> <button class="btn-regen" onclick="generateImage()">↺ Regenerate</button>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:18px;">
+                <div class="result-heading" style="margin-bottom:10px;">Generated Content</div>
+                <div id="contentPlaceholder" class="content-placeholder">
+                    <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+                        <rect x="8" y="12" width="48" height="8" rx="4" stroke="#e5e7eb" stroke-width="2" fill="none"/>
+                        <rect x="8" y="28" width="36" height="6" rx="3" stroke="#e5e7eb" stroke-width="2" fill="none"/>
+                        <rect x="8" y="42" width="28" height="6" rx="3" stroke="#e5e7eb" stroke-width="2" fill="none"/>
+                    </svg>
+                    <span>Content will appear here when a prompt with content is used</span>
+                </div>
+                <div id="contentCard" class="content-card" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reference Image Popup -->
+    <div id="refImageModal" class="ref-modal" role="dialog" aria-modal="true">
+        <div class="ref-modal-box">
+            <div class="ref-modal-title">📎 Reference Image</div>
+            <div class="ref-modal-tabs">
+                <button class="ref-tab-btn active" onclick="switchRefTab('gallery')">🖼 Select from Gallery</button>
+                <button class="ref-tab-btn" onclick="switchRefTab('upload')">⬆ Upload Image</button>
+            </div>
+
+            <!-- Gallery Tab -->
+            <div id="refTabGallery" class="ref-tab-pane active">
+                <div id="refGalleryGrid" class="ref-gallery-grid">
+                    <div class="ref-gallery-empty">Loading available images...</div>
+                </div>
+            </div>
+
+            <!-- Upload Tab -->
+            <div id="refTabUpload" class="ref-tab-pane">
+                <div class="ref-upload-zone" id="refUploadZone" onclick="document.getElementById('refFileInput').click()">
+                    <div class="ref-upload-zone-icon">📂</div>
+                    <div class="ref-upload-zone-label">Click to choose an image</div>
+                    <div class="ref-upload-zone-sub">JPG, PNG, WEBP — max 8MB</div>
+                </div>
+                <input type="file" id="refFileInput" accept="image/*" style="display:none;" onchange="onRefFileSelected(this)">
+                <div id="refUploadPreview" class="ref-upload-preview">
+                    <img id="refUploadPreviewImg" src="" alt="Preview">
+                    <button class="ref-upload-preview-remove" onclick="clearRefUpload()">&times;</button>
+                </div>
+                <div id="refUploadStatus" class="ref-upload-status"></div>
+            </div>
+
+            <div class="ref-modal-footer">
+                <button class="ref-btn-cancel" onclick="closeRefModal()">Cancel</button>
+                <button class="ref-btn-confirm" id="refConfirmBtn" onclick="confirmRefImage()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ref Image Lightbox -->
+    <div id="refLightbox" class="ref-lightbox" onclick="closeRefZoom()">
+        <button class="ref-lightbox-close" onclick="closeRefZoom()">&times;</button>
+        <img id="refLightboxImg" src="" alt="">
+        <div id="refLightboxLabel" class="ref-lightbox-label"></div>
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div id="imageModal" class="modal" role="dialog" aria-modal="true">
+        <div class="modal-content"> <button class="modal-close" onclick="closeModal()"
+                aria-label="Close">&times;</button> <img id="modalImage" src="" alt="Full size preview"> </div>
+    </div>
+    <script>
+'use strict'; /* ── Constants ──────────────────────────────────────────────────── */
+const CAMPAIGN_SEARCH_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_fetch_2';
+const CAMPAIGN_PROMPT_ENDPOINT = 'https://n8n.b2botix.ai/webhook-test/compaign_prompt_2';
+const MAX_FILE_SIZE_MB = 8;
+const CAMPAIGN_TIMEOUT_MS = 30_000;
+let activeModel = 'replicate';
+let generateTimer = null;
+let generateSeconds = 0;
+let currentContentData = null; /* ── Utility ────────────────────────────────────────────────────── */
+function parseErrorMessage(err, fallback) {
+    if (!err) return fallback; /* Try to extract a readable message from JSON error strings */
+    const msg = err.message || String(err);
+    try {
+        const json = JSON.parse(msg.replace(/^.*?:\s*/, ''));
+        return json.error || json.message || json.detail || msg;
+    } catch (_) {
+        return msg.length > 200 ? msg.substring(0, 200) + '...' : msg;
+    }
+}
+
+function showToast(message, type = 'info', duration = 3500) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.25s ease forwards';
+        setTimeout(() => toast.remove(), 250);
+    }, duration);
+}
+
+function setResultBadge(state) {
+    const badge = document.getElementById('resultBadge');
+    const map = {
+        idle: ['Idle', 'badge-idle'],
+        loading: ['Generating', 'badge-loading'],
+        done: ['Done', 'badge-done'],
+        error: ['Error', 'badge-error']
+    };
+    const [text, cls] = map[state] || map.idle;
+    badge.textContent = text;
+    badge.className = `result-status-badge ${cls}`;
+}
+
+function validateFile(file) {
+    if (!file) return null;
+    const sizeMB = file.size / 1024 / 1024;
+    if (sizeMB > MAX_FILE_SIZE_MB) {
+        return `File "${file.name}" is ${sizeMB.toFixed(1)}MB — max allowed is ${MAX_FILE_SIZE_MB}MB.`;
+    }
+    return null;
+} /* ── Character Counter ──────────────────────────────────────────── */
+function updateCharCounter() {
+    const ta = document.getElementById('prompt');
+    const counter = document.getElementById('charCounter');
+    const len = ta.value.length;
+    counter.textContent = `${len} / 2000`;
+    counter.className = 'char-counter' + (len > 1800 ? ' limit' : len > 1400 ? ' warn' : '');
+} /* ── Campaign Toggle ────────────────────────────────────────────── */
+function toggleCampaign() {
+    const body = document.getElementById('campaignBody');
+    const arrow = document.getElementById('campaignArrow');
+    const open = body.classList.toggle('open');
+    arrow.classList.toggle('open', open);
+} /* ── Campaign Status ────────────────────────────────────────────── */
+function setCampaignStatus(msg, type) {
+    const el = document.getElementById('campaignStatus');
+    el.textContent = msg;
+    el.className = 'campaign-status' + (msg ? ` ${type}` : '');
+} /* ── Campaign: Show Manual ──────────────────────────────────────── */
+function showCampaignManual() {
+    document.getElementById('campaignForm').style.display = 'block';
+    setCampaignStatus('Fill in the details below, then click Generate Image Prompts.', 'info');
+} /* ── Campaign: Search Company ───────────────────────────────────── */
+async function searchCampaignCompany() {
+    const idVal = document.getElementById('campaignCompanyId').value.trim();
+    if (!idVal || parseInt(idVal) < 1) {
+        setCampaignStatus('Please enter a valid Company ID (positive number).', 'error');
+        return;
+    }
+    const btn = document.getElementById('campaignSearchBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Searching...';
+    setCampaignStatus('', '');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), CAMPAIGN_TIMEOUT_MS);
+    try {
+        const res = await fetch(CAMPAIGN_SEARCH_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: parseInt(idVal)
+            }),
+            signal: controller.signal
+        });
+        clearTimeout(timeout);
+        if (!res.ok) {
+            throw new Error(`Server returned ${res.status} ${res.statusText}`);
+        }
+        const data = await res.json();
+        const company = Array.isArray(data) ? data[0] : data;
+        document.getElementById('campaignForm').style.display = 'block';
+        if (!company || !company.id) {
+            setCampaignStatus('Company not found. You can fill in details manually.', 'error');
+            return;
+        } /* Populate fields */
+        const fields = {
+            cf_company_name: company.company_name,
+            cf_industry: company.industry,
+            cf_product_service_name: company.product_service_name,
+            cf_brand_colors: company.brand_colors,
+            cf_logo_position: company.logo_position,
+            cf_heading_font: company.heading_font || '',
+            cf_subheading_font: company.subheading_font || '',
+            cf_body_font: company.body_font || '',
+            cf_cta_font: company.cta_font || '',
+            cf_brand_tone: company.brand_tone,
+            cf_product_image_position: company.product_image_position,
+            cf_product_border: company.product_border,
+        };
+        for (const [id, val] of Object.entries(fields)) {
+            const el = document.getElementById(id);
+            if (el) el.value = val || '';
+        }
+        const toBool = v => (v === true || v === 'true') ? 'true' : 'false';
+        document.getElementById('cf_product_image_uploaded').value = toBool(company.product_image_uploaded);
+        document.getElementById('cf_reference_image_uploaded').value = toBool(company.reference_image_uploaded);
+        setCampaignStatus(`✓ Loaded: ${company.company_name || 'Company'} — review and generate prompts.`, 'success');
+        showToast('Company data loaded successfully', 'success');
+    } catch (err) {
+        clearTimeout(timeout);
+        document.getElementById('campaignForm').style.display = 'block';
+        if (err.name === 'AbortError') {
+            setCampaignStatus('Request timed out after 30s. Check your connection and try again.', 'error');
+        } else {
+            setCampaignStatus(`Could not fetch company: ${parseErrorMessage(err, 'Unknown error')}. Fill manually.`, 'error');
+        }
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Search';
+    }
+} /* ── Campaign: Generate Prompts ─────────────────────────────────── */
+async function generateCampaignPrompts() {
+    const scenario = document.getElementById('cf_scenario').value.trim();
+    if (!scenario) {
+        setCampaignStatus('Please describe your campaign scenario before generating prompts.', 'error');
+        return;
+    }
+    const btn = document.getElementById('campaignGenerateBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Generating Prompts...';
+    setCampaignStatus('', '');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), CAMPAIGN_TIMEOUT_MS);
+    try {
+        const fields = {
+            company_name: document.getElementById('cf_company_name').value,
+            industry: document.getElementById('cf_industry').value,
+            product_service_name: document.getElementById('cf_product_service_name').value,
+            brand_colors: document.getElementById('cf_brand_colors').value,
+            logo_position: document.getElementById('cf_logo_position').value,
+            heading_font: document.getElementById('cf_heading_font').value,
+            subheading_font: document.getElementById('cf_subheading_font').value,
+            body_font: document.getElementById('cf_body_font').value,
+            cta_font: document.getElementById('cf_cta_font').value,
+            brand_tone: document.getElementById('cf_brand_tone').value,
+            product_image_position: document.getElementById('cf_product_image_position').value,
+            product_border: document.getElementById('cf_product_border').value,
+            image_size: document.getElementById('cf_image_size').value,
+            logo_uploaded: document.getElementById('cf_logo_uploaded').value,
+            product_image_uploaded: document.getElementById('cf_product_image_uploaded').value,
+            reference_image_uploaded: document.getElementById('cf_reference_image_uploaded').value,
+            reference_image_id: document.getElementById('cf_reference_image_id').value,
+            ref: document.getElementById('cf_ref_layout').value,
+            image_for: document.getElementById('cf_image_for').value,
+            content: document.getElementById('content').value,
+            website_url: document.getElementById('web_url').value,
+            scenario
+        };
+        let fetchOptions;
+        if (refUploadedFile) {
+            const fd = new FormData();
+            Object.entries(fields).forEach(([k, v]) => {
+                fd.append(k, v ?? '');
+            });
+            fd.append('reference_image', refUploadedFile, refUploadedFile.name);
+            fetchOptions = { method: 'POST', body: fd, signal: controller.signal };
+        } else {
+            fetchOptions = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fields), signal: controller.signal };
+        }
+        const res = await fetch(CAMPAIGN_PROMPT_ENDPOINT, fetchOptions);
+        clearTimeout(timeout);
+        if (!res.ok) {
+            throw new Error(`Server returned ${res.status} ${res.statusText}`);
+        }
+        const result = await res.json();
+        renderCampaignPrompts(result);
+        setCampaignStatus('✓ Prompts generated — click "Use" to load into the image generator.', 'success');
+        showToast('Image prompts generated!', 'success');
+    } catch (err) {
+        clearTimeout(timeout);
+        if (err.name === 'AbortError') {
+            setCampaignStatus('Request timed out. Try again.', 'error');
+        } else {
+            setCampaignStatus(`Error: ${parseErrorMessage(err, 'Failed to generate prompts')}`, 'error');
+        }
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '✦ Generate Image Prompts';
+    }
+} /* ── Campaign: Render Prompt Cards ─────────────────────────────── */
+function renderCampaignPrompts(result) {
+    const section = document.getElementById('campaignPromptsSection');
+    const grid = document.getElementById('campaignPromptsGrid');
+    grid.innerHTML = '';
+    const prompts = Array.isArray(result) ? result : [result];
+    if (prompts.length === 0) {
+        setCampaignStatus('No prompts returned. Try adjusting your scenario.', 'error');
+        return;
+    }
+    prompts.forEach((item, i) => {
+        const promptText = item.image_prompt || item.prompt || item.text || item.content || JSON.stringify(item);
+        let contentData = null;
+        if (item.output) {
+            try {
+                contentData = typeof item.output === 'string' ? JSON.parse(item.output) : item.output;
+            } catch (_) {
+                contentData = { message: item.output };
+            }
+        }
+        const safeText = promptText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const badge = contentData ? ' <span class="prompt-card-badge">+ Content</span>' : '';
+        const card = document.createElement('div');
+        card.className = 'prompt-card';
+        card.innerHTML = `<div class="prompt-card-label">Prompt ${i + 1}${badge}</div><div class="prompt-card-text">${safeText}</div><div class="prompt-card-actions"><button class="btn-use-prompt" onclick="useCampaignPrompt(this)">▶ Use as Prompt</button><button class="btn-copy-prompt" onclick="copyCampaignPrompt(this)">Copy</button></div>`;
+        card.querySelector('.btn-use-prompt').dataset.prompt = promptText;
+        card.querySelector('.btn-copy-prompt').dataset.prompt = promptText;
+        if (contentData) {
+            card.querySelector('.btn-use-prompt').dataset.content = JSON.stringify(contentData);
+        }
+        grid.appendChild(card);
+    });
+    section.style.display = 'block';
+}
+
+function useCampaignPrompt(btn) {
+    const ta = document.getElementById('prompt');
+    ta.value = btn.dataset.prompt;
+    currentContentData = btn.dataset.content ? JSON.parse(btn.dataset.content) : null;
+    if (currentContentData) {
+        renderContentCard(currentContentData);
+    } else {
+        document.getElementById('contentCard').style.display = 'none'; document.getElementById('contentPlaceholder').style.display = 'flex';
+    }
+    updateCharCounter();
+    ta.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+    });
+    ta.focus();
+    ta.style.borderColor = '#22c55e';
+    ta.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.15)';
+    setTimeout(() => {
+        ta.style.borderColor = '';
+        ta.style.boxShadow = '';
+    }, 1600);
+    showToast('Prompt loaded — click Generate Image!', 'success', 2500);
+}
+async function copyCampaignPrompt(btn) {
+    try {
+        await navigator.clipboard.writeText(btn.dataset.prompt);
+        btn.textContent = '✓ Copied';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+        }, 1800);
+    } catch (_) {
+        btn.textContent = 'Failed';
+        setTimeout(() => {
+            btn.textContent = 'Copy';
+        }, 1500);
+    }
+}
+/* ── Content Card ────────────────────────────────────────────────── */
+function renderContentCard(data) {
+    const card = document.getElementById('contentCard');
+    const escape = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const icons = { 'Whatsapp': '💬', 'WhatsApp': '💬', 'LinkedIn': '💼', 'Linkedin': '💼', 'Instagram': '📸', 'Facebook': '👍', 'Twitter': '🐦', 'X': '🐦' };
+
+    let html = '';
+    let copyText = '';
+
+    if (typeof data === 'string') {
+        /* Plain string — just display it */
+        html = `<div class="content-card-body">${escape(data)}</div>`;
+        copyText = data;
+    } else if (typeof data === 'object' && data !== null) {
+        const platform = data.platform || data.Platform || '';
+        const icon = icons[platform] || '📢';
+        if (platform) {
+            html += `<div class="content-card-platform">${icon} ${escape(platform)}</div>`;
+            copyText += `Platform: ${platform}\n\n`;
+        }
+        /* Render every key as a labeled section */
+        const skip = new Set(['platform', 'Platform']);
+        Object.entries(data).forEach(([key, val]) => {
+            if (skip.has(key) || val === null || val === undefined || val === '') return;
+            const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            if (Array.isArray(val)) {
+                html += `<div class="content-card-section"><div class="content-card-label">${escape(label)}</div><ul class="content-card-highlights">${val.map(v => `<li>${escape(v)}</li>`).join('')}</ul></div>`;
+                copyText += `${label}:\n${val.map(v => `• ${v}`).join('\n')}\n\n`;
+            } else {
+                html += `<div class="content-card-section"><div class="content-card-label">${escape(label)}</div><div class="content-card-value">${escape(val)}</div></div>`;
+                copyText += `${label}:\n${val}\n\n`;
+            }
+        });
+    }
+
+    const safeText = copyText.trim().replace(/'/g, '&#39;');
+    html += `<div class="content-card-footer"><button class="btn-copy-content" onclick="copyContentCard(this)" data-content='${safeText}'>Copy Content</button></div>`;
+    card.innerHTML = html;
+    card.style.display = 'block';
+    document.getElementById('contentPlaceholder').style.display = 'none';
+}
+async function copyContentCard(btn) {
+    try {
+        await navigator.clipboard.writeText(btn.dataset.content);
+        btn.textContent = '✓ Copied';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy Content'; btn.classList.remove('copied'); }, 1800);
+    } catch (_) {
+        showToast('Could not copy content', 'error');
+    }
+}
+/* ── Model Switch ───────────────────────────────────────────────── */
+function switchModel(model) {
+    activeModel = model;
+    const panels = ['replicate', 'kling', 'gemini', 'claude'];
+    panels.forEach(m => {
+        document.getElementById(`${m}Options`).style.display = m === model ? 'block' : 'none';
+    });
+    hideError();
+    document.getElementById('resultSection').classList.remove('show');
+    document.getElementById('resultPlaceholder').style.display = 'flex';
+    document.getElementById('resultLoading').classList.remove('show');
+    setResultBadge('idle');
+} /* ── Generate Image ─────────────────────────────────────────────── */
+async function generateImage() {
+    const promptText = document.getElementById('prompt').value.trim();
+    if (!promptText) {
+        showError('Please enter a prompt before generating.');
+        return;
+    }
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Generating...';
+    hideError();
+    document.getElementById('resultSection').classList.remove('show');
+    document.getElementById('resultPlaceholder').style.display = 'none'; /* Show loading panel */
+    const loadingEl = document.getElementById('resultLoading');
+    loadingEl.classList.add('show');
+    document.getElementById('loadingModelName').textContent = `Using: ${document.getElementById('modelSelect').selectedOptions[0].text}`;
+    setResultBadge('loading'); /* Start timer */
+    generateSeconds = 0;
+    document.getElementById('loadingTimer').textContent = '0s';
+    generateTimer = setInterval(() => {
+        generateSeconds++;
+        document.getElementById('loadingTimer').textContent = `${generateSeconds}s`;
+    }, 1000);
+    try {
+        let imageUrl;
+        const generators = {
+            replicate: () => generateReplicate(promptText),
+            kling: () => generateKling(promptText),
+            gemini: () => generateGemini(promptText),
+            claude: () => generateClaudeSVG(promptText),
+        };
+        const fn = generators[activeModel];
+        if (!fn) throw new Error(`Unknown model: ${activeModel}`);
+        imageUrl = await fn();
+        if (!imageUrl) throw new Error('No image URL returned from API.'); /* Preload image */
+        await new Promise((resolve, reject) => {
+            const img = new Image();
+            const onLoad = () => {
+                resolve();
+            };
+            const onError = () => {
+                reject(new Error('Image failed to load. The URL may have expired.'));
+            };
+            img.addEventListener('load', onLoad, {
+                once: true
+            });
+            img.addEventListener('error', onError, {
+                once: true
+            });
+            img.src = imageUrl;
+        });
+        document.getElementById('generatedImg').src = imageUrl;
+        document.getElementById('resultSection').classList.add('show');
+        setResultBadge('done');
+        showToast(`Image generated in ${generateSeconds}s`, 'success');
+    } catch (err) {
+        showError(parseErrorMessage(err, 'Generation failed. Please try again.'));
+        document.getElementById('resultPlaceholder').style.display = 'flex';
+        setResultBadge('error');
+    } finally {
+        clearInterval(generateTimer);
+        loadingEl.classList.remove('show');
+        btn.disabled = false;
+        btn.innerHTML = '⚡ Generate Image';
+    }
+} /* ── Error Helpers ──────────────────────────────────────────────── */
+function showError(msg) {
+    const box = document.getElementById('errorMsg');
+    document.getElementById('errorText').textContent = msg;
+    box.style.display = 'block';
+    box.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+    });
+}
+
+function hideError() {
+    document.getElementById('errorMsg').style.display = 'none';
+} /* ── File Helpers ───────────────────────────────────────────────── */
+function fileToBase64(file, maxPx = 1024, quality = 0.82) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
+        reader.onload = e => {
+            const img = new Image();
+            img.onerror = () => reject(new Error(`Failed to decode image: ${file.name}`));
+            img.onload = () => {
+                let { width, height } = img;
+                if (width > maxPx || height > maxPx) {
+                    if (width >= height) { height = Math.round(height * maxPx / width); width = maxPx; }
+                    else                 { width  = Math.round(width  * maxPx / height); height = maxPx; }
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = width; canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                resolve({ base64: dataUrl.split(',')[1], mimeType: 'image/jpeg', name: file.name.replace(/\.[^.]+$/, '.jpg'), dataUrl });
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function attachFilePreview(inputId, imgId, previewId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    input.addEventListener('change', function() {
+        const file = this.files[0];
+        if (!file) return;
+        const err = validateFile(file);
+        if (err) {
+            showToast(err, 'error', 5000);
+            this.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById(imgId).src = e.target.result;
+            document.getElementById(previewId).classList.add('show');
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function removeFile(prefix, type) {
+    document.getElementById(`${prefix}${type}`).value = '';
+    document.getElementById(`${prefix}${type}Preview`).classList.remove('show');
+    document.getElementById(`${prefix}${type}Img`).src = '';
+}
+
+function removeGeminiLogo() {
+    document.getElementById('geminiLogo').value = '';
+    document.getElementById('geminiLogoPreview').classList.remove('show');
+    document.getElementById('geminiLogoImg').src = '';
+}
+
+function removeReplicateFile(type) {
+    removeFile('replicate', type);
+} /* ── Individual Generators ──────────────────────────────────────── */
+async function generateClaudeSVG(prompt) {
+    const model = document.getElementById('claudeModel').value;
+    const format = document.getElementById('claudeFormat').value;
+    const logoFile = document.getElementById('claudeLogo').files[0];
+    const productFile = document.getElementById('claudeProduct').files[0];
+    const [logoData, productData] = await Promise.all([logoFile ? fileToBase64(logoFile) : Promise.resolve(null), productFile ? fileToBase64(productFile) : Promise.resolve(null), ]);
+    const res = await fetch('/proxy/claude/generate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            prompt,
+            model,
+            format,
+            logoData,
+            productData
+        })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || data.message || `Claude error ${res.status}`);
+    if (format === 'canvas' && data.html) return renderCanvasToImage(data.html);
+    if (data.svg) return URL.createObjectURL(new Blob([data.svg], {
+        type: 'image/svg+xml'
+    }));
+    throw new Error('No output returned from Claude.');
+}
+
+function renderCanvasToImage(html) {
+    return new Promise((resolve, reject) => {
+        const iframe = document.createElement('iframe');
+        iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1024px;height:1024px;border:none;';
+        document.body.appendChild(iframe);
+        const cleanup = () => {
+            try {
+                document.body.removeChild(iframe);
+            } catch (_) {}
+        };
+        iframe.onload = () => {
+            try {
+                const canvas = iframe.contentDocument.getElementById('c');
+                if (!canvas) {
+                    cleanup();
+                    return reject(new Error('Canvas element not found in output.'));
+                }
+                setTimeout(() => {
+                    try {
+                        canvas.toBlob(blob => {
+                            cleanup();
+                            blob ? resolve(URL.createObjectURL(blob)) : reject(new Error('Failed to convert canvas to image.'));
+                        }, 'image/png');
+                    } catch (e) {
+                        cleanup();
+                        reject(e);
+                    }
+                }, 500);
+            } catch (e) {
+                cleanup();
+                reject(e);
+            }
+        };
+        iframe.srcdoc = html;
+    });
+}
+async function generateGemini(prompt) {
+    const [logoData, productData] = await Promise.all([
+        document.getElementById('geminiLogo').files[0]    ? fileToBase64(document.getElementById('geminiLogo').files[0])    : Promise.resolve(null),
+        document.getElementById('geminiProduct').files[0] ? fileToBase64(document.getElementById('geminiProduct').files[0]) : Promise.resolve(null),
+    ]);
+    const res = await fetch('/proxy/gemini/generate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            prompt,
+            model: document.getElementById('geminiModel').value,
+            logoData:    logoData    ? { base64: logoData.base64,    mimeType: logoData.mimeType,    name: logoData.name    } : null,
+            productData: productData ? { base64: productData.base64, mimeType: productData.mimeType, name: productData.name } : null
+        })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || data.message || `Gemini error ${res.status}`);
+    if (!data.b64) throw new Error('No image data returned from Gemini.');
+    return `data:${data.mimeType};base64,${data.b64}`;
+}
+async function generateKling(prompt) {
+    const res = await fetch('/proxy/kling/generate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            prompt,
+            model: document.getElementById('klingModel').value,
+            aspect_ratio: document.getElementById('klingAspect').value,
+            negative_prompt: document.getElementById('klingNegative').value
+        })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || data.message || `Kling error ${res.status}`);
+    if (!data.url) throw new Error('No image URL returned from Kling.');
+    return data.url;
+}
+async function generateReplicate(prompt) {
+    const model        = document.getElementById('replicateModel').value;
+    const output_format = document.getElementById('replicateFormat').value;
+
+    const [logoData, productData] = await Promise.all([
+        document.getElementById('replicateLogo').files[0]    ? fileToBase64(document.getElementById('replicateLogo').files[0])    : Promise.resolve(null),
+        document.getElementById('replicateProduct').files[0] ? fileToBase64(document.getElementById('replicateProduct').files[0]) : Promise.resolve(null),
+    ]);
+
+    const slim = d => d ? { base64: d.base64, mimeType: d.mimeType, name: d.name } : null;
+    const payload = {
+        prompt,
+        model,
+        output_format,
+        aspect_ratio:  document.getElementById('replicateAspect').value,
+        seedream_size: document.getElementById('replicateSeedreamSize').value,
+        logoData:    slim(logoData),
+        productData: slim(productData)
+    };
+
+    const res = await fetch('/proxy/replicate/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || data.message || `Replicate error ${res.status}`);
+    if (!data.url) throw new Error('No image URL returned from Replicate.');
+    return data.url;
+} /* ── Download ───────────────────────────────────────────────────── */
+function downloadImage() {
+    const src = document.getElementById('generatedImg').src;
+    if (!src) return;
+    const a = document.createElement('a');
+    a.href = src;
+    a.download = `ai-image-${Date.now()}.png`;
+    a.click();
+} /* ── Modal ──────────────────────────────────────────────────────── */
+function openModal(src) {
+    document.getElementById('modalImage').src = src;
+    document.getElementById('imageModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('imageModal').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+/* ── Reference Image Modal ───────────────────────────────────────── */
+let refSelectedRefId      = null;
+let refSelectedContext    = null;
+let refUploadedFile       = null;
+let refUploadedReady      = false;
+let refActiveTab          = 'gallery';
+
+function onReferenceImageToggle(val) {
+    if (val === 'true') {
+        openRefModal();
+    } else {
+        document.getElementById('cf_reference_image_id').value = '';
+        document.getElementById('cf_ref_layout').value = '';
+        document.getElementById('refImageChosen').style.display = 'none';
+        refSelectedRefId   = null;
+        refSelectedContext = null;
+        refUploadedFile    = null;
+        refUploadedReady   = false;
+    }
+}
+
+function openRefModal() {
+    refSelectedRefId   = null;
+    refSelectedContext = null;
+    refUploadedFile    = null;
+    refUploadedReady   = false;
+    clearRefUpload();
+    switchRefTab('gallery');
+    loadRefGallery();
+    document.getElementById('refImageModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeRefModal() {
+    document.getElementById('refImageModal').classList.remove('show');
+    document.body.style.overflow = '';
+    if (!document.getElementById('cf_reference_image_id').value) {
+        document.getElementById('cf_reference_image_uploaded').value = 'false';
+    }
+}
+
+function switchRefTab(tab) {
+    refActiveTab = tab;
+    document.querySelectorAll('.ref-tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', (i === 0 && tab === 'gallery') || (i === 1 && tab === 'upload'));
+    });
+    document.getElementById('refTabGallery').classList.toggle('active', tab === 'gallery');
+    document.getElementById('refTabUpload').classList.toggle('active', tab === 'upload');
+    updateRefConfirmBtn();
+}
+
+function updateRefConfirmBtn() {
+    const ok = refActiveTab === 'gallery' ? !!refSelectedRefId : refUploadedReady;
+    document.getElementById('refConfirmBtn').disabled = !ok;
+}
+
+const CAMPAIGN_REF_GALLERY_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_ref_image';
+
+async function loadRefGallery() {
+    const grid = document.getElementById('refGalleryGrid');
+    grid.innerHTML = '<div class="ref-gallery-empty">Loading...</div>';
+    try {
+        const res = await fetch(CAMPAIGN_REF_GALLERY_ENDPOINT);
+        if (!res.ok) throw new Error('Failed to load gallery');
+        const text = await res.text();
+        console.log('REF GALLERY RAW LENGTH:', text.length);
+        console.log('REF GALLERY RAW:', text);
+        /* Parse response — handle array, {data:[...]}, NDJSON */
+        let items = [];
+        const trimmed = text.trim();
+        let parsed;
+        try {
+            parsed = JSON.parse(trimmed);
+        } catch (_) {
+            /* NDJSON fallback */
+            parsed = trimmed.split('\n').filter(l => l.trim()).map(l => JSON.parse(l.trim()));
+        }
+        if (Array.isArray(parsed)) {
+            /* Could be plain array OR NDJSON-wrapped single object [{data:[...]}] */
+            if (parsed.length === 1 && parsed[0] && !parsed[0].ref_id) {
+                const inner = parsed[0].data || parsed[0].images || parsed[0].rows || parsed[0].json;
+                items = Array.isArray(inner) ? inner : parsed;
+            } else {
+                items = parsed;
+            }
+        } else if (parsed && typeof parsed === 'object') {
+            items = parsed.data || parsed.images || parsed.rows || [parsed];
+        }
+        console.log('REF GALLERY ITEMS:', items.length, items);
+        if (!items.length) {
+            grid.innerHTML = `<div class="ref-gallery-empty">No reference images available<br><small style="opacity:.6">${JSON.stringify(parsed).substring(0,200)}</small></div>`;
+            return;
+        }
+        grid.innerHTML = '';
+        items.forEach(item => {
+            if (!item || typeof item !== 'object') return;
+            const refId    = item.ref_id        || item.id   || '';
+            const imageUrl = item.ref_image_url || item.image_url || item.url || '';
+            const context  = item.ref_context   || '';
+            const div = document.createElement('div');
+            div.className = 'ref-gallery-item';
+            div.title = context ? context.replace(/\r\n/g, ' ').substring(0, 120) + '...' : refId;
+            div.innerHTML = imageUrl
+                ? `<img src="${imageUrl}" alt="${refId}" loading="eager" crossorigin="anonymous"><div class="ref-gallery-label">${refId}</div><button class="ref-zoom-btn" title="View full size" onclick="event.stopPropagation();openRefZoom('${imageUrl}','${refId}')">⛶</button>`
+                : `<div class="ref-gallery-label ref-gallery-label-only">${refId}</div>`;
+            div.addEventListener('click', () => {
+                grid.querySelectorAll('.ref-gallery-item').forEach(el => el.classList.remove('selected'));
+                div.classList.add('selected');
+                refSelectedRefId   = refId;
+                refSelectedContext = context;
+                updateRefConfirmBtn();
+            });
+            grid.appendChild(div);
+        });
+    } catch (e) {
+        grid.innerHTML = `<div class="ref-gallery-empty">Could not load gallery<br><small>${e.message}</small></div>`;
+    }
+}
+
+function onRefFileSelected(input) {
+    const file = input.files[0];
+    if (!file) return;
+    if (file.size > 8 * 1024 * 1024) { showToast('File too large (max 8MB)', 'error'); input.value = ''; return; }
+    refUploadedFile  = file;
+    refUploadedReady = true;
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById('refUploadPreviewImg').src = e.target.result;
+        document.getElementById('refUploadPreview').style.display = 'block';
+        const status = document.getElementById('refUploadStatus');
+        status.className = 'ref-upload-status success';
+        status.textContent = '✓ Image ready — will be sent as binary';
+        updateRefConfirmBtn();
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearRefUpload() {
+    document.getElementById('refFileInput').value = '';
+    document.getElementById('refUploadPreview').style.display = 'none';
+    document.getElementById('refUploadPreviewImg').src = '';
+    document.getElementById('refUploadStatus').textContent = '';
+    document.getElementById('refUploadStatus').className = 'ref-upload-status';
+    refUploadedFile  = null;
+    refUploadedReady = false;
+    updateRefConfirmBtn();
+}
+
+function openRefZoom(url, label) {
+    document.getElementById('refLightboxImg').src = url;
+    document.getElementById('refLightboxLabel').textContent = label;
+    document.getElementById('refLightbox').classList.add('show');
+}
+function closeRefZoom() {
+    document.getElementById('refLightbox').classList.remove('show');
+}
+
+function confirmRefImage() {
+    if (refActiveTab === 'gallery') {
+        if (!refSelectedRefId) return;
+        refUploadedFile = null;
+        document.getElementById('cf_reference_image_id').value = refSelectedRefId;
+        document.getElementById('cf_ref_layout').value         = refSelectedContext || '';
+        document.getElementById('refImageChosen').textContent  = `✓ Selected: ${refSelectedRefId}`;
+    } else {
+        if (!refUploadedReady || !refUploadedFile) return;
+        document.getElementById('cf_reference_image_id').value = '';  /* binary file, no id */
+        document.getElementById('refImageChosen').textContent  = `✓ Uploaded: ${refUploadedFile.name}`;
+    }
+    document.getElementById('refImageChosen').style.display = 'block';
+    document.getElementById('refImageModal').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+/* ── Font Preview ───────────────────────────────────────────────── */
+const loadedFonts = new Set();
+
+function previewFont(select, previewId, sampleText) {
+    const value   = select.value;
+    const preview = document.getElementById(previewId);
+
+    // Empty = Select... chosen — show placeholder state
+    if (!value) {
+        preview.textContent      = 'Select a font to preview...';
+        preview.style.fontFamily = 'inherit';
+        preview.style.fontWeight = '400';
+        preview.style.color      = '#d1d5db';
+        return;
+    }
+
+    preview.textContent = sampleText;
+    preview.style.color = 'var(--text)';
+
+    const parts     = value.split(' ');
+    const weightMap = { 'thin':100,'extralight':200,'light':300,'regular':400,
+                        'medium':500,'semibold':600,'bold':700,'extrabold':800,'black':900 };
+    const lastWord  = parts[parts.length - 1].toLowerCase();
+    const weight    = weightMap[lastWord] || 400;
+    const fontName  = weightMap[lastWord] ? parts.slice(0, -1).join(' ') : value;
+
+    // System fonts — no Google Fonts load needed
+    const systemFonts = ['impact','helvetica','futura','georgia','arial'];
+    if (systemFonts.includes(fontName.toLowerCase())) {
+        preview.style.fontFamily = `"${fontName}", sans-serif`;
+        preview.style.fontWeight = weight;
+        return;
+    }
+
+    // Load from Google Fonts if not already loaded
+    const fontKey = `${fontName}:${weight}`;
+    if (!loadedFonts.has(fontKey)) {
+        const encoded = fontName.replace(/ /g, '+');
+        const link    = document.createElement('link');
+        link.rel      = 'stylesheet';
+        link.href     = `https://fonts.googleapis.com/css2?family=${encoded}:wght@${weight}&display=swap`;
+        document.head.appendChild(link);
+        loadedFonts.add(fontKey);
+    }
+
+    preview.style.fontFamily = `"${fontName}", sans-serif`;
+    preview.style.fontWeight = weight;
+}
+
+/* On page load — show placeholder since default is Select... */
+function initFontPreviews() {
+    ['cf_heading_font','cf_subheading_font','cf_body_font','cf_cta_font'].forEach(id => {
+        const sel = document.getElementById(id);
+        sel.dispatchEvent(new Event('change'));
+    });
+}
+
+/* ── DOMContentLoaded — single initialisation ───────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+    initFontPreviews();
+    /* Keyboard shortcut: Ctrl+Enter to generate */
+    document.getElementById('prompt').addEventListener('keydown', e => {
+        if (e.key === 'Enter' && e.ctrlKey) generateImage();
+    }); /* Close modal on backdrop click */
+    document.getElementById('imageModal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeModal();
+    });
+    document.getElementById('refImageModal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeRefModal();
+    }); /* Close modal on Escape */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeModal();
+    }); /* File previews — all providers in one place */
+    const fileMappings = [
+        ['claudeLogo', 'claudeLogoImg', 'claudeLogoPreview'],
+        ['claudeProduct', 'claudeProductImg', 'claudeProductPreview'],
+        ['geminiLogo',       'geminiLogoImg',       'geminiLogoPreview'],
+        ['geminiProduct',    'geminiProductImg',    'geminiProductPreview'],
+        ['replicateLogo',    'replicateLogoImg',    'replicateLogoPreview'],
+        ['replicateProduct', 'replicateProductImg', 'replicateProductPreview'],
+    ];
+    fileMappings.forEach(([input, img, preview]) => attachFilePreview(input, img, preview));
+
+    // Add ▼ arrow to every select except the model selector (already has its own)
+    document.querySelectorAll('select').forEach(sel => {
+        if (sel.closest('.model-selector-wrap')) return;
+        const wrap = document.createElement('div');
+        wrap.className = 'select-wrap';
+        sel.parentNode.insertBefore(wrap, sel);
+        wrap.appendChild(sel);
+    });
+
+    // Replicate: show Gemini note + seedream size toggle based on selected model
+    const replicateModelSel = document.getElementById('replicateModel');
+    const seedreamModels = ['seedream-4', 'seedream-4.5', 'seedream-5', 'seedream-5-lite'];
+    const sizeGroup      = document.getElementById('seedreamSizeGroup');
+    replicateModelSel.addEventListener('change', function() {
+        sizeGroup.style.display = seedreamModels.includes(this.value) ? 'block' : 'none';
+    });
+});
+</script>
+</body>
+
+</html>

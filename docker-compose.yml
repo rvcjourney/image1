@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+
+  image-gen:
+    build: .
+    container_name: image-gen
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    networks:
+      - web
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - web
+    depends_on:
+      - image-gen
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  web:
+    driver: bridge

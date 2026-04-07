@@ -1,0 +1,15 @@
+your_domain.com {
+    # Auto HTTPS — Caddy handles SSL certificate automatically
+
+    # Increase timeouts for long AI generation (Kling = 2min, Replicate = 3min)
+    request_body {
+        max_size 20MB
+    }
+
+    reverse_proxy image-gen:3000 {
+        transport http {
+            read_timeout  300s
+            write_timeout 300s
+        }
+    }
+}
