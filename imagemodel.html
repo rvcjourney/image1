@@ -1132,7 +1132,10 @@
             align-items: center;
             backdrop-filter: blur(4px);
         }
-        .ref-modal.show { display: flex; }
+
+        .ref-modal.show {
+            display: flex;
+        }
 
         .ref-modal-box {
             background: #fff;
@@ -1140,7 +1143,7 @@
             padding: 28px;
             width: 960px;
             max-width: 95vw;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             position: relative;
         }
 
@@ -1174,14 +1177,23 @@
             margin-top: 0;
             border-radius: 0;
         }
-        .ref-tab-btn:first-child { border-right: 1.5px solid var(--border); }
+
+        .ref-tab-btn:first-child {
+            border-right: 1.5px solid var(--border);
+        }
+
         .ref-tab-btn.active {
             background: var(--primary);
             color: #fff;
         }
 
-        .ref-tab-pane { display: none; }
-        .ref-tab-pane.active { display: block; }
+        .ref-tab-pane {
+            display: none;
+        }
+
+        .ref-tab-pane.active {
+            display: block;
+        }
 
         /* Gallery tab */
         .ref-gallery-grid {
@@ -1203,18 +1215,28 @@
             height: 240px;
             background: #f3f4f6;
         }
+
         .ref-gallery-item:hover {
-            box-shadow: 0 6px 20px rgba(79,70,229,0.18);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.18);
         }
-        .ref-gallery-item:hover { border-color: var(--primary); }
-        .ref-gallery-item.selected { border-color: var(--primary); }
+
+        .ref-gallery-item:hover {
+            border-color: var(--primary);
+        }
+
+        .ref-gallery-item.selected {
+            border-color: var(--primary);
+        }
+
         .ref-gallery-item.selected::after {
             content: '✓';
             position: absolute;
-            top: 6px; right: 6px;
+            top: 6px;
+            right: 6px;
             background: var(--primary);
             color: #fff;
-            width: 20px; height: 20px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1222,16 +1244,20 @@
             font-size: 11px;
             font-weight: 700;
         }
+
         .ref-gallery-item img {
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             display: block;
         }
 
         .ref-gallery-label {
             position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(0,0,0,0.55);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.55);
             color: #fff;
             font-size: 10px;
             font-weight: 700;
@@ -1252,65 +1278,91 @@
 
         .ref-zoom-btn {
             position: absolute;
-            top: 7px; left: 7px;
-            background: rgba(0,0,0,0.55);
+            top: 7px;
+            left: 7px;
+            background: rgba(0, 0, 0, 0.55);
             color: #fff;
             border: none;
             border-radius: 6px;
-            width: 28px; height: 28px;
+            width: 28px;
+            height: 28px;
             font-size: 14px;
             cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
             transition: opacity 0.15s;
-            padding: 0; margin: 0; width: auto; min-width: 28px;
+            padding: 0;
+            margin: 0;
+            width: auto;
+            min-width: 28px;
         }
-        .ref-gallery-item:hover .ref-zoom-btn { opacity: 1; }
+
+        .ref-gallery-item:hover .ref-zoom-btn {
+            opacity: 1;
+        }
 
         .ref-lightbox {
             display: none;
             position: fixed;
             inset: 0;
             z-index: 11000;
-            background: rgba(0,0,0,0.92);
+            background: rgba(0, 0, 0, 0.92);
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(6px);
         }
-        .ref-lightbox.show { display: flex; }
+
+        .ref-lightbox.show {
+            display: flex;
+        }
+
         .ref-lightbox img {
             max-width: 90vw;
             max-height: 88vh;
             border-radius: 10px;
             object-fit: contain;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
+
         .ref-lightbox-label {
             position: absolute;
             bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             color: #fff;
             font-size: 13px;
             font-weight: 600;
             padding: 6px 16px;
             border-radius: 20px;
         }
+
         .ref-lightbox-close {
             position: absolute;
-            top: 20px; right: 24px;
-            background: rgba(255,255,255,0.15);
+            top: 20px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.15);
             color: #fff;
             border: none;
             border-radius: 50%;
-            width: 38px; height: 38px;
+            width: 38px;
+            height: 38px;
             font-size: 20px;
             cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            padding: 0; margin: 0; width: auto; min-width: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+            width: auto;
+            min-width: 38px;
         }
-        .ref-lightbox-close:hover { background: rgba(255,255,255,0.3); }
+
+        .ref-lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
 
         .ref-gallery-empty {
             grid-column: 1/-1;
@@ -1329,18 +1381,29 @@
             cursor: pointer;
             transition: border-color 0.15s, background 0.15s;
         }
-        .ref-upload-zone:hover, .ref-upload-zone.dragover {
+
+        .ref-upload-zone:hover,
+        .ref-upload-zone.dragover {
             border-color: var(--primary);
-            background: rgba(79,70,229,0.03);
+            background: rgba(79, 70, 229, 0.03);
         }
-        .ref-upload-zone-icon { font-size: 32px; margin-bottom: 8px; }
+
+        .ref-upload-zone-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
         .ref-upload-zone-label {
             font-size: 13px;
             font-weight: 600;
             color: var(--text);
             margin-bottom: 4px;
         }
-        .ref-upload-zone-sub { font-size: 11px; color: var(--text-muted); }
+
+        .ref-upload-zone-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
 
         .ref-upload-preview {
             display: none;
@@ -1350,6 +1413,7 @@
             overflow: hidden;
             border: 1.5px solid var(--border);
         }
+
         .ref-upload-preview img {
             width: 100%;
             max-height: 180px;
@@ -1357,18 +1421,25 @@
             display: block;
             background: #f9fafb;
         }
+
         .ref-upload-preview-remove {
             position: absolute;
-            top: 6px; right: 6px;
-            background: rgba(0,0,0,0.6);
+            top: 6px;
+            right: 6px;
+            background: rgba(0, 0, 0, 0.6);
             color: #fff;
             border: none;
             border-radius: 50%;
-            width: 24px; height: 24px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
             font-size: 14px;
-            display: flex; align-items: center; justify-content: center;
-            margin-top: 0; width: auto; padding: 0 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0;
+            width: auto;
+            padding: 0 6px;
         }
 
         .ref-upload-status {
@@ -1378,8 +1449,14 @@
             min-height: 18px;
             text-align: center;
         }
-        .ref-upload-status.success { color: var(--success); }
-        .ref-upload-status.error   { color: var(--danger); }
+
+        .ref-upload-status.success {
+            color: var(--success);
+        }
+
+        .ref-upload-status.error {
+            color: var(--danger);
+        }
 
         .ref-modal-footer {
             display: flex;
@@ -1398,9 +1475,13 @@
             background: #fff;
             color: var(--text-muted);
             cursor: pointer;
-            width: auto; margin-top: 0;
+            width: auto;
+            margin-top: 0;
         }
-        .ref-btn-cancel:hover { background: #f3f4f6; }
+
+        .ref-btn-cancel:hover {
+            background: #f3f4f6;
+        }
 
         .ref-btn-confirm {
             padding: 8px 20px;
@@ -1411,10 +1492,101 @@
             background: var(--primary);
             color: #fff;
             cursor: pointer;
-            width: auto; margin-top: 0;
+            width: auto;
+            margin-top: 0;
         }
-        .ref-btn-confirm:hover { background: var(--primary-dark); }
-        .ref-btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .ref-btn-confirm:hover {
+            background: var(--primary-dark);
+        }
+
+        .ref-btn-confirm:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ── Color Label Tooltip ────────────────────────────────────── */
+        .color-label-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: default;
+            margin-bottom: 4px;
+        }
+
+        .color-label-wrap .color-label-text {
+            font-size: 10px;
+            color: #9ca3af;
+            font-weight: 600;
+        }
+
+        .color-label-wrap .color-info-icon {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .color-tooltip {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            z-index: 999;
+            background: #1e1e2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 12px;
+            min-width: 190px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            pointer-events: none;
+        }
+
+        .color-label-wrap:hover .color-tooltip {
+            display: block;
+        }
+
+        .color-tooltip-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .color-tooltip ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .color-tooltip ul li {
+            font-size: 11px;
+            color: #c4c9d4;
+            padding-left: 12px;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .color-tooltip ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #6b7280;
+        }
 
         /* ── Font Preview ───────────────────────────────────────────── */
         .font-preview {
@@ -1493,115 +1665,230 @@
                                     placeholder="e.g. Manufacturing"></div>
                             <div class="fg"><label>Product / Service</label><input type="text"
                                     id="cf_product_service_name" placeholder="e.g. Running Shoes"></div>
-                            <div class="fg"><label>Brand Colors</label><input type="text" id="cf_brand_colors"
-                                    placeholder="e.g. Blue, White"></div>
-                            <div class="fg"> <label>Logo Position</label> <select id="cf_logo_position">
-                                    <option value="">Select...</option>
-                                    <option value="Top-Left">Top-Left</option>
-                                    <option value="Top-Right">Top-Right</option>
-                                    <option value="Bottom-Left">Bottom-Left</option>
-                                    <option value="Bottom-Right">Bottom-Right</option>
-                                    <option value="Center">Center</option>
-                                    <option value="No Logo">No Logo</option>
-                                </select> </div>
                             <div class="fg fg-full">
-                                <label>Font Styles</label>
-                                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:4px;">
+                                <label>Brand Colors</label>
+                                <div
+                                    style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:6px;">
+                                    <!-- Signature Color -->
+                                    <div>
+                                        <div class="color-label-wrap">
+                                            <span class="color-label-text">Signature Color</span>
+                                            <span class="color-info-icon">i</span>
+                                            <div class="color-tooltip">
+                                                <div class="color-tooltip-title">Signature Color</div>
+                                                <ul>
+                                                    <li>Brand headings</li>
+                                                    <li>Main design blocks</li>
+                                                    <li>Logo-based elements</li>
+                                                    <li>Strong brand sections</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex;gap:6px;align-items:center;">
+                                            <input type="color" id="cf_signature_picker" value="#4f46e5"
+                                                style="width:34px;height:34px;padding:2px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;flex-shrink:0;"
+                                                oninput="onColorPick(this,'cf_signature_color')">
+                                            <input type="text" id="cf_signature_color" placeholder="#4f46e5"
+                                                oninput="onColorType(this,'cf_signature_picker')" style="flex:1;">
+                                        </div>
+                                    </div>
+                                    <!-- Support Color -->
+                                    <div>
+                                        <div class="color-label-wrap">
+                                            <span class="color-label-text">Support Color</span>
+                                            <span class="color-info-icon">i</span>
+                                            <div class="color-tooltip">
+                                                <div class="color-tooltip-title">Support Color</div>
+                                                <ul>
+                                                    <li>Background blocks</li>
+                                                    <li>Subheadings</li>
+                                                    <li>Icons</li>
+                                                    <li>Supporting design shapes</li>
+                                                    <li>Secondary elements</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex;gap:6px;align-items:center;">
+                                            <input type="color" id="cf_support_picker" value="#ffffff"
+                                                style="width:34px;height:34px;padding:2px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;flex-shrink:0;"
+                                                oninput="onColorPick(this,'cf_support_color')">
+                                            <input type="text" id="cf_support_color" placeholder="#ffffff"
+                                                oninput="onColorType(this,'cf_support_picker')" style="flex:1;">
+                                        </div>
+                                    </div>
+                                    <!-- Highlight Color -->
+                                    <div>
+                                        <div class="color-label-wrap">
+                                            <span class="color-label-text">Highlight Color</span>
+                                            <span class="color-info-icon">i</span>
+                                            <div class="color-tooltip">
+                                                <div class="color-tooltip-title">Highlight Color</div>
+                                                <ul>
+                                                    <li>CTA text</li>
+                                                    <li>Offers</li>
+                                                    <li>Key numbers</li>
+                                                    <li>Important points</li>
+                                                    <li>Callout boxes</li>
+                                                    <li>Buttons in creatives</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex;gap:6px;align-items:center;">
+                                            <input type="color" id="cf_highlight_picker" value="#f59e0b"
+                                                style="width:34px;height:34px;padding:2px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;flex-shrink:0;"
+                                                oninput="onColorPick(this,'cf_highlight_color')">
+                                            <input type="text" id="cf_highlight_color" placeholder="#f59e0b"
+                                                oninput="onColorType(this,'cf_highlight_picker')" style="flex:1;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="cf_brand_colors">
+                            </div>
+                            <!-- ── Poster Content (one-by-one) ────────────────── -->
+                            <div class="fg fg-full">
+                                <label
+                                    style="font-size:11px;font-weight:700;color:#6b7280;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:2px;display:block;">Poster
+                                    Content</label>
+                                <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;">
+
                                     <!-- Heading -->
-                                    <div>
-                                        <div style="font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:3px;">Heading</div>
-                                        <select id="cf_heading_font" onchange="previewFont(this,'prev_heading','Heading Style')">
-                                            <option value="">Select...</option>
-                                            <option value="Montserrat Bold">Montserrat Bold </option>
-                                            <option value="Bebas Neue">Bebas Neue</option>
-                                            <option value="Oswald Bold">Oswald Bold</option>
-                                            <option value="Playfair Display Bold">Playfair Display Bold</option>
-                                            <option value="Raleway Bold">Raleway Bold</option>
-                                            <option value="Poppins Bold">Poppins Bold</option>
-                                            <option value="Lato Black">Lato Black</option>
-                                            <option value="Roboto Bold">Roboto Bold</option>
-                                            <option value="Futura Bold">Futura Bold</option>
-                                            <option value="Impact">Impact</option>
-                                            <option value="Helvetica Bold">Helvetica Bold</option>
-                                            <option value="Georgia Bold">Georgia Bold</option>
-                                            <option value="Nunito ExtraBold">Nunito ExtraBold</option>
-                                            <option value="Inter Bold">Inter Bold</option>
-                                        </select>
-                                        <div id="prev_heading" class="font-preview">Heading Style</div>
+                                    <div
+                                        style="border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:#fafafa;">
+                                        <div
+                                            style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:10px;">
+                                            <label
+                                                style="margin:0;font-size:11px;font-weight:700;color:#374151;white-space:nowrap;">Heading</label>
+                                            <select id="cf_heading_font"
+                                                onchange="previewFont(this,'cf_poster_heading')"
+                                                style="font-size:11px;padding:3px 6px;flex:0 0 180px;">
+                                                <option value="">Font Style...</option>
+                                                <option value="Montserrat Bold">Montserrat Bold</option>
+                                                <option value="Bebas Neue">Bebas Neue</option>
+                                                <option value="Oswald Bold">Oswald Bold</option>
+                                                <option value="Playfair Display Bold">Playfair Display Bold</option>
+                                                <option value="Raleway Bold">Raleway Bold</option>
+                                                <option value="Poppins Bold">Poppins Bold</option>
+                                                <option value="Lato Black">Lato Black</option>
+                                                <option value="Roboto Bold">Roboto Bold</option>
+                                                <option value="Futura Bold">Futura Bold</option>
+                                                <option value="Impact">Impact</option>
+                                                <option value="Helvetica Bold">Helvetica Bold</option>
+                                                <option value="Georgia Bold">Georgia Bold</option>
+                                                <option value="Nunito ExtraBold">Nunito ExtraBold</option>
+                                                <option value="Inter Bold">Inter Bold</option>
+                                            </select>
+                                        </div>
+                                        <input type="text" id="cf_poster_heading"
+                                            placeholder="e.g. PREMIUM PERFORMANCE BRASS CABLE GLANDS"
+                                            style="width:100%;">
                                     </div>
+
                                     <!-- Sub-Heading -->
-                                    <div>
-                                        <div style="font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:3px;">Sub-Heading</div>
-                                        <select id="cf_subheading_font" onchange="previewFont(this,'prev_subheading','Sub-Heading Style')">
-                                            <option value="">Select...</option>
-                                            <option value="Poppins SemiBold">Poppins SemiBold</option>
-                                            <option value="Montserrat SemiBold">Montserrat SemiBold</option>
-                                            <option value="Raleway SemiBold">Raleway SemiBold</option>
-                                            <option value="Open Sans SemiBold">Open Sans SemiBold</option>
-                                            <option value="Lato Bold">Lato Bold</option>
-                                            <option value="Roboto Medium">Roboto Medium</option>
-                                            <option value="Oswald Regular">Oswald Regular</option>
-                                            <option value="Nunito SemiBold">Nunito SemiBold</option>
-                                            <option value="Inter SemiBold">Inter SemiBold</option>
-                                            <option value="Source Sans Pro Bold">Source Sans Pro Bold</option>
-                                            <option value="Playfair Display Regular">Playfair Display Regular</option>
-                                            <option value="Helvetica Regular">Helvetica Regular</option>
-                                        </select>
-                                        <div id="prev_subheading" class="font-preview">Sub-Heading Style</div>
+                                    <div
+                                        style="border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:#fafafa;">
+                                        <div
+                                            style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:10px;">
+                                            <label
+                                                style="margin:0;font-size:11px;font-weight:700;color:#374151;white-space:nowrap;">Sub-Heading</label>
+                                            <select id="cf_subheading_font"
+                                                onchange="previewFont(this,'cf_poster_subheading')"
+                                                style="font-size:11px;padding:3px 6px;flex:0 0 180px;">
+                                                <option value="">Font Style...</option>
+                                                <option value="Poppins SemiBold">Poppins SemiBold</option>
+                                                <option value="Montserrat SemiBold">Montserrat SemiBold</option>
+                                                <option value="Raleway SemiBold">Raleway SemiBold</option>
+                                                <option value="Open Sans SemiBold">Open Sans SemiBold</option>
+                                                <option value="Lato Bold">Lato Bold</option>
+                                                <option value="Roboto Medium">Roboto Medium</option>
+                                                <option value="Oswald Regular">Oswald Regular</option>
+                                                <option value="Nunito SemiBold">Nunito SemiBold</option>
+                                                <option value="Inter SemiBold">Inter SemiBold</option>
+                                                <option value="Source Sans Pro Bold">Source Sans Pro Bold</option>
+                                                <option value="Playfair Display Regular">Playfair Display Regular
+                                                </option>
+                                                <option value="Helvetica Regular">Helvetica Regular</option>
+                                            </select>
+                                        </div>
+                                        <input type="text" id="cf_poster_subheading"
+                                            placeholder="e.g. Tight Grip. Total Protection." style="width:100%;">
                                     </div>
-                                    <!-- Body -->
-                                    <div>
-                                        <div style="font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:3px;">Body</div>
-                                        <select id="cf_body_font" onchange="previewFont(this,'prev_body','Body text looks like this.')">
-                                            <option value="">Select...</option>
-                                            <option value="Open Sans Regular">Open Sans Regular</option>
-                                            <option value="Lato Regular">Lato Regular</option>
-                                            <option value="Roboto Regular">Roboto Regular</option>
-                                            <option value="Poppins Regular">Poppins Regular</option>
-                                            <option value="Noto Sans Regular">Noto Sans Regular</option>
-                                            <option value="Inter Regular">Inter Regular</option>
-                                            <option value="Nunito Regular">Nunito Regular</option>
-                                            <option value="Source Sans Pro Regular">Source Sans Pro Regular</option>
-                                            <option value="Montserrat Regular">Montserrat Regular</option>
-                                            <option value="Raleway Regular">Raleway Regular</option>
-                                            <option value="Georgia Regular">Georgia Regular</option>
-                                            <option value="Helvetica Light">Helvetica Light</option>
-                                        </select>
-                                        <div id="prev_body" class="font-preview">Body text looks like this.</div>
+
+                                    <!-- Key Terms -->
+                                    <div
+                                        style="border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:#fafafa;">
+                                        <div
+                                            style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:10px;">
+                                            <label
+                                                style="margin:0;font-size:11px;font-weight:700;color:#374151;white-space:nowrap;">Key
+                                                Terms <span style="font-size:10px;color:#9ca3af;font-weight:400;">one
+                                                    per line</span></label>
+                                            <select id="cf_body_font" onchange="previewFont(this,'cf_poster_key_terms')"
+                                                style="font-size:11px;padding:3px 6px;flex:0 0 180px;">
+                                                <option value="">Font Style...</option>
+                                                <option value="Open Sans Regular">Open Sans Regular</option>
+                                                <option value="Lato Regular">Lato Regular</option>
+                                                <option value="Roboto Regular">Roboto Regular</option>
+                                                <option value="Poppins Regular">Poppins Regular</option>
+                                                <option value="Noto Sans Regular">Noto Sans Regular</option>
+                                                <option value="Inter Regular">Inter Regular</option>
+                                                <option value="Nunito Regular">Nunito Regular</option>
+                                                <option value="Source Sans Pro Regular">Source Sans Pro Regular</option>
+                                                <option value="Montserrat Regular">Montserrat Regular</option>
+                                                <option value="Raleway Regular">Raleway Regular</option>
+                                                <option value="Georgia Regular">Georgia Regular</option>
+                                                <option value="Helvetica Light">Helvetica Light</option>
+                                            </select>
+                                        </div>
+                                        <textarea id="cf_poster_key_terms" rows="5" style="width:100%;"
+                                            placeholder="High Strength Brass Construction&#10;Corrosion Resistant Finish&#10;Sizes – Various Options Available&#10;Types – A2, BW, CW, &amp; Single&#10;Made in India"></textarea>
                                     </div>
+
                                     <!-- CTA -->
-                                    <div>
-                                        <div style="font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:3px;">CTA</div>
-                                        <select id="cf_cta_font" onchange="previewFont(this,'prev_cta','Buy Now!')">
-                                            <option value="">Select...</option>
-                                            <option value="Raleway ExtraBold">Raleway ExtraBold</option>
-                                            <option value="Montserrat ExtraBold">Montserrat ExtraBold</option>
-                                            <option value="Poppins Bold">Poppins Bold</option>
-                                            <option value="Oswald Bold">Oswald Bold</option>
-                                            <option value="Bebas Neue">Bebas Neue</option>
-                                            <option value="Lato Black">Lato Black</option>
-                                            <option value="Roboto Bold">Roboto Bold</option>
-                                            <option value="Nunito ExtraBold">Nunito ExtraBold</option>
-                                            <option value="Inter ExtraBold">Inter ExtraBold</option>
-                                            <option value="Futura Bold">Futura Bold</option>
-                                            <option value="Impact">Impact</option>
-                                            <option value="Helvetica Bold">Helvetica Bold</option>
-                                        </select>
-                                        <div id="prev_cta" class="font-preview">Buy Now!</div>
+                                    <div
+                                        style="border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:#fafafa;">
+                                        <div
+                                            style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:10px;">
+                                            <label
+                                                style="margin:0;font-size:11px;font-weight:700;color:#374151;white-space:nowrap;">CTA
+                                                <span style="font-size:10px;color:#9ca3af;font-weight:400;">Footer /
+                                                    Call to Action</span></label>
+                                            <select id="cf_cta_font" onchange="previewFont(this,'cf_poster_cta')"
+                                                style="font-size:11px;padding:3px 6px;flex:0 0 180px;">
+                                                <option value="">Font Style...</option>
+                                                <option value="Raleway ExtraBold">Raleway ExtraBold</option>
+                                                <option value="Montserrat ExtraBold">Montserrat ExtraBold</option>
+                                                <option value="Poppins Bold">Poppins Bold</option>
+                                                <option value="Oswald Bold">Oswald Bold</option>
+                                                <option value="Bebas Neue">Bebas Neue</option>
+                                                <option value="Lato Black">Lato Black</option>
+                                                <option value="Roboto Bold">Roboto Bold</option>
+                                                <option value="Nunito ExtraBold">Nunito ExtraBold</option>
+                                                <option value="Inter ExtraBold">Inter ExtraBold</option>
+                                                <option value="Futura Bold">Futura Bold</option>
+                                                <option value="Impact">Impact</option>
+                                                <option value="Helvetica Bold">Helvetica Bold</option>
+                                            </select>
+                                        </div>
+                                        <input type="text" id="cf_poster_cta"
+                                            placeholder="e.g. Built for Safety. Designed for Performance."
+                                            style="width:100%;">
                                     </div>
+
                                 </div>
                             </div>
                             <div class="fg"><label>Brand Tone</label><input type="text" id="cf_brand_tone"
                                     placeholder="e.g. Professional"></div>
-                            <div class="fg"> <label>Product Image Position</label> <select
-                                    id="cf_product_image_position">
+                            <div class="fg" id="cf_product_pos_wrap">
+                                <label>Product Image Position</label>
+                                <select id="cf_product_image_position">
                                     <option value="">Select...</option>
                                     <option value="Left">Left</option>
                                     <option value="Right">Right</option>
                                     <option value="Center">Center</option>
                                     <option value="Top">Top</option>
                                     <option value="Bottom">Bottom</option>
-                                </select> </div>
+                                </select>
+                            </div>
                             <div class="fg"> <label>Product Border</label> <select id="cf_product_border">
                                     <option value="">Select...</option>
                                     <option value="Thin">Thin</option>
@@ -1619,26 +1906,43 @@
                                     <option value="4:5">4:5 — Instagram Feed</option>
                                     <option value="1.91:1">1.91:1 — Wide (Facebook)</option>
                                 </select> </div> <input type="hidden" id="cf_logo_url" value="">
-                            <div class="fg"> <label>Logo Uploaded</label> <select id="cf_logo_uploaded">
+                            <div class="fg"> 
+                            <label>Logo Upload</label> 
+                                <select id="cf_logo_uploaded">
                                     <option value="true" selected>Yes</option>
                                     <option value="false">No</option>
-                                </select> </div>
-                            <div class="fg"> <label>Product Image Uploaded</label> <select
+                                </select> 
+                            </div>
+                            <div class="fg" id="cf_logo_pos_wrap">
+                                <label>Logo Position</label>
+                                <select id="cf_logo_position">
+                                    <option value="">Select...</option>
+                                    <option value="Top-Left">Top-Left</option>
+                                    <option value="Top-Right">Top-Right</option>
+                                    <option value="Bottom-Left">Bottom-Left</option>
+                                    <option value="Bottom-Right">Bottom-Right</option>
+                                    <option value="Center">Center</option>
+                                    <option value="No Logo">No Logo</option>
+                                </select>
+                            </div>
+                            <div class="fg"> <label>Product Image Upload</label> <select
                                     id="cf_product_image_uploaded">
                                     <option value="false">No</option>
                                     <option value="true">Yes</option>
                                 </select> </div>
-                            <div class="fg"> <label>Reference Image Uploaded</label> <select
+                            <div class="fg"> <label>Reference Image Upload</label> <select
                                     id="cf_reference_image_uploaded" onchange="onReferenceImageToggle(this.value)">
                                     <option value="false">No</option>
                                     <option value="true">Yes</option>
                                 </select>
                                 <input type="hidden" id="cf_reference_image_id" value="">
                                 <input type="hidden" id="cf_ref_layout" value="">
-                                <div id="refImageChosen" style="display:none;margin-top:6px;font-size:11px;color:var(--success);font-weight:600;"></div>
+                                <div id="refImageChosen"
+                                    style="display:none;margin-top:6px;font-size:11px;color:var(--success);font-weight:600;">
+                                </div>
                             </div>
                             <div class="fg">
-                                <label>Image For</label>
+                                <label>Image For Linkedin/Whatsapp</label>
                                 <select id="cf_image_for">
                                     <option value="">Select...</option>
                                     <option value="Linkedin">Linkedin</option>
@@ -1647,7 +1951,7 @@
                             </div>
                             <div class="fg">
                                 <label>Need Content</label>
-                                    <select id="content">
+                                <select id="content">
                                     <option value="">Select...</option>
                                     <option value="true">Yes</option>
                                     <option value="false">No</option>
@@ -1655,7 +1959,7 @@
                             </div>
                             <div class="fg">
                                 <label>Website URL</label>
-                                   <input type="text" id="web_url" placeholder="www.example.com"/>
+                                <input type="text" id="web_url" placeholder="www.example.com" />
                             </div>
                             <div class="fg fg-full"> <label>Campaign Scenario</label> <textarea id="cf_scenario"
                                     rows="2"
@@ -1674,9 +1978,7 @@
             <div class="section-header">Image Prompt</div>
             <div class="form-group">
                 <div class="prompt-wrapper"> <textarea id="prompt" rows="4"
-                        placeholder="Describe the image you want to generate... (Ctrl+Enter to generate)"
-                        maxlength="2000" oninput="updateCharCounter()"></textarea> <span class="char-counter"
-                        id="charCounter">0 / 2000</span> </div>
+                        placeholder="Describe the image you want to generate... (Ctrl+Enter to generate)"></textarea> </div>
             </div> <!-- AI Model -->
             <div class="section-header">AI Model</div>
             <div class="form-group">
@@ -1729,7 +2031,8 @@
                         <input type="file" id="geminiLogo" accept="image/*">
                         <div id="geminiLogoPreview" class="file-preview">
                             <img id="geminiLogoImg" alt="Logo preview">
-                            <button class="file-preview-remove" onclick="removeGeminiLogo()" title="Remove">&times;</button>
+                            <button class="file-preview-remove" onclick="removeGeminiLogo()"
+                                title="Remove">&times;</button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1737,7 +2040,8 @@
                         <input type="file" id="geminiProduct" accept="image/*">
                         <div id="geminiProductPreview" class="file-preview">
                             <img id="geminiProductImg" alt="Product preview">
-                            <button class="file-preview-remove" onclick="removeFile('gemini','Product')" title="Remove">&times;</button>
+                            <button class="file-preview-remove" onclick="removeFile('gemini','Product')"
+                                title="Remove">&times;</button>
                         </div>
                     </div>
                 </div>
@@ -1819,7 +2123,8 @@
                         <input type="file" id="replicateLogo" accept="image/*">
                         <div id="replicateLogoPreview" class="file-preview">
                             <img id="replicateLogoImg" alt="Logo preview">
-                            <button class="file-preview-remove" onclick="removeFile('replicate','Logo')" title="Remove">&times;</button>
+                            <button class="file-preview-remove" onclick="removeFile('replicate','Logo')"
+                                title="Remove">&times;</button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1827,7 +2132,8 @@
                         <input type="file" id="replicateProduct" accept="image/*">
                         <div id="replicateProductPreview" class="file-preview">
                             <img id="replicateProductImg" alt="Product preview">
-                            <button class="file-preview-remove" onclick="removeFile('replicate','Product')" title="Remove">&times;</button>
+                            <button class="file-preview-remove" onclick="removeFile('replicate','Product')"
+                                title="Remove">&times;</button>
                         </div>
                     </div>
                 </div>
@@ -1867,9 +2173,9 @@
                 <div class="result-heading" style="margin-bottom:10px;">Generated Content</div>
                 <div id="contentPlaceholder" class="content-placeholder">
                     <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
-                        <rect x="8" y="12" width="48" height="8" rx="4" stroke="#e5e7eb" stroke-width="2" fill="none"/>
-                        <rect x="8" y="28" width="36" height="6" rx="3" stroke="#e5e7eb" stroke-width="2" fill="none"/>
-                        <rect x="8" y="42" width="28" height="6" rx="3" stroke="#e5e7eb" stroke-width="2" fill="none"/>
+                        <rect x="8" y="12" width="48" height="8" rx="4" stroke="#e5e7eb" stroke-width="2" fill="none" />
+                        <rect x="8" y="28" width="36" height="6" rx="3" stroke="#e5e7eb" stroke-width="2" fill="none" />
+                        <rect x="8" y="42" width="28" height="6" rx="3" stroke="#e5e7eb" stroke-width="2" fill="none" />
                     </svg>
                     <span>Content will appear here when a prompt with content is used</span>
                 </div>
@@ -1896,12 +2202,14 @@
 
             <!-- Upload Tab -->
             <div id="refTabUpload" class="ref-tab-pane">
-                <div class="ref-upload-zone" id="refUploadZone" onclick="document.getElementById('refFileInput').click()">
+                <div class="ref-upload-zone" id="refUploadZone"
+                    onclick="document.getElementById('refFileInput').click()">
                     <div class="ref-upload-zone-icon">📂</div>
                     <div class="ref-upload-zone-label">Click to choose an image</div>
                     <div class="ref-upload-zone-sub">JPG, PNG, WEBP — max 8MB</div>
                 </div>
-                <input type="file" id="refFileInput" accept="image/*" style="display:none;" onchange="onRefFileSelected(this)">
+                <input type="file" id="refFileInput" accept="image/*" style="display:none;"
+                    onchange="onRefFileSelected(this)">
                 <div id="refUploadPreview" class="ref-upload-preview">
                     <img id="refUploadPreviewImg" src="" alt="Preview">
                     <button class="ref-upload-preview-remove" onclick="clearRefUpload()">&times;</button>
@@ -1929,925 +2237,973 @@
                 aria-label="Close">&times;</button> <img id="modalImage" src="" alt="Full size preview"> </div>
     </div>
     <script>
-'use strict'; /* ── Constants ──────────────────────────────────────────────────── */
-const CAMPAIGN_SEARCH_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_fetch_2';
-const CAMPAIGN_PROMPT_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_prompt_2';
-const MAX_FILE_SIZE_MB = 8;
-const CAMPAIGN_TIMEOUT_MS = 30_000;
-let activeModel = 'replicate';
-let generateTimer = null;
-let generateSeconds = 0;
-let currentContentData = null; /* ── Utility ────────────────────────────────────────────────────── */
-function parseErrorMessage(err, fallback) {
-    if (!err) return fallback; /* Try to extract a readable message from JSON error strings */
-    const msg = err.message || String(err);
-    try {
-        const json = JSON.parse(msg.replace(/^.*?:\s*/, ''));
-        return json.error || json.message || json.detail || msg;
-    } catch (_) {
-        return msg.length > 200 ? msg.substring(0, 200) + '...' : msg;
-    }
-}
-
-function showToast(message, type = 'info', duration = 3500) {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
-    container.appendChild(toast);
-    setTimeout(() => {
-        toast.style.animation = 'slideOut 0.25s ease forwards';
-        setTimeout(() => toast.remove(), 250);
-    }, duration);
-}
-
-function setResultBadge(state) {
-    const badge = document.getElementById('resultBadge');
-    const map = {
-        idle: ['Idle', 'badge-idle'],
-        loading: ['Generating', 'badge-loading'],
-        done: ['Done', 'badge-done'],
-        error: ['Error', 'badge-error']
-    };
-    const [text, cls] = map[state] || map.idle;
-    badge.textContent = text;
-    badge.className = `result-status-badge ${cls}`;
-}
-
-function validateFile(file) {
-    if (!file) return null;
-    const sizeMB = file.size / 1024 / 1024;
-    if (sizeMB > MAX_FILE_SIZE_MB) {
-        return `File "${file.name}" is ${sizeMB.toFixed(1)}MB — max allowed is ${MAX_FILE_SIZE_MB}MB.`;
-    }
-    return null;
-} /* ── Character Counter ──────────────────────────────────────────── */
-function updateCharCounter() {
-    const ta = document.getElementById('prompt');
-    const counter = document.getElementById('charCounter');
-    const len = ta.value.length;
-    counter.textContent = `${len} / 2000`;
-    counter.className = 'char-counter' + (len > 1800 ? ' limit' : len > 1400 ? ' warn' : '');
-} /* ── Campaign Toggle ────────────────────────────────────────────── */
-function toggleCampaign() {
-    const body = document.getElementById('campaignBody');
-    const arrow = document.getElementById('campaignArrow');
-    const open = body.classList.toggle('open');
-    arrow.classList.toggle('open', open);
-} /* ── Campaign Status ────────────────────────────────────────────── */
-function setCampaignStatus(msg, type) {
-    const el = document.getElementById('campaignStatus');
-    el.textContent = msg;
-    el.className = 'campaign-status' + (msg ? ` ${type}` : '');
-} /* ── Campaign: Show Manual ──────────────────────────────────────── */
-function showCampaignManual() {
-    document.getElementById('campaignForm').style.display = 'block';
-    setCampaignStatus('Fill in the details below, then click Generate Image Prompts.', 'info');
-} /* ── Campaign: Search Company ───────────────────────────────────── */
-async function searchCampaignCompany() {
-    const idVal = document.getElementById('campaignCompanyId').value.trim();
-    if (!idVal || parseInt(idVal) < 1) {
-        setCampaignStatus('Please enter a valid Company ID (positive number).', 'error');
-        return;
-    }
-    const btn = document.getElementById('campaignSearchBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Searching...';
-    setCampaignStatus('', '');
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), CAMPAIGN_TIMEOUT_MS);
-    try {
-        const res = await fetch(CAMPAIGN_SEARCH_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: parseInt(idVal)
-            }),
-            signal: controller.signal
-        });
-        clearTimeout(timeout);
-        if (!res.ok) {
-            throw new Error(`Server returned ${res.status} ${res.statusText}`);
-        }
-        const data = await res.json();
-        const company = Array.isArray(data) ? data[0] : data;
-        document.getElementById('campaignForm').style.display = 'block';
-        if (!company || !company.id) {
-            setCampaignStatus('Company not found. You can fill in details manually.', 'error');
-            return;
-        } /* Populate fields */
-        const fields = {
-            cf_company_name: company.company_name,
-            cf_industry: company.industry,
-            cf_product_service_name: company.product_service_name,
-            cf_brand_colors: company.brand_colors,
-            cf_logo_position: company.logo_position,
-            cf_heading_font: company.heading_font || '',
-            cf_subheading_font: company.subheading_font || '',
-            cf_body_font: company.body_font || '',
-            cf_cta_font: company.cta_font || '',
-            cf_brand_tone: company.brand_tone,
-            cf_product_image_position: company.product_image_position,
-            cf_product_border: company.product_border,
-        };
-        for (const [id, val] of Object.entries(fields)) {
-            const el = document.getElementById(id);
-            if (el) el.value = val || '';
-        }
-        const toBool = v => (v === true || v === 'true') ? 'true' : 'false';
-        document.getElementById('cf_product_image_uploaded').value = toBool(company.product_image_uploaded);
-        document.getElementById('cf_reference_image_uploaded').value = toBool(company.reference_image_uploaded);
-        setCampaignStatus(`✓ Loaded: ${company.company_name || 'Company'} — review and generate prompts.`, 'success');
-        showToast('Company data loaded successfully', 'success');
-    } catch (err) {
-        clearTimeout(timeout);
-        document.getElementById('campaignForm').style.display = 'block';
-        if (err.name === 'AbortError') {
-            setCampaignStatus('Request timed out after 30s. Check your connection and try again.', 'error');
-        } else {
-            setCampaignStatus(`Could not fetch company: ${parseErrorMessage(err, 'Unknown error')}. Fill manually.`, 'error');
-        }
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = 'Search';
-    }
-} /* ── Campaign: Generate Prompts ─────────────────────────────────── */
-async function generateCampaignPrompts() {
-    const scenario = document.getElementById('cf_scenario').value.trim();
-    if (!scenario) {
-        setCampaignStatus('Please describe your campaign scenario before generating prompts.', 'error');
-        return;
-    }
-    const btn = document.getElementById('campaignGenerateBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Generating Prompts...';
-    setCampaignStatus('', '');
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), CAMPAIGN_TIMEOUT_MS);
-    try {
-        const fields = {
-            company_name: document.getElementById('cf_company_name').value,
-            industry: document.getElementById('cf_industry').value,
-            product_service_name: document.getElementById('cf_product_service_name').value,
-            brand_colors: document.getElementById('cf_brand_colors').value,
-            logo_position: document.getElementById('cf_logo_position').value,
-            heading_font: document.getElementById('cf_heading_font').value,
-            subheading_font: document.getElementById('cf_subheading_font').value,
-            body_font: document.getElementById('cf_body_font').value,
-            cta_font: document.getElementById('cf_cta_font').value,
-            brand_tone: document.getElementById('cf_brand_tone').value,
-            product_image_position: document.getElementById('cf_product_image_position').value,
-            product_border: document.getElementById('cf_product_border').value,
-            image_size: document.getElementById('cf_image_size').value,
-            logo_uploaded: document.getElementById('cf_logo_uploaded').value,
-            product_image_uploaded: document.getElementById('cf_product_image_uploaded').value,
-            reference_image_uploaded: document.getElementById('cf_reference_image_uploaded').value,
-            reference_image_id: document.getElementById('cf_reference_image_id').value,
-            ref: document.getElementById('cf_ref_layout').value,
-            image_for: document.getElementById('cf_image_for').value,
-            content: document.getElementById('content').value,
-            website_url: document.getElementById('web_url').value,
-            scenario
-        };
-        let fetchOptions;
-        if (refUploadedFile) {
-            const fd = new FormData();
-            Object.entries(fields).forEach(([k, v]) => {
-                fd.append(k, v ?? '');
-            });
-            fd.append('reference_image', refUploadedFile, refUploadedFile.name);
-            fetchOptions = { method: 'POST', body: fd, signal: controller.signal };
-        } else {
-            fetchOptions = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fields), signal: controller.signal };
-        }
-        const res = await fetch(CAMPAIGN_PROMPT_ENDPOINT, fetchOptions);
-        clearTimeout(timeout);
-        if (!res.ok) {
-            throw new Error(`Server returned ${res.status} ${res.statusText}`);
-        }
-        const result = await res.json();
-        renderCampaignPrompts(result);
-        setCampaignStatus('✓ Prompts generated — click "Use" to load into the image generator.', 'success');
-        showToast('Image prompts generated!', 'success');
-    } catch (err) {
-        clearTimeout(timeout);
-        if (err.name === 'AbortError') {
-            setCampaignStatus('Request timed out. Try again.', 'error');
-        } else {
-            setCampaignStatus(`Error: ${parseErrorMessage(err, 'Failed to generate prompts')}`, 'error');
-        }
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '✦ Generate Image Prompts';
-    }
-} /* ── Campaign: Render Prompt Cards ─────────────────────────────── */
-function renderCampaignPrompts(result) {
-    const section = document.getElementById('campaignPromptsSection');
-    const grid = document.getElementById('campaignPromptsGrid');
-    grid.innerHTML = '';
-    const prompts = Array.isArray(result) ? result : [result];
-    if (prompts.length === 0) {
-        setCampaignStatus('No prompts returned. Try adjusting your scenario.', 'error');
-        return;
-    }
-    prompts.forEach((item, i) => {
-        const promptText = item.image_prompt || item.prompt || item.text || item.content || JSON.stringify(item);
-        let contentData = null;
-        if (item.output) {
+        'use strict'; /* ── Constants ──────────────────────────────────────────────────── */
+        const CAMPAIGN_SEARCH_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_fetch_2';
+        const CAMPAIGN_PROMPT_ENDPOINT = 'https://n8n.b2botix.ai/webhook-test/compaign_prompt_2';
+        const MAX_FILE_SIZE_MB = 8;
+        const CAMPAIGN_TIMEOUT_MS = 30_000;
+        let activeModel = 'replicate';
+        let generateTimer = null;
+        let generateSeconds = 0;
+        let currentContentData = null; /* ── Utility ────────────────────────────────────────────────────── */
+        function parseErrorMessage(err, fallback) {
+            if (!err) return fallback; /* Try to extract a readable message from JSON error strings */
+            const msg = err.message || String(err);
             try {
-                contentData = typeof item.output === 'string' ? JSON.parse(item.output) : item.output;
+                const json = JSON.parse(msg.replace(/^.*?:\s*/, ''));
+                return json.error || json.message || json.detail || msg;
             } catch (_) {
-                contentData = { message: item.output };
+                return msg.length > 200 ? msg.substring(0, 200) + '...' : msg;
             }
         }
-        const safeText = promptText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        const badge = contentData ? ' <span class="prompt-card-badge">+ Content</span>' : '';
-        const card = document.createElement('div');
-        card.className = 'prompt-card';
-        card.innerHTML = `<div class="prompt-card-label">Prompt ${i + 1}${badge}</div><div class="prompt-card-text">${safeText}</div><div class="prompt-card-actions"><button class="btn-use-prompt" onclick="useCampaignPrompt(this)">▶ Use as Prompt</button><button class="btn-copy-prompt" onclick="copyCampaignPrompt(this)">Copy</button></div>`;
-        card.querySelector('.btn-use-prompt').dataset.prompt = promptText;
-        card.querySelector('.btn-copy-prompt').dataset.prompt = promptText;
-        if (contentData) {
-            card.querySelector('.btn-use-prompt').dataset.content = JSON.stringify(contentData);
+
+        function showToast(message, type = 'info', duration = 3500) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.25s ease forwards';
+                setTimeout(() => toast.remove(), 250);
+            }, duration);
         }
-        grid.appendChild(card);
-    });
-    section.style.display = 'block';
-}
 
-function useCampaignPrompt(btn) {
-    const ta = document.getElementById('prompt');
-    ta.value = btn.dataset.prompt;
-    currentContentData = btn.dataset.content ? JSON.parse(btn.dataset.content) : null;
-    if (currentContentData) {
-        renderContentCard(currentContentData);
-    } else {
-        document.getElementById('contentCard').style.display = 'none'; document.getElementById('contentPlaceholder').style.display = 'flex';
-    }
-    updateCharCounter();
-    ta.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-    });
-    ta.focus();
-    ta.style.borderColor = '#22c55e';
-    ta.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.15)';
-    setTimeout(() => {
-        ta.style.borderColor = '';
-        ta.style.boxShadow = '';
-    }, 1600);
-    showToast('Prompt loaded — click Generate Image!', 'success', 2500);
-}
-async function copyCampaignPrompt(btn) {
-    try {
-        await navigator.clipboard.writeText(btn.dataset.prompt);
-        btn.textContent = '✓ Copied';
-        btn.classList.add('copied');
-        setTimeout(() => {
-            btn.textContent = 'Copy';
-            btn.classList.remove('copied');
-        }, 1800);
-    } catch (_) {
-        btn.textContent = 'Failed';
-        setTimeout(() => {
-            btn.textContent = 'Copy';
-        }, 1500);
-    }
-}
-/* ── Content Card ────────────────────────────────────────────────── */
-function renderContentCard(data) {
-    const card = document.getElementById('contentCard');
-    const escape = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const icons = { 'Whatsapp': '💬', 'WhatsApp': '💬', 'LinkedIn': '💼', 'Linkedin': '💼', 'Instagram': '📸', 'Facebook': '👍', 'Twitter': '🐦', 'X': '🐦' };
-
-    let html = '';
-    let copyText = '';
-
-    if (typeof data === 'string') {
-        /* Plain string — just display it */
-        html = `<div class="content-card-body">${escape(data)}</div>`;
-        copyText = data;
-    } else if (typeof data === 'object' && data !== null) {
-        const platform = data.platform || data.Platform || '';
-        const icon = icons[platform] || '📢';
-        if (platform) {
-            html += `<div class="content-card-platform">${icon} ${escape(platform)}</div>`;
-            copyText += `Platform: ${platform}\n\n`;
+        function setResultBadge(state) {
+            const badge = document.getElementById('resultBadge');
+            const map = {
+                idle: ['Idle', 'badge-idle'],
+                loading: ['Generating', 'badge-loading'],
+                done: ['Done', 'badge-done'],
+                error: ['Error', 'badge-error']
+            };
+            const [text, cls] = map[state] || map.idle;
+            badge.textContent = text;
+            badge.className = `result-status-badge ${cls}`;
         }
-        /* Render every key as a labeled section */
-        const skip = new Set(['platform', 'Platform']);
-        Object.entries(data).forEach(([key, val]) => {
-            if (skip.has(key) || val === null || val === undefined || val === '') return;
-            const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-            if (Array.isArray(val)) {
-                html += `<div class="content-card-section"><div class="content-card-label">${escape(label)}</div><ul class="content-card-highlights">${val.map(v => `<li>${escape(v)}</li>`).join('')}</ul></div>`;
-                copyText += `${label}:\n${val.map(v => `• ${v}`).join('\n')}\n\n`;
-            } else {
-                html += `<div class="content-card-section"><div class="content-card-label">${escape(label)}</div><div class="content-card-value">${escape(val)}</div></div>`;
-                copyText += `${label}:\n${val}\n\n`;
+
+        function validateFile(file) {
+            if (!file) return null;
+            const sizeMB = file.size / 1024 / 1024;
+            if (sizeMB > MAX_FILE_SIZE_MB) {
+                return `File "${file.name}" is ${sizeMB.toFixed(1)}MB — max allowed is ${MAX_FILE_SIZE_MB}MB.`;
             }
-        });
-    }
-
-    const safeText = copyText.trim().replace(/'/g, '&#39;');
-    html += `<div class="content-card-footer"><button class="btn-copy-content" onclick="copyContentCard(this)" data-content='${safeText}'>Copy Content</button></div>`;
-    card.innerHTML = html;
-    card.style.display = 'block';
-    document.getElementById('contentPlaceholder').style.display = 'none';
-}
-async function copyContentCard(btn) {
-    try {
-        await navigator.clipboard.writeText(btn.dataset.content);
-        btn.textContent = '✓ Copied';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'Copy Content'; btn.classList.remove('copied'); }, 1800);
-    } catch (_) {
-        showToast('Could not copy content', 'error');
-    }
-}
-/* ── Model Switch ───────────────────────────────────────────────── */
-function switchModel(model) {
-    activeModel = model;
-    const panels = ['replicate', 'kling', 'gemini', 'claude'];
-    panels.forEach(m => {
-        document.getElementById(`${m}Options`).style.display = m === model ? 'block' : 'none';
-    });
-    hideError();
-    document.getElementById('resultSection').classList.remove('show');
-    document.getElementById('resultPlaceholder').style.display = 'flex';
-    document.getElementById('resultLoading').classList.remove('show');
-    setResultBadge('idle');
-} /* ── Generate Image ─────────────────────────────────────────────── */
-async function generateImage() {
-    const promptText = document.getElementById('prompt').value.trim();
-    if (!promptText) {
-        showError('Please enter a prompt before generating.');
-        return;
-    }
-    const btn = document.getElementById('generateBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Generating...';
-    hideError();
-    document.getElementById('resultSection').classList.remove('show');
-    document.getElementById('resultPlaceholder').style.display = 'none'; /* Show loading panel */
-    const loadingEl = document.getElementById('resultLoading');
-    loadingEl.classList.add('show');
-    document.getElementById('loadingModelName').textContent = `Using: ${document.getElementById('modelSelect').selectedOptions[0].text}`;
-    setResultBadge('loading'); /* Start timer */
-    generateSeconds = 0;
-    document.getElementById('loadingTimer').textContent = '0s';
-    generateTimer = setInterval(() => {
-        generateSeconds++;
-        document.getElementById('loadingTimer').textContent = `${generateSeconds}s`;
-    }, 1000);
-    try {
-        let imageUrl;
-        const generators = {
-            replicate: () => generateReplicate(promptText),
-            kling: () => generateKling(promptText),
-            gemini: () => generateGemini(promptText),
-            claude: () => generateClaudeSVG(promptText),
-        };
-        const fn = generators[activeModel];
-        if (!fn) throw new Error(`Unknown model: ${activeModel}`);
-        imageUrl = await fn();
-        if (!imageUrl) throw new Error('No image URL returned from API.'); /* Preload image */
-        await new Promise((resolve, reject) => {
-            const img = new Image();
-            const onLoad = () => {
-                resolve();
-            };
-            const onError = () => {
-                reject(new Error('Image failed to load. The URL may have expired.'));
-            };
-            img.addEventListener('load', onLoad, {
-                once: true
-            });
-            img.addEventListener('error', onError, {
-                once: true
-            });
-            img.src = imageUrl;
-        });
-        document.getElementById('generatedImg').src = imageUrl;
-        document.getElementById('resultSection').classList.add('show');
-        setResultBadge('done');
-        showToast(`Image generated in ${generateSeconds}s`, 'success');
-    } catch (err) {
-        showError(parseErrorMessage(err, 'Generation failed. Please try again.'));
-        document.getElementById('resultPlaceholder').style.display = 'flex';
-        setResultBadge('error');
-    } finally {
-        clearInterval(generateTimer);
-        loadingEl.classList.remove('show');
-        btn.disabled = false;
-        btn.innerHTML = '⚡ Generate Image';
-    }
-} /* ── Error Helpers ──────────────────────────────────────────────── */
-function showError(msg) {
-    const box = document.getElementById('errorMsg');
-    document.getElementById('errorText').textContent = msg;
-    box.style.display = 'block';
-    box.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest'
-    });
-}
-
-function hideError() {
-    document.getElementById('errorMsg').style.display = 'none';
-} /* ── File Helpers ───────────────────────────────────────────────── */
-function fileToBase64(file, maxPx = 1024, quality = 0.82) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
-        reader.onload = e => {
-            const img = new Image();
-            img.onerror = () => reject(new Error(`Failed to decode image: ${file.name}`));
-            img.onload = () => {
-                let { width, height } = img;
-                if (width > maxPx || height > maxPx) {
-                    if (width >= height) { height = Math.round(height * maxPx / width); width = maxPx; }
-                    else                 { width  = Math.round(width  * maxPx / height); height = maxPx; }
-                }
-                const canvas = document.createElement('canvas');
-                canvas.width = width; canvas.height = height;
-                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-                const dataUrl = canvas.toDataURL('image/jpeg', quality);
-                resolve({ base64: dataUrl.split(',')[1], mimeType: 'image/jpeg', name: file.name.replace(/\.[^.]+$/, '.jpg'), dataUrl });
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
-function attachFilePreview(inputId, imgId, previewId) {
-    const input = document.getElementById(inputId);
-    if (!input) return;
-    input.addEventListener('change', function() {
-        const file = this.files[0];
-        if (!file) return;
-        const err = validateFile(file);
-        if (err) {
-            showToast(err, 'error', 5000);
-            this.value = '';
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = e => {
-            document.getElementById(imgId).src = e.target.result;
-            document.getElementById(previewId).classList.add('show');
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
-function removeFile(prefix, type) {
-    document.getElementById(`${prefix}${type}`).value = '';
-    document.getElementById(`${prefix}${type}Preview`).classList.remove('show');
-    document.getElementById(`${prefix}${type}Img`).src = '';
-}
-
-function removeGeminiLogo() {
-    document.getElementById('geminiLogo').value = '';
-    document.getElementById('geminiLogoPreview').classList.remove('show');
-    document.getElementById('geminiLogoImg').src = '';
-}
-
-function removeReplicateFile(type) {
-    removeFile('replicate', type);
-} /* ── Individual Generators ──────────────────────────────────────── */
-async function generateClaudeSVG(prompt) {
-    const model = document.getElementById('claudeModel').value;
-    const format = document.getElementById('claudeFormat').value;
-    const logoFile = document.getElementById('claudeLogo').files[0];
-    const productFile = document.getElementById('claudeProduct').files[0];
-    const [logoData, productData] = await Promise.all([logoFile ? fileToBase64(logoFile) : Promise.resolve(null), productFile ? fileToBase64(productFile) : Promise.resolve(null), ]);
-    const res = await fetch('/proxy/claude/generate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            prompt,
-            model,
-            format,
-            logoData,
-            productData
-        })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || data.message || `Claude error ${res.status}`);
-    if (format === 'canvas' && data.html) return renderCanvasToImage(data.html);
-    if (data.svg) return URL.createObjectURL(new Blob([data.svg], {
-        type: 'image/svg+xml'
-    }));
-    throw new Error('No output returned from Claude.');
-}
-
-function renderCanvasToImage(html) {
-    return new Promise((resolve, reject) => {
-        const iframe = document.createElement('iframe');
-        iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1024px;height:1024px;border:none;';
-        document.body.appendChild(iframe);
-        const cleanup = () => {
+            return null;
+        } /* ── Campaign Toggle ────────────────────────────────────────────── */
+        function toggleCampaign() {
+            const body = document.getElementById('campaignBody');
+            const arrow = document.getElementById('campaignArrow');
+            const open = body.classList.toggle('open');
+            arrow.classList.toggle('open', open);
+        } /* ── Campaign Status ────────────────────────────────────────────── */
+        function setCampaignStatus(msg, type) {
+            const el = document.getElementById('campaignStatus');
+            el.textContent = msg;
+            el.className = 'campaign-status' + (msg ? ` ${type}` : '');
+        } /* ── Campaign: Show Manual ──────────────────────────────────────── */
+        function showCampaignManual() {
+            document.getElementById('campaignForm').style.display = 'block';
+            setCampaignStatus('Fill in the details below, then click Generate Image Prompts.', 'info');
+        } /* ── Campaign: Search Company ───────────────────────────────────── */
+        async function searchCampaignCompany() {
+            const idVal = document.getElementById('campaignCompanyId').value.trim();
+            if (!idVal || parseInt(idVal) < 1) {
+                setCampaignStatus('Please enter a valid Company ID (positive number).', 'error');
+                return;
+            }
+            const btn = document.getElementById('campaignSearchBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Searching...';
+            setCampaignStatus('', '');
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), CAMPAIGN_TIMEOUT_MS);
             try {
-                document.body.removeChild(iframe);
-            } catch (_) {}
-        };
-        iframe.onload = () => {
-            try {
-                const canvas = iframe.contentDocument.getElementById('c');
-                if (!canvas) {
-                    cleanup();
-                    return reject(new Error('Canvas element not found in output.'));
+                const res = await fetch(CAMPAIGN_SEARCH_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: parseInt(idVal)
+                    }),
+                    signal: controller.signal
+                });
+                clearTimeout(timeout);
+                if (!res.ok) {
+                    throw new Error(`Server returned ${res.status} ${res.statusText}`);
                 }
-                setTimeout(() => {
+                const data = await res.json();
+                const company = Array.isArray(data) ? data[0] : data;
+                document.getElementById('campaignForm').style.display = 'block';
+                if (!company || !company.id) {
+                    setCampaignStatus('Company not found. You can fill in details manually.', 'error');
+                    return;
+                } /* Populate fields */
+                const fields = {
+                    cf_company_name: company.company_name,
+                    cf_industry: company.industry,
+                    cf_product_service_name: company.product_service_name,
+                    /* brand_colors populated via setBrandColorPickers below */
+                    cf_logo_position: company.logo_position,
+                    cf_heading_font: company.heading_font || '',
+                    cf_subheading_font: company.subheading_font || '',
+                    cf_body_font: company.body_font || '',
+                    cf_cta_font: company.cta_font || '',
+                    cf_brand_tone: company.brand_tone,
+                    cf_product_image_position: company.product_image_position,
+                    cf_product_border: company.product_border,
+                };
+                for (const [id, val] of Object.entries(fields)) {
+                    const el = document.getElementById(id);
+                    if (el) el.value = val || '';
+                }
+                const toBool = v => (v === true || v === 'true') ? 'true' : 'false';
+                document.getElementById('cf_product_image_uploaded').value = toBool(company.product_image_uploaded);
+                document.getElementById('cf_reference_image_uploaded').value = toBool(company.reference_image_uploaded);
+                setBrandColorPickers(company.brand_colors || '');
+                setCampaignStatus(`✓ Loaded: ${company.company_name || 'Company'} — review and generate prompts.`, 'success');
+                showToast('Company data loaded successfully', 'success');
+            } catch (err) {
+                clearTimeout(timeout);
+                document.getElementById('campaignForm').style.display = 'block';
+                if (err.name === 'AbortError') {
+                    setCampaignStatus('Request timed out after 30s. Check your connection and try again.', 'error');
+                } else {
+                    setCampaignStatus(`Could not fetch company: ${parseErrorMessage(err, 'Unknown error')}. Fill manually.`, 'error');
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Search';
+            }
+        } /* ── Campaign: Generate Prompts ─────────────────────────────────── */
+        async function generateCampaignPrompts() {
+            const scenario = document.getElementById('cf_scenario').value.trim();
+            if (!scenario) {
+                setCampaignStatus('Please describe your campaign scenario before generating prompts.', 'error');
+                return;
+            }
+            const btn = document.getElementById('campaignGenerateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Generating Prompts...';
+            setCampaignStatus('', '');
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), CAMPAIGN_TIMEOUT_MS);
+            try {
+                const fields = {
+                    company_name: document.getElementById('cf_company_name').value,
+                    industry: document.getElementById('cf_industry').value,
+                    product_service_name: document.getElementById('cf_product_service_name').value,
+                    brand_colors: getBrandColorsFromPickers(),
+                    logo_position: document.getElementById('cf_logo_position').value,
+                    context_heading_font: document.getElementById('cf_heading_font').value,
+                    context_subheading_font: document.getElementById('cf_subheading_font').value,
+                    context_key_terms_font: document.getElementById('cf_body_font').value,
+                    context_cta_font: document.getElementById('cf_cta_font').value,
+                    brand_tone: document.getElementById('cf_brand_tone').value,
+                    product_image_position: document.getElementById('cf_product_image_position').value,
+                    product_border: document.getElementById('cf_product_border').value,
+                    image_size: document.getElementById('cf_image_size').value,
+                    logo_uploaded: document.getElementById('cf_logo_uploaded').value,
+                    product_image_uploaded: document.getElementById('cf_product_image_uploaded').value,
+                    reference_image_uploaded: document.getElementById('cf_reference_image_uploaded').value,
+                    reference_image_id: document.getElementById('cf_reference_image_id').value,
+                    ref: document.getElementById('cf_ref_layout').value,
+                    image_for: document.getElementById('cf_image_for').value,
+                    content: document.getElementById('content').value,
+                    website_url: document.getElementById('web_url').value,
+                    context_heading: document.getElementById('cf_poster_heading').value.trim(),
+                    context_subheading: document.getElementById('cf_poster_subheading').value.trim(),
+                    context_key_terms: document.getElementById('cf_poster_key_terms').value.trim(),
+                    context_cta: document.getElementById('cf_poster_cta').value.trim(),
+                    scenario
+                };
+                let fetchOptions;
+                if (refUploadedFile) {
+                    const fd = new FormData();
+                    Object.entries(fields).forEach(([k, v]) => {
+                        fd.append(k, typeof v === 'object' && v !== null ? JSON.stringify(v) : (v ?? ''));
+                    });
+                    fd.append('reference_image', refUploadedFile, refUploadedFile.name);
+                    fetchOptions = { method: 'POST', body: fd, signal: controller.signal };
+                } else {
+                    fetchOptions = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fields), signal: controller.signal };
+                }
+                const res = await fetch(CAMPAIGN_PROMPT_ENDPOINT, fetchOptions);
+                clearTimeout(timeout);
+                if (!res.ok) {
+                    throw new Error(`Server returned ${res.status} ${res.statusText}`);
+                }
+                const result = await res.json();
+                renderCampaignPrompts(result);
+                setCampaignStatus('✓ Prompts generated — click "Use" to load into the image generator.', 'success');
+                showToast('Image prompts generated!', 'success');
+            } catch (err) {
+                clearTimeout(timeout);
+                if (err.name === 'AbortError') {
+                    setCampaignStatus('Request timed out. Try again.', 'error');
+                } else {
+                    setCampaignStatus(`Error: ${parseErrorMessage(err, 'Failed to generate prompts')}`, 'error');
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '✦ Generate Image Prompts';
+            }
+        } /* ── Campaign: Render Prompt Cards ─────────────────────────────── */
+        function renderCampaignPrompts(result) {
+            const section = document.getElementById('campaignPromptsSection');
+            const grid = document.getElementById('campaignPromptsGrid');
+            grid.innerHTML = '';
+            const prompts = Array.isArray(result) ? result : [result];
+            if (prompts.length === 0) {
+                setCampaignStatus('No prompts returned. Try adjusting your scenario.', 'error');
+                return;
+            }
+            prompts.forEach((item, i) => {
+                const promptText = item.image_prompt || item.prompt || item.text || item.content || JSON.stringify(item);
+                let contentData = null;
+                if (item.output) {
                     try {
-                        canvas.toBlob(blob => {
+                        contentData = typeof item.output === 'string' ? JSON.parse(item.output) : item.output;
+                    } catch (_) {
+                        contentData = { message: item.output };
+                    }
+                }
+                const safeText = promptText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const badge = contentData ? ' <span class="prompt-card-badge">+ Content</span>' : '';
+                const card = document.createElement('div');
+                card.className = 'prompt-card';
+                card.innerHTML = `<div class="prompt-card-label">Prompt ${i + 1}${badge}</div><div class="prompt-card-text">${safeText}</div><div class="prompt-card-actions"><button class="btn-use-prompt" onclick="useCampaignPrompt(this)">▶ Use as Prompt</button><button class="btn-copy-prompt" onclick="copyCampaignPrompt(this)">Copy</button></div>`;
+                card.querySelector('.btn-use-prompt').dataset.prompt = promptText;
+                card.querySelector('.btn-copy-prompt').dataset.prompt = promptText;
+                if (contentData) {
+                    card.querySelector('.btn-use-prompt').dataset.content = JSON.stringify(contentData);
+                }
+                grid.appendChild(card);
+            });
+            section.style.display = 'block';
+        }
+
+        function useCampaignPrompt(btn) {
+            const ta = document.getElementById('prompt');
+            ta.value = btn.dataset.prompt;
+            currentContentData = btn.dataset.content ? JSON.parse(btn.dataset.content) : null;
+            if (currentContentData) {
+                renderContentCard(currentContentData);
+            } else {
+                document.getElementById('contentCard').style.display = 'none'; document.getElementById('contentPlaceholder').style.display = 'flex';
+            }
+            ta.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            ta.focus();
+            ta.style.borderColor = '#22c55e';
+            ta.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.15)';
+            setTimeout(() => {
+                ta.style.borderColor = '';
+                ta.style.boxShadow = '';
+            }, 1600);
+            showToast('Prompt loaded — click Generate Image!', 'success', 2500);
+        }
+        async function copyCampaignPrompt(btn) {
+            try {
+                await navigator.clipboard.writeText(btn.dataset.prompt);
+                btn.textContent = '✓ Copied';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 1800);
+            } catch (_) {
+                btn.textContent = 'Failed';
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                }, 1500);
+            }
+        }
+        /* ── Content Card ────────────────────────────────────────────────── */
+        function renderContentCard(data) {
+            const card = document.getElementById('contentCard');
+            const escape = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const icons = { 'Whatsapp': '💬', 'WhatsApp': '💬', 'LinkedIn': '💼', 'Linkedin': '💼', 'Instagram': '📸', 'Facebook': '👍', 'Twitter': '🐦', 'X': '🐦' };
+
+            let html = '';
+            let copyText = '';
+
+            if (typeof data === 'string') {
+                /* Plain string — just display it */
+                html = `<div class="content-card-body">${escape(data)}</div>`;
+                copyText = data;
+            } else if (typeof data === 'object' && data !== null) {
+                const platform = data.platform || data.Platform || '';
+                const icon = icons[platform] || '📢';
+                if (platform) {
+                    html += `<div class="content-card-platform">${icon} ${escape(platform)}</div>`;
+                    copyText += `Platform: ${platform}\n\n`;
+                }
+                /* Render every key as a labeled section */
+                const skip = new Set(['platform', 'Platform']);
+                Object.entries(data).forEach(([key, val]) => {
+                    if (skip.has(key) || val === null || val === undefined || val === '') return;
+                    const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    if (Array.isArray(val)) {
+                        html += `<div class="content-card-section"><div class="content-card-label">${escape(label)}</div><ul class="content-card-highlights">${val.map(v => `<li>${escape(v)}</li>`).join('')}</ul></div>`;
+                        copyText += `${label}:\n${val.map(v => `• ${v}`).join('\n')}\n\n`;
+                    } else {
+                        html += `<div class="content-card-section"><div class="content-card-label">${escape(label)}</div><div class="content-card-value">${escape(val)}</div></div>`;
+                        copyText += `${label}:\n${val}\n\n`;
+                    }
+                });
+            }
+
+            const safeText = copyText.trim().replace(/'/g, '&#39;');
+            html += `<div class="content-card-footer"><button class="btn-copy-content" onclick="copyContentCard(this)" data-content='${safeText}'>Copy Content</button></div>`;
+            card.innerHTML = html;
+            card.style.display = 'block';
+            document.getElementById('contentPlaceholder').style.display = 'none';
+        }
+        async function copyContentCard(btn) {
+            try {
+                await navigator.clipboard.writeText(btn.dataset.content);
+                btn.textContent = '✓ Copied';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = 'Copy Content'; btn.classList.remove('copied'); }, 1800);
+            } catch (_) {
+                showToast('Could not copy content', 'error');
+            }
+        }
+        /* ── Model Switch ───────────────────────────────────────────────── */
+        function switchModel(model) {
+            activeModel = model;
+            const panels = ['replicate', 'kling', 'gemini', 'claude'];
+            panels.forEach(m => {
+                document.getElementById(`${m}Options`).style.display = m === model ? 'block' : 'none';
+            });
+            hideError();
+            document.getElementById('resultSection').classList.remove('show');
+            document.getElementById('resultPlaceholder').style.display = 'flex';
+            document.getElementById('resultLoading').classList.remove('show');
+            setResultBadge('idle');
+        } /* ── Generate Image ─────────────────────────────────────────────── */
+        async function generateImage() {
+            const promptText = document.getElementById('prompt').value.trim();
+            if (!promptText) {
+                showError('Please enter a prompt before generating.');
+                return;
+            }
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Generating...';
+            hideError();
+            document.getElementById('resultSection').classList.remove('show');
+            document.getElementById('resultPlaceholder').style.display = 'none'; /* Show loading panel */
+            const loadingEl = document.getElementById('resultLoading');
+            loadingEl.classList.add('show');
+            document.getElementById('loadingModelName').textContent = `Using: ${document.getElementById('modelSelect').selectedOptions[0].text}`;
+            setResultBadge('loading'); /* Start timer */
+            generateSeconds = 0;
+            document.getElementById('loadingTimer').textContent = '0s';
+            generateTimer = setInterval(() => {
+                generateSeconds++;
+                document.getElementById('loadingTimer').textContent = `${generateSeconds}s`;
+            }, 1000);
+            try {
+                let imageUrl;
+                const generators = {
+                    replicate: () => generateReplicate(promptText),
+                    kling: () => generateKling(promptText),
+                    gemini: () => generateGemini(promptText),
+                    claude: () => generateClaudeSVG(promptText),
+                };
+                const fn = generators[activeModel];
+                if (!fn) throw new Error(`Unknown model: ${activeModel}`);
+                imageUrl = await fn();
+                if (!imageUrl) throw new Error('No image URL returned from API.'); /* Preload image */
+                await new Promise((resolve, reject) => {
+                    const img = new Image();
+                    const onLoad = () => {
+                        resolve();
+                    };
+                    const onError = () => {
+                        reject(new Error('Image failed to load. The URL may have expired.'));
+                    };
+                    img.addEventListener('load', onLoad, {
+                        once: true
+                    });
+                    img.addEventListener('error', onError, {
+                        once: true
+                    });
+                    img.src = imageUrl;
+                });
+                document.getElementById('generatedImg').src = imageUrl;
+                document.getElementById('resultSection').classList.add('show');
+                setResultBadge('done');
+                showToast(`Image generated in ${generateSeconds}s`, 'success');
+            } catch (err) {
+                showError(parseErrorMessage(err, 'Generation failed. Please try again.'));
+                document.getElementById('resultPlaceholder').style.display = 'flex';
+                setResultBadge('error');
+            } finally {
+                clearInterval(generateTimer);
+                loadingEl.classList.remove('show');
+                btn.disabled = false;
+                btn.innerHTML = '⚡ Generate Image';
+            }
+        } /* ── Error Helpers ──────────────────────────────────────────────── */
+        function showError(msg) {
+            const box = document.getElementById('errorMsg');
+            document.getElementById('errorText').textContent = msg;
+            box.style.display = 'block';
+            box.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+
+        function hideError() {
+            document.getElementById('errorMsg').style.display = 'none';
+        } /* ── File Helpers ───────────────────────────────────────────────── */
+        function fileToBase64(file, maxPx = 1024, quality = 0.82) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
+                reader.onload = e => {
+                    const img = new Image();
+                    img.onerror = () => reject(new Error(`Failed to decode image: ${file.name}`));
+                    img.onload = () => {
+                        let { width, height } = img;
+                        if (width > maxPx || height > maxPx) {
+                            if (width >= height) { height = Math.round(height * maxPx / width); width = maxPx; }
+                            else { width = Math.round(width * maxPx / height); height = maxPx; }
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width; canvas.height = height;
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        resolve({ base64: dataUrl.split(',')[1], mimeType: 'image/jpeg', name: file.name.replace(/\.[^.]+$/, '.jpg'), dataUrl });
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function attachFilePreview(inputId, imgId, previewId) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            input.addEventListener('change', function () {
+                const file = this.files[0];
+                if (!file) return;
+                const err = validateFile(file);
+                if (err) {
+                    showToast(err, 'error', 5000);
+                    this.value = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById(imgId).src = e.target.result;
+                    document.getElementById(previewId).classList.add('show');
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removeFile(prefix, type) {
+            document.getElementById(`${prefix}${type}`).value = '';
+            document.getElementById(`${prefix}${type}Preview`).classList.remove('show');
+            document.getElementById(`${prefix}${type}Img`).src = '';
+        }
+
+        function removeGeminiLogo() {
+            document.getElementById('geminiLogo').value = '';
+            document.getElementById('geminiLogoPreview').classList.remove('show');
+            document.getElementById('geminiLogoImg').src = '';
+        }
+
+        function removeReplicateFile(type) {
+            removeFile('replicate', type);
+        } /* ── Individual Generators ──────────────────────────────────────── */
+        async function generateClaudeSVG(prompt) {
+            const model = document.getElementById('claudeModel').value;
+            const format = document.getElementById('claudeFormat').value;
+            const logoFile = document.getElementById('claudeLogo').files[0];
+            const productFile = document.getElementById('claudeProduct').files[0];
+            const [logoData, productData] = await Promise.all([logoFile ? fileToBase64(logoFile) : Promise.resolve(null), productFile ? fileToBase64(productFile) : Promise.resolve(null),]);
+            const res = await fetch('/proxy/claude/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prompt,
+                    model,
+                    format,
+                    logoData,
+                    productData
+                })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || data.message || `Claude error ${res.status}`);
+            if (format === 'canvas' && data.html) return renderCanvasToImage(data.html);
+            if (data.svg) return URL.createObjectURL(new Blob([data.svg], {
+                type: 'image/svg+xml'
+            }));
+            throw new Error('No output returned from Claude.');
+        }
+
+        function renderCanvasToImage(html) {
+            return new Promise((resolve, reject) => {
+                const iframe = document.createElement('iframe');
+                iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1024px;height:1024px;border:none;';
+                document.body.appendChild(iframe);
+                const cleanup = () => {
+                    try {
+                        document.body.removeChild(iframe);
+                    } catch (_) { }
+                };
+                iframe.onload = () => {
+                    try {
+                        const canvas = iframe.contentDocument.getElementById('c');
+                        if (!canvas) {
                             cleanup();
-                            blob ? resolve(URL.createObjectURL(blob)) : reject(new Error('Failed to convert canvas to image.'));
-                        }, 'image/png');
+                            return reject(new Error('Canvas element not found in output.'));
+                        }
+                        setTimeout(() => {
+                            try {
+                                canvas.toBlob(blob => {
+                                    cleanup();
+                                    blob ? resolve(URL.createObjectURL(blob)) : reject(new Error('Failed to convert canvas to image.'));
+                                }, 'image/png');
+                            } catch (e) {
+                                cleanup();
+                                reject(e);
+                            }
+                        }, 500);
                     } catch (e) {
                         cleanup();
                         reject(e);
                     }
-                }, 500);
-            } catch (e) {
-                cleanup();
-                reject(e);
-            }
-        };
-        iframe.srcdoc = html;
-    });
-}
-async function generateGemini(prompt) {
-    const [logoData, productData] = await Promise.all([
-        document.getElementById('geminiLogo').files[0]    ? fileToBase64(document.getElementById('geminiLogo').files[0])    : Promise.resolve(null),
-        document.getElementById('geminiProduct').files[0] ? fileToBase64(document.getElementById('geminiProduct').files[0]) : Promise.resolve(null),
-    ]);
-    const res = await fetch('/proxy/gemini/generate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            prompt,
-            model: document.getElementById('geminiModel').value,
-            logoData:    logoData    ? { base64: logoData.base64,    mimeType: logoData.mimeType,    name: logoData.name    } : null,
-            productData: productData ? { base64: productData.base64, mimeType: productData.mimeType, name: productData.name } : null
-        })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || data.message || `Gemini error ${res.status}`);
-    if (!data.b64) throw new Error('No image data returned from Gemini.');
-    return `data:${data.mimeType};base64,${data.b64}`;
-}
-async function generateKling(prompt) {
-    const res = await fetch('/proxy/kling/generate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            prompt,
-            model: document.getElementById('klingModel').value,
-            aspect_ratio: document.getElementById('klingAspect').value,
-            negative_prompt: document.getElementById('klingNegative').value
-        })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || data.message || `Kling error ${res.status}`);
-    if (!data.url) throw new Error('No image URL returned from Kling.');
-    return data.url;
-}
-async function generateReplicate(prompt) {
-    const model        = document.getElementById('replicateModel').value;
-    const output_format = document.getElementById('replicateFormat').value;
-
-    const [logoData, productData] = await Promise.all([
-        document.getElementById('replicateLogo').files[0]    ? fileToBase64(document.getElementById('replicateLogo').files[0])    : Promise.resolve(null),
-        document.getElementById('replicateProduct').files[0] ? fileToBase64(document.getElementById('replicateProduct').files[0]) : Promise.resolve(null),
-    ]);
-
-    const slim = d => d ? { base64: d.base64, mimeType: d.mimeType, name: d.name } : null;
-    const payload = {
-        prompt,
-        model,
-        output_format,
-        aspect_ratio:  document.getElementById('replicateAspect').value,
-        seedream_size: document.getElementById('replicateSeedreamSize').value,
-        logoData:    slim(logoData),
-        productData: slim(productData)
-    };
-
-    const res = await fetch('/proxy/replicate/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || data.message || `Replicate error ${res.status}`);
-    if (!data.url) throw new Error('No image URL returned from Replicate.');
-    return data.url;
-} /* ── Download ───────────────────────────────────────────────────── */
-function downloadImage() {
-    const src = document.getElementById('generatedImg').src;
-    if (!src) return;
-    const a = document.createElement('a');
-    a.href = src;
-    a.download = `ai-image-${Date.now()}.png`;
-    a.click();
-} /* ── Modal ──────────────────────────────────────────────────────── */
-function openModal(src) {
-    document.getElementById('modalImage').src = src;
-    document.getElementById('imageModal').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-    document.getElementById('imageModal').classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-/* ── Reference Image Modal ───────────────────────────────────────── */
-let refSelectedRefId      = null;
-let refSelectedContext    = null;
-let refUploadedFile       = null;
-let refUploadedReady      = false;
-let refActiveTab          = 'gallery';
-
-function onReferenceImageToggle(val) {
-    if (val === 'true') {
-        openRefModal();
-    } else {
-        document.getElementById('cf_reference_image_id').value = '';
-        document.getElementById('cf_ref_layout').value = '';
-        document.getElementById('refImageChosen').style.display = 'none';
-        refSelectedRefId   = null;
-        refSelectedContext = null;
-        refUploadedFile    = null;
-        refUploadedReady   = false;
-    }
-}
-
-function openRefModal() {
-    refSelectedRefId   = null;
-    refSelectedContext = null;
-    refUploadedFile    = null;
-    refUploadedReady   = false;
-    clearRefUpload();
-    switchRefTab('gallery');
-    loadRefGallery();
-    document.getElementById('refImageModal').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeRefModal() {
-    document.getElementById('refImageModal').classList.remove('show');
-    document.body.style.overflow = '';
-    if (!document.getElementById('cf_reference_image_id').value) {
-        document.getElementById('cf_reference_image_uploaded').value = 'false';
-    }
-}
-
-function switchRefTab(tab) {
-    refActiveTab = tab;
-    document.querySelectorAll('.ref-tab-btn').forEach((b, i) => {
-        b.classList.toggle('active', (i === 0 && tab === 'gallery') || (i === 1 && tab === 'upload'));
-    });
-    document.getElementById('refTabGallery').classList.toggle('active', tab === 'gallery');
-    document.getElementById('refTabUpload').classList.toggle('active', tab === 'upload');
-    updateRefConfirmBtn();
-}
-
-function updateRefConfirmBtn() {
-    const ok = refActiveTab === 'gallery' ? !!refSelectedRefId : refUploadedReady;
-    document.getElementById('refConfirmBtn').disabled = !ok;
-}
-
-const CAMPAIGN_REF_GALLERY_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_ref_image';
-
-async function loadRefGallery() {
-    const grid = document.getElementById('refGalleryGrid');
-    grid.innerHTML = '<div class="ref-gallery-empty">Loading...</div>';
-    try {
-        const res = await fetch(CAMPAIGN_REF_GALLERY_ENDPOINT);
-        if (!res.ok) throw new Error('Failed to load gallery');
-        const text = await res.text();
-        console.log('REF GALLERY RAW LENGTH:', text.length);
-        console.log('REF GALLERY RAW:', text);
-        /* Parse response — handle array, {data:[...]}, NDJSON */
-        let items = [];
-        const trimmed = text.trim();
-        let parsed;
-        try {
-            parsed = JSON.parse(trimmed);
-        } catch (_) {
-            /* NDJSON fallback */
-            parsed = trimmed.split('\n').filter(l => l.trim()).map(l => JSON.parse(l.trim()));
-        }
-        if (Array.isArray(parsed)) {
-            /* Could be plain array OR NDJSON-wrapped single object [{data:[...]}] */
-            if (parsed.length === 1 && parsed[0] && !parsed[0].ref_id) {
-                const inner = parsed[0].data || parsed[0].images || parsed[0].rows || parsed[0].json;
-                items = Array.isArray(inner) ? inner : parsed;
-            } else {
-                items = parsed;
-            }
-        } else if (parsed && typeof parsed === 'object') {
-            items = parsed.data || parsed.images || parsed.rows || [parsed];
-        }
-        console.log('REF GALLERY ITEMS:', items.length, items);
-        if (!items.length) {
-            grid.innerHTML = `<div class="ref-gallery-empty">No reference images available<br><small style="opacity:.6">${JSON.stringify(parsed).substring(0,200)}</small></div>`;
-            return;
-        }
-        grid.innerHTML = '';
-        items.forEach(item => {
-            if (!item || typeof item !== 'object') return;
-            const refId    = item.ref_id        || item.id   || '';
-            const imageUrl = item.ref_image_url || item.image_url || item.url || '';
-            const context  = item.ref_context   || '';
-            const div = document.createElement('div');
-            div.className = 'ref-gallery-item';
-            div.title = context ? context.replace(/\r\n/g, ' ').substring(0, 120) + '...' : refId;
-            div.innerHTML = imageUrl
-                ? `<img src="${imageUrl}" alt="${refId}" loading="eager" crossorigin="anonymous"><div class="ref-gallery-label">${refId}</div><button class="ref-zoom-btn" title="View full size" onclick="event.stopPropagation();openRefZoom('${imageUrl}','${refId}')">⛶</button>`
-                : `<div class="ref-gallery-label ref-gallery-label-only">${refId}</div>`;
-            div.addEventListener('click', () => {
-                grid.querySelectorAll('.ref-gallery-item').forEach(el => el.classList.remove('selected'));
-                div.classList.add('selected');
-                refSelectedRefId   = refId;
-                refSelectedContext = context;
-                updateRefConfirmBtn();
+                };
+                iframe.srcdoc = html;
             });
-            grid.appendChild(div);
+        }
+        async function generateGemini(prompt) {
+            const [logoData, productData] = await Promise.all([
+                document.getElementById('geminiLogo').files[0] ? fileToBase64(document.getElementById('geminiLogo').files[0]) : Promise.resolve(null),
+                document.getElementById('geminiProduct').files[0] ? fileToBase64(document.getElementById('geminiProduct').files[0]) : Promise.resolve(null),
+            ]);
+            const res = await fetch('/proxy/gemini/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prompt,
+                    model: document.getElementById('geminiModel').value,
+                    logoData: logoData ? { base64: logoData.base64, mimeType: logoData.mimeType, name: logoData.name } : null,
+                    productData: productData ? { base64: productData.base64, mimeType: productData.mimeType, name: productData.name } : null
+                })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || data.message || `Gemini error ${res.status}`);
+            if (!data.b64) throw new Error('No image data returned from Gemini.');
+            return `data:${data.mimeType};base64,${data.b64}`;
+        }
+        async function generateKling(prompt) {
+            const res = await fetch('/proxy/kling/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prompt,
+                    model: document.getElementById('klingModel').value,
+                    aspect_ratio: document.getElementById('klingAspect').value,
+                    negative_prompt: document.getElementById('klingNegative').value
+                })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || data.message || `Kling error ${res.status}`);
+            if (!data.url) throw new Error('No image URL returned from Kling.');
+            return data.url;
+        }
+        async function generateReplicate(prompt) {
+            const model = document.getElementById('replicateModel').value;
+            const output_format = document.getElementById('replicateFormat').value;
+
+            const [logoData, productData] = await Promise.all([
+                document.getElementById('replicateLogo').files[0] ? fileToBase64(document.getElementById('replicateLogo').files[0]) : Promise.resolve(null),
+                document.getElementById('replicateProduct').files[0] ? fileToBase64(document.getElementById('replicateProduct').files[0]) : Promise.resolve(null),
+            ]);
+
+            const slim = d => d ? { base64: d.base64, mimeType: d.mimeType, name: d.name } : null;
+            const payload = {
+                prompt,
+                model,
+                output_format,
+                aspect_ratio: document.getElementById('replicateAspect').value,
+                seedream_size: document.getElementById('replicateSeedreamSize').value,
+                logoData: slim(logoData),
+                productData: slim(productData)
+            };
+
+            const res = await fetch('/proxy/replicate/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || data.message || `Replicate error ${res.status}`);
+            if (!data.url) throw new Error('No image URL returned from Replicate.');
+            return data.url;
+        } /* ── Download ───────────────────────────────────────────────────── */
+        function downloadImage() {
+            const src = document.getElementById('generatedImg').src;
+            if (!src) return;
+            const a = document.createElement('a');
+            a.href = src;
+            a.download = `ai-image-${Date.now()}.png`;
+            a.click();
+        } /* ── Modal ──────────────────────────────────────────────────────── */
+        function openModal(src) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('imageModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        /* ── Reference Image Modal ───────────────────────────────────────── */
+        let refSelectedRefId = null;
+        let refSelectedContext = null;
+        let refUploadedFile = null;
+        let refUploadedReady = false;
+        let refActiveTab = 'gallery';
+
+
+        function onReferenceImageToggle(val) {
+            if (val === 'true') {
+                openRefModal();
+            } else {
+                document.getElementById('cf_reference_image_id').value = '';
+                document.getElementById('cf_ref_layout').value = '';
+                document.getElementById('refImageChosen').style.display = 'none';
+                refSelectedRefId = null;
+                refSelectedContext = null;
+                refUploadedFile = null;
+                refUploadedReady = false;
+            }
+        }
+
+        function openRefModal() {
+            refSelectedRefId = null;
+            refSelectedContext = null;
+            refUploadedFile = null;
+            refUploadedReady = false;
+            clearRefUpload();
+            switchRefTab('gallery');
+            loadRefGallery();
+            document.getElementById('refImageModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRefModal() {
+            document.getElementById('refImageModal').classList.remove('show');
+            document.body.style.overflow = '';
+            if (!document.getElementById('cf_reference_image_id').value) {
+                document.getElementById('cf_reference_image_uploaded').value = 'false';
+            }
+        }
+
+        function switchRefTab(tab) {
+            refActiveTab = tab;
+            document.querySelectorAll('.ref-tab-btn').forEach((b, i) => {
+                b.classList.toggle('active', (i === 0 && tab === 'gallery') || (i === 1 && tab === 'upload'));
+            });
+            document.getElementById('refTabGallery').classList.toggle('active', tab === 'gallery');
+            document.getElementById('refTabUpload').classList.toggle('active', tab === 'upload');
+            updateRefConfirmBtn();
+        }
+
+        function updateRefConfirmBtn() {
+            const ok = refActiveTab === 'gallery' ? !!refSelectedRefId : refUploadedReady;
+            document.getElementById('refConfirmBtn').disabled = !ok;
+        }
+
+        const CAMPAIGN_REF_GALLERY_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_ref_image';
+
+        async function loadRefGallery() {
+            const grid = document.getElementById('refGalleryGrid');
+            grid.innerHTML = '<div class="ref-gallery-empty">Loading...</div>';
+            try {
+                const res = await fetch(CAMPAIGN_REF_GALLERY_ENDPOINT);
+                if (!res.ok) throw new Error('Failed to load gallery');
+                const text = await res.text();
+                console.log('REF GALLERY RAW LENGTH:', text.length);
+                console.log('REF GALLERY RAW:', text);
+                /* Parse response — handle array, {data:[...]}, NDJSON */
+                let items = [];
+                const trimmed = text.trim();
+                let parsed;
+                try {
+                    parsed = JSON.parse(trimmed);
+                } catch (_) {
+                    /* NDJSON fallback */
+                    parsed = trimmed.split('\n').filter(l => l.trim()).map(l => JSON.parse(l.trim()));
+                }
+                if (Array.isArray(parsed)) {
+                    /* Could be plain array OR NDJSON-wrapped single object [{data:[...]}] */
+                    if (parsed.length === 1 && parsed[0] && !parsed[0].ref_id) {
+                        const inner = parsed[0].data || parsed[0].images || parsed[0].rows || parsed[0].json;
+                        items = Array.isArray(inner) ? inner : parsed;
+                    } else {
+                        items = parsed;
+                    }
+                } else if (parsed && typeof parsed === 'object') {
+                    items = parsed.data || parsed.images || parsed.rows || [parsed];
+                }
+                console.log('REF GALLERY ITEMS:', items.length, items);
+                if (!items.length) {
+                    grid.innerHTML = `<div class="ref-gallery-empty">No reference images available<br><small style="opacity:.6">${JSON.stringify(parsed).substring(0, 200)}</small></div>`;
+                    return;
+                }
+                grid.innerHTML = '';
+                items.forEach(item => {
+                    if (!item || typeof item !== 'object') return;
+                    const refId = item.ref_id || item.id || '';
+                    const imageUrl = item.ref_image_url || item.image_url || item.url || '';
+                    const context = item.ref_context || '';
+                    const div = document.createElement('div');
+                    div.className = 'ref-gallery-item';
+                    div.title = context ? context.replace(/\r\n/g, ' ').substring(0, 120) + '...' : refId;
+                    div.innerHTML = imageUrl
+                        ? `<img src="${imageUrl}" alt="${refId}" loading="eager" crossorigin="anonymous"><div class="ref-gallery-label">${refId}</div><button class="ref-zoom-btn" title="View full size" onclick="event.stopPropagation();openRefZoom('${imageUrl}','${refId}')">⛶</button>`
+                        : `<div class="ref-gallery-label ref-gallery-label-only">${refId}</div>`;
+                    div.addEventListener('click', () => {
+                        grid.querySelectorAll('.ref-gallery-item').forEach(el => el.classList.remove('selected'));
+                        div.classList.add('selected');
+                        refSelectedRefId = refId;
+                        refSelectedContext = context;
+                        updateRefConfirmBtn();
+                    });
+                    grid.appendChild(div);
+                });
+            } catch (e) {
+                grid.innerHTML = `<div class="ref-gallery-empty">Could not load gallery<br><small>${e.message}</small></div>`;
+            }
+        }
+
+        function onRefFileSelected(input) {
+            const file = input.files[0];
+            if (!file) return;
+            if (file.size > 8 * 1024 * 1024) { showToast('File too large (max 8MB)', 'error'); input.value = ''; return; }
+            refUploadedFile = file;
+            refUploadedReady = true;
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('refUploadPreviewImg').src = e.target.result;
+                document.getElementById('refUploadPreview').style.display = 'block';
+                const status = document.getElementById('refUploadStatus');
+                status.className = 'ref-upload-status success';
+                status.textContent = '✓ Image ready — will be sent as binary';
+                updateRefConfirmBtn();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearRefUpload() {
+            document.getElementById('refFileInput').value = '';
+            document.getElementById('refUploadPreview').style.display = 'none';
+            document.getElementById('refUploadPreviewImg').src = '';
+            document.getElementById('refUploadStatus').textContent = '';
+            document.getElementById('refUploadStatus').className = 'ref-upload-status';
+            refUploadedFile = null;
+            refUploadedReady = false;
+            updateRefConfirmBtn();
+        }
+
+        function openRefZoom(url, label) {
+            document.getElementById('refLightboxImg').src = url;
+            document.getElementById('refLightboxLabel').textContent = label;
+            document.getElementById('refLightbox').classList.add('show');
+        }
+        function closeRefZoom() {
+            document.getElementById('refLightbox').classList.remove('show');
+        }
+
+        function confirmRefImage() {
+            if (refActiveTab === 'gallery') {
+                if (!refSelectedRefId) return;
+                refUploadedFile = null;
+                document.getElementById('cf_reference_image_id').value = refSelectedRefId;
+                document.getElementById('cf_ref_layout').value = refSelectedContext || '';
+                document.getElementById('refImageChosen').textContent = `✓ Selected: ${refSelectedRefId}`;
+            } else {
+                if (!refUploadedReady || !refUploadedFile) return;
+                document.getElementById('cf_reference_image_id').value = '';  /* binary file, no id */
+                document.getElementById('refImageChosen').textContent = `✓ Uploaded: ${refUploadedFile.name}`;
+            }
+            document.getElementById('refImageChosen').style.display = 'block';
+            document.getElementById('refImageModal').classList.remove('show');
+            document.body.style.overflow = '';
+            document.getElementById('cf_logo_position').value = '';
+            document.getElementById('cf_product_image_position').value = '';
+        }
+
+        /* ── Brand Colors ───────────────────────────────────────────────── */
+        function onBrandColorChange(val) {
+            const customDiv = document.getElementById('brandColorCustom');
+            customDiv.style.display = val === 'Custom' ? 'block' : 'none';
+        }
+
+        function onColorPick(picker, textId) {
+            const hex = picker.value;
+            const textEl = document.getElementById(textId);
+            if (textEl) textEl.value = hex;
+        }
+
+        function onColorType(textEl, pickerId) {
+            const val = textEl.value.trim();
+            const pickerEl = document.getElementById(pickerId);
+            if (!pickerEl) return;
+            if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+                pickerEl.value = val;
+            }
+        }
+
+        function setBrandColorPickers(brandColors) {
+            const defaults = { signature: '#4f46e5', support: '#ffffff', highlight: '#f59e0b' };
+            let colors = defaults;
+            if (brandColors && typeof brandColors === 'object') {
+                colors = { ...defaults, ...brandColors };
+            } else if (typeof brandColors === 'string' && brandColors.trim().startsWith('{')) {
+                try { colors = { ...defaults, ...JSON.parse(brandColors) }; } catch (_) { }
+            }
+            const isHex = v => /^#[0-9a-fA-F]{6}$/.test(v);
+            const slots = [
+                { picker: 'cf_signature_picker', text: 'cf_signature_color', key: 'signature' },
+                { picker: 'cf_support_picker', text: 'cf_support_color', key: 'support' },
+                { picker: 'cf_highlight_picker', text: 'cf_highlight_color', key: 'highlight' },
+            ];
+            slots.forEach(slot => {
+                const hex = isHex(colors[slot.key]) ? colors[slot.key] : defaults[slot.key];
+                const pickerEl = document.getElementById(slot.picker);
+                const textEl = document.getElementById(slot.text);
+                if (pickerEl) pickerEl.value = hex;
+                if (textEl) textEl.value = hex;
+            });
+        }
+
+        function getBrandColorsFromPickers() {
+            const isHex = v => /^#[0-9a-fA-F]{6}$/.test(v);
+            const get = (textId, pickerId) => {
+                const txt = document.getElementById(textId).value.trim();
+                return isHex(txt) ? txt : document.getElementById(pickerId).value;
+            };
+            return {
+                signature: get('cf_signature_color', 'cf_signature_picker'),
+                support: get('cf_support_color', 'cf_support_picker'),
+                highlight: get('cf_highlight_color', 'cf_highlight_picker'),
+            };
+        }
+
+        /* ── Font Preview ───────────────────────────────────────────────── */
+        const loadedFonts = new Set();
+
+        function previewFont(select, inputId) {
+            const value = select.value;
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            if (!value) {
+                input.style.fontFamily = 'inherit';
+                input.style.fontWeight = '400';
+                return;
+            }
+
+            const parts = value.split(' ');
+            const weightMap = {
+                'thin': 100, 'extralight': 200, 'light': 300, 'regular': 400,
+                'medium': 500, 'semibold': 600, 'bold': 700, 'extrabold': 800, 'black': 900
+            };
+            const lastWord = parts[parts.length - 1].toLowerCase();
+            const weight = weightMap[lastWord] || 400;
+            const fontName = weightMap[lastWord] ? parts.slice(0, -1).join(' ') : value;
+
+            const systemFonts = ['impact', 'helvetica', 'futura', 'georgia', 'arial'];
+            if (!systemFonts.includes(fontName.toLowerCase())) {
+                const fontKey = `${fontName}:${weight}`;
+                if (!loadedFonts.has(fontKey)) {
+                    const encoded = fontName.replace(/ /g, '+');
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = `https://fonts.googleapis.com/css2?family=${encoded}:wght@${weight}&display=swap`;
+                    document.head.appendChild(link);
+                    loadedFonts.add(fontKey);
+                }
+            }
+
+            input.style.fontFamily = `"${fontName}", sans-serif`;
+            input.style.fontWeight = String(weight);
+        }
+
+        /* On page load — apply default font state to inputs */
+        function initFontPreviews() {
+            ['cf_heading_font', 'cf_subheading_font', 'cf_body_font', 'cf_cta_font'].forEach(id => {
+                const sel = document.getElementById(id);
+                if (sel) sel.dispatchEvent(new Event('change'));
+            });
+        }
+
+        /* ── DOMContentLoaded — single initialisation ───────────────────── */
+        document.addEventListener('DOMContentLoaded', () => {
+            initFontPreviews();
+            /* Keyboard shortcut: Ctrl+Enter to generate */
+            document.getElementById('prompt').addEventListener('keydown', e => {
+                if (e.key === 'Enter' && e.ctrlKey) generateImage();
+            }); /* Close modal on backdrop click */
+            document.getElementById('imageModal').addEventListener('click', e => {
+                if (e.target === e.currentTarget) closeModal();
+            });
+            document.getElementById('refImageModal').addEventListener('click', e => {
+                if (e.target === e.currentTarget) closeRefModal();
+            }); /* Close modal on Escape */
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') closeModal();
+            }); /* File previews — all providers in one place */
+            const fileMappings = [
+                ['claudeLogo', 'claudeLogoImg', 'claudeLogoPreview'],
+                ['claudeProduct', 'claudeProductImg', 'claudeProductPreview'],
+                ['geminiLogo', 'geminiLogoImg', 'geminiLogoPreview'],
+                ['geminiProduct', 'geminiProductImg', 'geminiProductPreview'],
+                ['replicateLogo', 'replicateLogoImg', 'replicateLogoPreview'],
+                ['replicateProduct', 'replicateProductImg', 'replicateProductPreview'],
+            ];
+            fileMappings.forEach(([input, img, preview]) => attachFilePreview(input, img, preview));
+
+            // Add ▼ arrow to every select except the model selector (already has its own)
+            document.querySelectorAll('select').forEach(sel => {
+                if (sel.closest('.model-selector-wrap')) return;
+                const wrap = document.createElement('div');
+                wrap.className = 'select-wrap';
+                sel.parentNode.insertBefore(wrap, sel);
+                wrap.appendChild(sel);
+            });
+
+            // Replicate: show Gemini note + seedream size toggle based on selected model
+            const replicateModelSel = document.getElementById('replicateModel');
+            const seedreamModels = ['seedream-4', 'seedream-4.5', 'seedream-5', 'seedream-5-lite'];
+            const sizeGroup = document.getElementById('seedreamSizeGroup');
+            replicateModelSel.addEventListener('change', function () {
+                sizeGroup.style.display = seedreamModels.includes(this.value) ? 'block' : 'none';
+            });
         });
-    } catch (e) {
-        grid.innerHTML = `<div class="ref-gallery-empty">Could not load gallery<br><small>${e.message}</small></div>`;
-    }
-}
-
-function onRefFileSelected(input) {
-    const file = input.files[0];
-    if (!file) return;
-    if (file.size > 8 * 1024 * 1024) { showToast('File too large (max 8MB)', 'error'); input.value = ''; return; }
-    refUploadedFile  = file;
-    refUploadedReady = true;
-    const reader = new FileReader();
-    reader.onload = e => {
-        document.getElementById('refUploadPreviewImg').src = e.target.result;
-        document.getElementById('refUploadPreview').style.display = 'block';
-        const status = document.getElementById('refUploadStatus');
-        status.className = 'ref-upload-status success';
-        status.textContent = '✓ Image ready — will be sent as binary';
-        updateRefConfirmBtn();
-    };
-    reader.readAsDataURL(file);
-}
-
-function clearRefUpload() {
-    document.getElementById('refFileInput').value = '';
-    document.getElementById('refUploadPreview').style.display = 'none';
-    document.getElementById('refUploadPreviewImg').src = '';
-    document.getElementById('refUploadStatus').textContent = '';
-    document.getElementById('refUploadStatus').className = 'ref-upload-status';
-    refUploadedFile  = null;
-    refUploadedReady = false;
-    updateRefConfirmBtn();
-}
-
-function openRefZoom(url, label) {
-    document.getElementById('refLightboxImg').src = url;
-    document.getElementById('refLightboxLabel').textContent = label;
-    document.getElementById('refLightbox').classList.add('show');
-}
-function closeRefZoom() {
-    document.getElementById('refLightbox').classList.remove('show');
-}
-
-function confirmRefImage() {
-    if (refActiveTab === 'gallery') {
-        if (!refSelectedRefId) return;
-        refUploadedFile = null;
-        document.getElementById('cf_reference_image_id').value = refSelectedRefId;
-        document.getElementById('cf_ref_layout').value         = refSelectedContext || '';
-        document.getElementById('refImageChosen').textContent  = `✓ Selected: ${refSelectedRefId}`;
-    } else {
-        if (!refUploadedReady || !refUploadedFile) return;
-        document.getElementById('cf_reference_image_id').value = '';  /* binary file, no id */
-        document.getElementById('refImageChosen').textContent  = `✓ Uploaded: ${refUploadedFile.name}`;
-    }
-    document.getElementById('refImageChosen').style.display = 'block';
-    document.getElementById('refImageModal').classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-/* ── Font Preview ───────────────────────────────────────────────── */
-const loadedFonts = new Set();
-
-function previewFont(select, previewId, sampleText) {
-    const value   = select.value;
-    const preview = document.getElementById(previewId);
-
-    // Empty = Select... chosen — show placeholder state
-    if (!value) {
-        preview.textContent      = 'Select a font to preview...';
-        preview.style.fontFamily = 'inherit';
-        preview.style.fontWeight = '400';
-        preview.style.color      = '#d1d5db';
-        return;
-    }
-
-    preview.textContent = sampleText;
-    preview.style.color = 'var(--text)';
-
-    const parts     = value.split(' ');
-    const weightMap = { 'thin':100,'extralight':200,'light':300,'regular':400,
-                        'medium':500,'semibold':600,'bold':700,'extrabold':800,'black':900 };
-    const lastWord  = parts[parts.length - 1].toLowerCase();
-    const weight    = weightMap[lastWord] || 400;
-    const fontName  = weightMap[lastWord] ? parts.slice(0, -1).join(' ') : value;
-
-    // System fonts — no Google Fonts load needed
-    const systemFonts = ['impact','helvetica','futura','georgia','arial'];
-    if (systemFonts.includes(fontName.toLowerCase())) {
-        preview.style.fontFamily = `"${fontName}", sans-serif`;
-        preview.style.fontWeight = weight;
-        return;
-    }
-
-    // Load from Google Fonts if not already loaded
-    const fontKey = `${fontName}:${weight}`;
-    if (!loadedFonts.has(fontKey)) {
-        const encoded = fontName.replace(/ /g, '+');
-        const link    = document.createElement('link');
-        link.rel      = 'stylesheet';
-        link.href     = `https://fonts.googleapis.com/css2?family=${encoded}:wght@${weight}&display=swap`;
-        document.head.appendChild(link);
-        loadedFonts.add(fontKey);
-    }
-
-    preview.style.fontFamily = `"${fontName}", sans-serif`;
-    preview.style.fontWeight = weight;
-}
-
-/* On page load — show placeholder since default is Select... */
-function initFontPreviews() {
-    ['cf_heading_font','cf_subheading_font','cf_body_font','cf_cta_font'].forEach(id => {
-        const sel = document.getElementById(id);
-        sel.dispatchEvent(new Event('change'));
-    });
-}
-
-/* ── DOMContentLoaded — single initialisation ───────────────────── */
-document.addEventListener('DOMContentLoaded', () => {
-    initFontPreviews();
-    /* Keyboard shortcut: Ctrl+Enter to generate */
-    document.getElementById('prompt').addEventListener('keydown', e => {
-        if (e.key === 'Enter' && e.ctrlKey) generateImage();
-    }); /* Close modal on backdrop click */
-    document.getElementById('imageModal').addEventListener('click', e => {
-        if (e.target === e.currentTarget) closeModal();
-    });
-    document.getElementById('refImageModal').addEventListener('click', e => {
-        if (e.target === e.currentTarget) closeRefModal();
-    }); /* Close modal on Escape */
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeModal();
-    }); /* File previews — all providers in one place */
-    const fileMappings = [
-        ['claudeLogo', 'claudeLogoImg', 'claudeLogoPreview'],
-        ['claudeProduct', 'claudeProductImg', 'claudeProductPreview'],
-        ['geminiLogo',       'geminiLogoImg',       'geminiLogoPreview'],
-        ['geminiProduct',    'geminiProductImg',    'geminiProductPreview'],
-        ['replicateLogo',    'replicateLogoImg',    'replicateLogoPreview'],
-        ['replicateProduct', 'replicateProductImg', 'replicateProductPreview'],
-    ];
-    fileMappings.forEach(([input, img, preview]) => attachFilePreview(input, img, preview));
-
-    // Add ▼ arrow to every select except the model selector (already has its own)
-    document.querySelectorAll('select').forEach(sel => {
-        if (sel.closest('.model-selector-wrap')) return;
-        const wrap = document.createElement('div');
-        wrap.className = 'select-wrap';
-        sel.parentNode.insertBefore(wrap, sel);
-        wrap.appendChild(sel);
-    });
-
-    // Replicate: show Gemini note + seedream size toggle based on selected model
-    const replicateModelSel = document.getElementById('replicateModel');
-    const seedreamModels = ['seedream-4', 'seedream-4.5', 'seedream-5', 'seedream-5-lite'];
-    const sizeGroup      = document.getElementById('seedreamSizeGroup');
-    replicateModelSel.addEventListener('change', function() {
-        sizeGroup.style.display = seedreamModels.includes(this.value) ? 'block' : 'none';
-    });
-});
-</script>
+    </script>
 </body>
 
 </html>
