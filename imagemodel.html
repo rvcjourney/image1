@@ -1661,8 +1661,6 @@
                         <div class="campaign-form-grid">
                             <div class="fg"><label>Company Name</label><input type="text" id="cf_company_name"
                                     placeholder="e.g. Acme Corp"></div>
-                            <div class="fg"><label>Industry</label><input type="text" id="cf_industry"
-                                    placeholder="e.g. Manufacturing"></div>
                             <div class="fg"><label>Product / Service</label><input type="text"
                                     id="cf_product_service_name" placeholder="e.g. Running Shoes"></div>
                             <div class="fg fg-full">
@@ -1876,36 +1874,7 @@
 
                                 </div>
                             </div>
-                            <div class="fg"><label>Brand Tone</label><input type="text" id="cf_brand_tone"
-                                    placeholder="e.g. Professional"></div>
-                            <div class="fg" id="cf_product_pos_wrap">
-                                <label>Product Image Position</label>
-                                <select id="cf_product_image_position">
-                                    <option value="">Select...</option>
-                                    <option value="Left">Left</option>
-                                    <option value="Right">Right</option>
-                                    <option value="Center">Center</option>
-                                    <option value="Top">Top</option>
-                                    <option value="Bottom">Bottom</option>
-                                </select>
-                            </div>
-                            <div class="fg"> <label>Product Border</label> <select id="cf_product_border">
-                                    <option value="">Select...</option>
-                                    <option value="Thin">Thin</option>
-                                    <option value="Thick">Thick</option>
-                                    <option value="Rounded">Rounded</option>
-                                    <option value="Shadow">Shadow</option>
-                                    <option value="Glow">Glow</option>
-                                </select> </div>
-                            <div class="fg"> <label>Image Size / Aspect Ratio</label> <select id="cf_image_size">
-                                    <option value="1:1">1:1 — Square</option>
-                                    <option value="9:16">9:16 — Portrait (Stories)</option>
-                                    <option value="16:9">16:9 — Landscape (Banner)</option>
-                                    <option value="4:3">4:3 — Standard</option>
-                                    <option value="3:4">3:4 — Portrait (Pinterest)</option>
-                                    <option value="4:5">4:5 — Instagram Feed</option>
-                                    <option value="1.91:1">1.91:1 — Wide (Facebook)</option>
-                                </select> </div> <input type="hidden" id="cf_logo_url" value="">
+                            <input type="hidden" id="cf_logo_url" value="">
                             <div class="fg"> 
                             <label>Logo Upload</label> 
                                 <select id="cf_logo_uploaded">
@@ -1915,7 +1884,7 @@
                             </div>
                             <div class="fg" id="cf_logo_pos_wrap">
                                 <label>Logo Position</label>
-                                <select id="cf_logo_position">
+                                <select id="cf_logo_position" onchange="onCustomPosition(this,'cf_logo_position_custom')">
                                     <option value="">Select...</option>
                                     <option value="Top-Left">Top-Left</option>
                                     <option value="Top-Right">Top-Right</option>
@@ -1923,13 +1892,28 @@
                                     <option value="Bottom-Right">Bottom-Right</option>
                                     <option value="Center">Center</option>
                                     <option value="No Logo">No Logo</option>
+                                    <option value="Custom">Custom</option>
                                 </select>
+                                <input type="text" id="cf_logo_position_custom" placeholder="Describe position..." style="display:none;margin-top:5px;width:100%;">
                             </div>
                             <div class="fg"> <label>Product Image Upload</label> <select
                                     id="cf_product_image_uploaded">
                                     <option value="false">No</option>
                                     <option value="true">Yes</option>
                                 </select> </div>
+                            <div class="fg" id="cf_product_pos_wrap">
+                                <label>Product Image Position</label>
+                                <select id="cf_product_image_position" onchange="onCustomPosition(this,'cf_product_image_position_custom')">
+                                    <option value="">Select...</option>
+                                    <option value="Left">Left</option>
+                                    <option value="Right">Right</option>
+                                    <option value="Center">Center</option>
+                                    <option value="Top">Top</option>
+                                    <option value="Bottom">Bottom</option>
+                                    <option value="Custom">Custom</option>
+                                </select>
+                                <input type="text" id="cf_product_image_position_custom" placeholder="Describe position..." style="display:none;margin-top:5px;width:100%;">
+                            </div>
                             <div class="fg"> <label>Reference Image Upload</label> <select
                                     id="cf_reference_image_uploaded" onchange="onReferenceImageToggle(this.value)">
                                     <option value="false">No</option>
@@ -1941,6 +1925,15 @@
                                     style="display:none;margin-top:6px;font-size:11px;color:var(--success);font-weight:600;">
                                 </div>
                             </div>
+                            <div class="fg"> <label>Image Size / Aspect Ratio</label> <select id="cf_image_size">
+                                    <option value="1:1">1:1 — Square</option>
+                                    <option value="9:16">9:16 — Portrait (Stories)</option>
+                                    <option value="16:9">16:9 — Landscape (Banner)</option>
+                                    <option value="4:3">4:3 — Standard</option>
+                                    <option value="3:4">3:4 — Portrait (Pinterest)</option>
+                                    <option value="4:5">4:5 — Instagram Feed</option>
+                                    <option value="1.91:1">1.91:1 — Wide (Facebook)</option>
+                            </select> </div>
                             <div class="fg">
                                 <label>Image For Linkedin/Whatsapp</label>
                                 <select id="cf_image_for">
@@ -1957,11 +1950,7 @@
                                     <option value="false">No</option>
                                 </select>
                             </div>
-                            <div class="fg">
-                                <label>Website URL</label>
-                                <input type="text" id="web_url" placeholder="www.example.com" />
-                            </div>
-                            <div class="fg fg-full"> <label>Campaign Scenario</label> <textarea id="cf_scenario"
+                            <div class="fg fg-full"> <label>Image Prompt*</label> <textarea id="cf_scenario"
                                     rows="2"
                                     placeholder="Describe your campaign, e.g. Diwali Festival Poster for LinkedIn with 30% off promotion..."></textarea>
                             </div>
@@ -2239,7 +2228,7 @@
     <script>
         'use strict'; /* ── Constants ──────────────────────────────────────────────────── */
         const CAMPAIGN_SEARCH_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_fetch_2';
-        const CAMPAIGN_PROMPT_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_prompt_2';
+        const CAMPAIGN_PROMPT_ENDPOINT = 'https://n8n.b2botix.ai/webhook-test/compaign_prompt_2';
         const MAX_FILE_SIZE_MB = 8;
         const CAMPAIGN_TIMEOUT_MS = 30_000;
         let activeModel = 'replicate';
@@ -2342,7 +2331,6 @@
                 } /* Populate fields */
                 const fields = {
                     cf_company_name: company.company_name,
-                    cf_industry: company.industry,
                     cf_product_service_name: company.product_service_name,
                     /* brand_colors populated via setBrandColorPickers below */
                     cf_logo_position: company.logo_position,
@@ -2350,9 +2338,7 @@
                     cf_subheading_font: company.subheading_font || '',
                     cf_body_font: company.body_font || '',
                     cf_cta_font: company.cta_font || '',
-                    cf_brand_tone: company.brand_tone,
                     cf_product_image_position: company.product_image_position,
-                    cf_product_border: company.product_border,
                 };
                 for (const [id, val] of Object.entries(fields)) {
                     const el = document.getElementById(id);
@@ -2392,17 +2378,14 @@
             try {
                 const fields = {
                     company_name: document.getElementById('cf_company_name').value,
-                    industry: document.getElementById('cf_industry').value,
                     product_service_name: document.getElementById('cf_product_service_name').value,
                     brand_colors: getBrandColorsFromPickers(),
-                    logo_position: document.getElementById('cf_logo_position').value,
                     context_heading_font: document.getElementById('cf_heading_font').value,
                     context_subheading_font: document.getElementById('cf_subheading_font').value,
                     context_key_terms_font: document.getElementById('cf_body_font').value,
                     context_cta_font: document.getElementById('cf_cta_font').value,
-                    brand_tone: document.getElementById('cf_brand_tone').value,
-                    product_image_position: document.getElementById('cf_product_image_position').value,
-                    product_border: document.getElementById('cf_product_border').value,
+                    logo_position: getPositionValue('cf_logo_position', 'cf_logo_position_custom'),
+                    product_image_position: getPositionValue('cf_product_image_position', 'cf_product_image_position_custom'),
                     image_size: document.getElementById('cf_image_size').value,
                     logo_uploaded: document.getElementById('cf_logo_uploaded').value,
                     product_image_uploaded: document.getElementById('cf_product_image_uploaded').value,
@@ -2411,7 +2394,6 @@
                     ref: document.getElementById('cf_ref_layout').value,
                     image_for: document.getElementById('cf_image_for').value,
                     content: document.getElementById('content').value,
-                    website_url: document.getElementById('web_url').value,
                     context_heading: document.getElementById('cf_poster_heading').value.trim(),
                     context_subheading: document.getElementById('cf_poster_subheading').value.trim(),
                     context_key_terms: document.getElementById('cf_poster_key_terms').value.trim(),
@@ -3056,6 +3038,21 @@
         }
 
         /* ── Brand Colors ───────────────────────────────────────────────── */
+        function onCustomPosition(select, customInputId) {
+            const input = document.getElementById(customInputId);
+            if (!input) return;
+            input.style.display = select.value === 'Custom' ? 'block' : 'none';
+            if (select.value !== 'Custom') input.value = '';
+        }
+
+        function getPositionValue(selectId, customId) {
+            const sel = document.getElementById(selectId).value;
+            if (sel === 'Custom') {
+                return document.getElementById(customId).value.trim() || 'Custom';
+            }
+            return sel;
+        }
+
         function onBrandColorChange(val) {
             const customDiv = document.getElementById('brandColorCustom');
             customDiv.style.display = val === 'Custom' ? 'block' : 'none';
