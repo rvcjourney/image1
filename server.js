@@ -179,8 +179,18 @@ ${imageInstructions}`;
     }
 });
 
+// ── Gemini: rate-limit guard (max 1 req per 35s) ─────────────────────────────
+let geminiLastCall = 0;
+const GEMINI_MIN_INTERVAL = 35000; // 35 seconds between calls
+
 // ── Gemini: generate image ────────────────────────────────────────────────────
 app.post('/proxy/gemini/generate', async (req, res) => {
+    const now = Date.now();
+    const wait = GEMINI_MIN_INTERVAL - (now - geminiLastCall);
+    if (wait > 0) {
+        await new Promise(r => setTimeout(r, wait));
+    }
+    geminiLastCall = Date.now();
     try {
         const { prompt, model, logoData, productData } = req.body;
         const modelId = model || 'gemini-2.5-flash-image';
