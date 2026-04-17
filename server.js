@@ -333,8 +333,7 @@ app.post('/proxy/replicate/generate', async (req, res) => {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${REPLICATE_TOKEN}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'wait'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ input })
         });
@@ -342,18 +341,12 @@ app.post('/proxy/replicate/generate', async (req, res) => {
         const submitData = await submitRes.json();
         if (!submitRes.ok) return res.status(submitRes.status).json(submitData);
 
-        // If Prefer:wait returned output directly
-        if (submitData.output) {
-            const imgUrl = Array.isArray(submitData.output) ? submitData.output[0] : submitData.output;
-            return res.json({ url: imgUrl });
-        }
-
         const predictionId = submitData.id;
         if (!predictionId) return res.status(500).json({ error: 'No prediction id', raw: submitData });
 
-        // Step 2: Poll every 4s (max 6 minutes)
-        for (let i = 0; i < 90; i++) {
-            await new Promise(r => setTimeout(r, 4000));
+        // Poll every 3s (max 10 minutes)
+        for (let i = 0; i < 200; i++) {
+            await new Promise(r => setTimeout(r, 3000));
 
             const pollRes = await fetch(`${REPLICATE_BASE}/predictions/${predictionId}`, {
                 headers: { 'Authorization': `Bearer ${REPLICATE_TOKEN}` }
