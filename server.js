@@ -351,9 +351,9 @@ app.post('/proxy/replicate/generate', async (req, res) => {
         const predictionId = submitData.id;
         if (!predictionId) return res.status(500).json({ error: 'No prediction id', raw: submitData });
 
-        // Step 2: Poll every 3s (max 3 minutes)
-        for (let i = 0; i < 60; i++) {
-            await new Promise(r => setTimeout(r, 3000));
+        // Step 2: Poll every 4s (max 6 minutes)
+        for (let i = 0; i < 90; i++) {
+            await new Promise(r => setTimeout(r, 4000));
 
             const pollRes = await fetch(`${REPLICATE_BASE}/predictions/${predictionId}`, {
                 headers: { 'Authorization': `Bearer ${REPLICATE_TOKEN}` }
@@ -379,6 +379,8 @@ app.post('/proxy/replicate/generate', async (req, res) => {
 
 
 
+
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 const PORT = 4000;
 app.listen(PORT, () => {
