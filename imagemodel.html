@@ -1956,11 +1956,6 @@
                             </div>
                         </div> <button id="campaignGenerateBtn" class="btn-success" onclick="generateCampaignPrompts()">
                             ✦ Generate Image Prompts </button>
-                        <div id="campaignPromptsSection" class="prompts-section" style="display:none;">
-                            <div class="prompts-section-title">✦ Generated Prompts — click "Use" to load into generator
-                            </div>
-                            <div id="campaignPromptsGrid" class="prompt-cards-grid"></div>
-                        </div>
                     </div>
                 </div>
             </div> <!-- Image Prompt -->
@@ -2417,9 +2412,24 @@
                     throw new Error(`Server returned ${res.status} ${res.statusText}`);
                 }
                 const result = await res.json();
-                renderCampaignPrompts(result);
-                setCampaignStatus('✓ Prompts generated — click "Use" to load into the image generator.', 'success');
-                showToast('Image prompts generated!', 'success');
+                const prompts = Array.isArray(result) ? result : [result];
+                if (!prompts.length) throw new Error('No prompts returned');
+                const first = prompts[0];
+                const promptText = first.image_prompt || first.prompt || first.text || first.content || JSON.stringify(first);
+                const contentData = first.content_data || first.content || null;
+                const ta = document.getElementById('prompt');
+                ta.value = promptText;
+                currentContentData = (contentData && typeof contentData === 'object') ? contentData : null;
+                if (currentContentData) {
+                    renderContentCard(currentContentData);
+                }
+                ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                ta.focus();
+                ta.style.borderColor = '#22c55e';
+                ta.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.15)';
+                setTimeout(() => { ta.style.borderColor = ''; ta.style.boxShadow = ''; }, 1600);
+                setCampaignStatus('✓ Prompt loaded — click Generate Image to create your image.', 'success');
+                showToast('Prompt loaded into generator!', 'success');
             } catch (err) {
                 clearTimeout(timeout);
                 if (err.name === 'AbortError') {
