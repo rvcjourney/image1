@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'imagemodel.html')));
+app.get('/imagemodel', (req, res) => res.sendFile(path.join(__dirname, 'imagemodel.html')));
 app.get('/imagemodel.html', (req, res) => res.sendFile(path.join(__dirname, 'imagemodel.html')));
 
 const REPLICATE_BASE   = 'https://api.replicate.com/v1';
