@@ -5,21 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Image Generator</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
         /* ── Design Tokens ─────────────────────────────────────────── */
         :root {
             --primary: #4f46e5;
             --primary-dark: #3730a3;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --warning: #d97706;
-            --bg: #f0f2f8;
+            --success: #10b981;
+            --danger: #f43f5e;
+            --warning: #f59e0b;
+            --bg: #f0f4ff;
             --panel: #ffffff;
-            --border: #e2e5ec;
-            --text: #1a1d27;
+            --border: #e8eaf6;
+            --text: #1e1b4b;
             --text-muted: #6b7280;
-            --radius: 10px;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 14px;
+            --shadow: 0 4px 24px rgba(79,70,229,0.08);
         }
 
         /* ── Reset ─────────────────────────────────────────────────── */
@@ -33,7 +34,10 @@
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(145deg, #1a1d3a 0%, #2d2060 50%, #1a1d3a 100%);
+            background: #f0f4ff;
+            background-image:
+                radial-gradient(ellipse at 0% 0%, rgba(79,70,229,0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 100% 100%, rgba(16,185,129,0.07) 0%, transparent 50%);
             min-height: 100vh;
             padding: 24px 20px;
             color: var(--text);
@@ -49,26 +53,20 @@
         }
 
         .page-header-icon {
-            width: 42px;
-            height: 42px;
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .page-header-text h1 {
             font-size: 20px;
             font-weight: 700;
-            color: #fff;
+            color: #1e1b4b;
         }
 
         .page-header-text p {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.55);
+            color: #6b7280;
             margin-top: 1px;
         }
 
@@ -81,18 +79,20 @@
         }
 
         .container {
-            background: var(--panel);
+            background: #ffffff;
+            border: 1px solid #e8eaf6;
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 24px rgba(79,70,229,0.08);
             padding: 24px 26px;
             flex: 0 0 660px;
             min-width: 0;
         }
 
         .result-panel {
-            background: var(--panel);
+            background: #ffffff;
+            border: 1px solid #e8eaf6;
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 24px rgba(79,70,229,0.08);
             padding: 22px;
             flex: 1;
             min-width: 300px;
@@ -104,9 +104,9 @@
         .section-header {
             font-size: 10px;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
-            color: #9ca3af;
+            color: #6366f1;
             margin: 22px 0 10px;
             display: flex;
             align-items: center;
@@ -117,7 +117,7 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: var(--border);
+            background: linear-gradient(90deg, rgba(99,102,241,0.4), transparent);
         }
 
         /* ── Form Elements ──────────────────────────────────────────── */
@@ -125,7 +125,7 @@
             display: block;
             font-size: 12px;
             font-weight: 600;
-            color: #4b5563;
+            color: #374151;
             margin-bottom: 5px;
         }
 
@@ -139,24 +139,31 @@
         textarea {
             width: 100%;
             padding: 9px 12px;
-            border: 1.5px solid var(--border);
-            border-radius: 7px;
+            border: 1.5px solid #dde4f0;
+            border-radius: 8px;
             font-size: 13px;
             font-family: inherit;
-            background: #fff;
-            color: var(--text);
+            background: #f8faff;
+            color: #1e1b4b;
             transition: border-color 0.18s, box-shadow 0.18s;
             appearance: none;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="number"]::placeholder,
+        textarea::placeholder {
+            color: #9ca3af;
         }
 
         input[type="file"] {
             width: 100%;
             padding: 7px 10px;
-            border: 1.5px solid var(--border);
-            border-radius: 7px;
+            border: 1.5px solid #dde4f0;
+            border-radius: 8px;
             font-size: 12px;
             font-family: inherit;
-            background: #fafbfc;
+            background: #f8faff;
+            color: #6b7280;
             cursor: pointer;
         }
 
@@ -164,8 +171,9 @@
         select:focus,
         textarea:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+            background: #fff;
         }
 
         textarea {
@@ -174,7 +182,7 @@
         }
 
         input[readonly] {
-            background: #f9fafb;
+            background: #f1f5f9;
             color: #6b7280;
         }
 
@@ -230,26 +238,30 @@
         }
 
         .btn-primary {
-            background: var(--primary);
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
             color: #fff;
             padding: 10px 18px;
+            box-shadow: 0 4px 14px rgba(99,102,241,0.35);
         }
 
         .btn-secondary {
-            background: #f3f4f6;
-            color: #374151;
+            background: #f1f4fd;
+            color: #4f46e5;
             padding: 9px 14px;
+            border: 1px solid #c7d2fe;
         }
 
         .btn-success {
-            background: var(--success);
+            background: linear-gradient(135deg, #10b981, #059669);
             color: #fff;
             padding: 10px 18px;
+            box-shadow: 0 4px 14px rgba(16,185,129,0.3);
         }
 
         .btn-danger {
-            background: var(--danger);
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
             color: #fff;
+            box-shadow: 0 4px 14px rgba(244,63,94,0.3);
         }
 
         .btn-sm {
@@ -323,7 +335,6 @@
         }
 
         .campaign-toggle-arrow {
-            font-size: 10px;
             color: #9ca3af;
             transition: transform 0.22s;
         }
@@ -753,7 +764,7 @@
         }
 
         .file-preview img {
-            max-height: 56px;
+            max-height: 40px;
             max-width: 100%;
             border-radius: 5px;
             border: 1.5px solid var(--border);
@@ -765,17 +776,17 @@
             top: -5px;
             right: -5px;
             width: 18px;
-            height: 18px;
+            height: 16px;
             padding: 0;
             background: var(--danger);
             color: #fff;
             border-radius: 50%;
-            font-size: 11px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            border: 2px solid #fff;
+            /* border: 2px solid #fff; */
             margin-top: 0;
             width: auto;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
@@ -1588,6 +1599,53 @@
             color: #6b7280;
         }
 
+        /* ── Multi Product Thumbnails ───────────────────────────────── */
+        .product-thumbs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 7px;
+            min-height: 0;
+        }
+
+        .product-thumb-item {
+            position: relative;
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+        }
+
+        .product-thumb-item img {
+            width: 52px;
+            height: 52px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1.5px solid var(--border);
+            display: block;
+        }
+
+        .product-thumb-remove {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 16px !important;
+            height: 16px;
+            background: var(--danger);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 10px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1.5px solid #fff;
+            padding: 0;
+            margin-top: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
         /* ── Font Preview ───────────────────────────────────────────── */
         .font-preview {
             margin-top: 6px;
@@ -1630,7 +1688,20 @@
 <body>
     <div class="toast-container" id="toastContainer"></div><!-- Page Header -->
     <div class="page-header">
-        <div class="page-header-icon">🎨</div>
+        <div class="page-header-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="paletteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%"   stop-color="#f43f5e"/>
+                        <stop offset="25%"  stop-color="#f97316"/>
+                        <stop offset="50%"  stop-color="#facc15"/>
+                        <stop offset="75%"  stop-color="#22d3ee"/>
+                        <stop offset="100%" stop-color="#818cf8"/>
+                    </linearGradient>
+                </defs>
+                <path fill="url(#paletteGrad)" d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.17-.64-1.59-.09-.1-.13-.21-.13-.34 0-.28.22-.5.5-.5H16c3.31 0 6-2.69 6-6 0-4.96-4.49-9-10-9zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 8 6.5 8 8 8.67 8 9.5 7.33 11 6.5 11zm3-4C8.67 7 8 6.33 8 5.5S8.67 4 9.5 4s1.5.67 1.5 1.5S10.33 7 9.5 7zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 4 14.5 4s1.5.67 1.5 1.5S15.33 7 14.5 7zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 8 17.5 8s1.5.67 1.5 1.5S18.33 11 17.5 11z"/>
+            </svg>
+        </div>
         <div class="page-header-text">
             <h1>AI Image Generator</h1>
             <p>AI models — Replicate, Gemini, Kling &amp; more</p>
@@ -1642,9 +1713,9 @@
                 <div class="campaign-toggle" onclick="toggleCampaign()" role="button" tabindex="0"
                     onkeydown="if(event.key==='Enter'||event.key===' ')toggleCampaign()">
                     <div class="campaign-toggle-left">
-                        <span>🏢</span> Company Data
+                        <span class="material-icons-round" style="font-size:18px;vertical-align:-4px">business</span> Company Data
                     </div>
-                    <div class="campaign-toggle-right"> <span class="campaign-toggle-arrow" id="campaignArrow">▼</span>
+                    <div class="campaign-toggle-right"><span class="material-icons-round campaign-toggle-arrow" id="campaignArrow" style="font-size:18px;transition:transform 0.22s">expand_more</span>
                     </div>
                 </div>
                 <div class="campaign-body" id="campaignBody"> <label
@@ -1837,7 +1908,7 @@
                                                 <option value="Helvetica Light">Helvetica Light</option>
                                             </select>
                                         </div>
-                                        <textarea id="cf_poster_key_terms" rows="5" style="width:100%;"
+                                        <textarea id="cf_poster_key_terms" rows="6" style="width:100%;"
                                             placeholder="High Strength Brass Construction&#10;Corrosion Resistant Finish&#10;Sizes – Various Options Available&#10;Types – A2, BW, CW, &amp; Single&#10;Made in India"></textarea>
                                     </div>
 
@@ -1951,18 +2022,41 @@
                                 </select>
                             </div>
                             <div class="fg fg-full"> <label>Image Prompt*</label> <textarea id="cf_scenario"
-                                    rows="2"
+                                    rows="6"
                                     placeholder="Describe your campaign, e.g. Diwali Festival Poster for LinkedIn with 30% off promotion..."></textarea>
                             </div>
                         </div> <button id="campaignGenerateBtn" class="btn-success" onclick="generateCampaignPrompts()">
-                            ✦ Generate Image Prompts </button>
+                            <span class="material-icons-round" style="font-size:16px;vertical-align:-3px;margin-right:5px">auto_awesome</span>Generate Image Prompts</button>
                     </div>
+                </div>
+            </div> <!-- Scenario (collapsible) -->
+            <div class="campaign-section" style="margin-top:10px;">
+                <div class="campaign-toggle" onclick="toggleScenario()" role="button" tabindex="0"
+                    onkeydown="if(event.key==='Enter'||event.key===' ')toggleScenario()">
+                    <div class="campaign-toggle-left">
+                        <span class="material-icons-round" style="font-size:18px;vertical-align:-4px">lightbulb</span> Scenario
+                        <!-- <span class="campaign-badge">AI Prompt</span> -->
+                    </div>
+                    <div class="campaign-toggle-right">
+                        <span class="material-icons-round campaign-toggle-arrow" id="scenarioArrow" style="font-size:18px;transition:transform 0.22s">expand_more</span>
+                    </div>
+                </div>
+                <div class="campaign-body" id="scenarioBody">
+                    <div class="fg fg-full" style="margin-top:14px;">
+                        <label style="font-size:12px;color:#6b7280;margin-bottom:6px;display:block;">Describe your image scenario — AI will turn it into a detailed generation prompt</label>
+                        <textarea id="sc_scenario" rows="5"
+                            placeholder="e.g. Diwali Festival poster for Mettle Bottles, golden lights background, premium feel, show two bottles centered with festive decorations..."></textarea>
+                    </div>
+                    <div id="scenarioStatus" class="campaign-status" style="margin-top:10px;"></div>
+                    <button id="scenarioGenerateBtn" class="btn-success" onclick="generateScenarioPrompts()" style="margin-top:14px;">
+                        <span class="material-icons-round" style="font-size:16px;vertical-align:-3px;margin-right:5px">auto_awesome</span>Generate Image Prompts
+                    </button>
                 </div>
             </div> <!-- Image Prompt -->
             <div class="section-header">Image Prompt</div>
             <div class="form-group">
-                <div class="prompt-wrapper"> <textarea id="prompt" rows="4"
-                        placeholder="Describe the image you want to generate... (Ctrl+Enter to generate)"></textarea> </div>
+                <div class="prompt-wrapper"> <textarea id="prompt" rows="8"
+                        placeholder="Describe the image you want to generate..."></textarea> </div>
             </div> <!-- AI Model -->
             <div class="section-header">AI Model</div>
             <div class="form-group">
@@ -1985,19 +2079,17 @@
                             <option value="svg">SVG (Scalable)</option>
                         </select> </div>
                     <div class="form-group"> <label>Logo <span
-                                style="font-weight:400;color:#9ca3af;">(optional)</span></label> <input type="file"
+                                style="font-weight:400;color:#9ca3af;">(opt)</span></label> <input type="file"
                             id="claudeLogo" accept="image/*">
                         <div id="claudeLogoPreview" class="file-preview"> <img id="claudeLogoImg" alt="Logo preview">
                             <button class="file-preview-remove" onclick="removeFile('claude','Logo')"
                                 title="Remove">&times;</button>
                         </div>
                     </div>
-                    <div class="form-group"> <label>Product Image <span
-                                style="font-weight:400;color:#9ca3af;">(optional)</span></label> <input type="file"
-                            id="claudeProduct" accept="image/*">
-                        <div id="claudeProductPreview" class="file-preview"> <img id="claudeProductImg"
-                                alt="Product preview"> <button class="file-preview-remove"
-                                onclick="removeFile('claude','Product')" title="Remove">&times;</button> </div>
+                    <div class="form-group">
+                        <label>Product Images <span style="font-weight:400;color:#9ca3af;">(opt, img+)</span></label>
+                        <input type="file" id="claudeProduct" accept="image/*" multiple>
+                        <div id="claudeProductThumbs" class="product-thumbs"></div>
                     </div>
                 </div>
             </div> <!-- Gemini Options -->
@@ -2005,13 +2097,23 @@
                 <div class="options-grid">
                     <div class="form-group"><label>Model</label>
                         <select id="geminiModel">
-                            <option value="gemini-2.5-flash-image">Gemini 2.5 Flash ($0.039)</option>
+                            <option value="gemini-2.5-flash-image">Gemini 2.5 Flash</option>
                             <option value="gemini-3.1-flash-image-preview">Gemini 3.1 Flash Preview</option>
-                            <option value="gemini-3-pro-image-preview">Gemini 3 Pro ($0.134)</option>
+                            <option value="gemini-3-pro-image-preview">Gemini 3 Pro</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Logo <span style="font-weight:400;color:#9ca3af;">(optional)</span></label>
+                        <label>Aspect Ratio</label>
+                        <select id="geminiAspect">
+                            <option value="1:1">1:1 — Square</option>
+                            <option value="9:16">9:16 — Portrait / Story</option>
+                            <option value="16:9">16:9 — Landscape / Banner</option>
+                            <option value="3:4">3:4 — Portrait</option>
+                            <option value="4:3">4:3 — Landscape</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Logo <span style="font-weight:400;color:#9ca3af;">(opt)</span></label>
                         <input type="file" id="geminiLogo" accept="image/*">
                         <div id="geminiLogoPreview" class="file-preview">
                             <img id="geminiLogoImg" alt="Logo preview">
@@ -2020,13 +2122,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Product Image <span style="font-weight:400;color:#9ca3af;">(optional)</span></label>
-                        <input type="file" id="geminiProduct" accept="image/*">
-                        <div id="geminiProductPreview" class="file-preview">
-                            <img id="geminiProductImg" alt="Product preview">
-                            <button class="file-preview-remove" onclick="removeFile('gemini','Product')"
-                                title="Remove">&times;</button>
-                        </div>
+                        <label>Product Images <span style="font-weight:400;color:#9ca3af;">(opt, img+)</span></label>
+                        <input type="file" id="geminiProduct" accept="image/*" multiple>
+                        <div id="geminiProductThumbs" class="product-thumbs"></div>
                     </div>
                 </div>
             </div> <!-- Kling Options -->
@@ -2054,7 +2152,7 @@
             </div> <!-- Replicate Options -->
             <div id="replicateOptions">
                 <div class="options-grid">
-                    <div class="form-group"><label>Model</label> <select id="replicateModel">
+                    <div class="form-group"><label>Model</label> <select id="replicateModel" onchange="checkImageModelWarning()">
                             <optgroup label="── FLUX Family ──">
                                 <option value="flux-2-max">Flux 2 Max — Best Quality (img+)</option>
                                 <option value="flux-2-pro">Flux 2 Pro — High Volume(img+)</option>
@@ -2103,7 +2201,7 @@
                             <option value="jpg">JPG</option>
                         </select> </div>
                     <div class="form-group">
-                        <label>Logo <span style="font-weight:400;color:#9ca3af;">(optional)</span></label>
+                        <label>Logo <span style="font-weight:400;color:#9ca3af;">(opt)</span></label>
                         <input type="file" id="replicateLogo" accept="image/*">
                         <div id="replicateLogoPreview" class="file-preview">
                             <img id="replicateLogoImg" alt="Logo preview">
@@ -2112,16 +2210,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Product Image <span style="font-weight:400;color:#9ca3af;">(optional)</span></label>
-                        <input type="file" id="replicateProduct" accept="image/*">
-                        <div id="replicateProductPreview" class="file-preview">
-                            <img id="replicateProductImg" alt="Product preview">
-                            <button class="file-preview-remove" onclick="removeFile('replicate','Product')"
-                                title="Remove">&times;</button>
-                        </div>
+                        <label>Product Images <span style="font-weight:400;color:#9ca3af;">(opt, img+)</span></label>
+                        <input type="file" id="replicateProduct" accept="image/*" multiple>
+                        <div id="replicateProductThumbs" class="product-thumbs"></div>
                     </div>
                 </div>
-            </div> <button id="generateBtn" onclick="generateImage()">⚡ Generate Image</button> <!-- Error Box -->
+                <div id="imageModelWarning" class="model-note" style="display:none;margin-top:8px;">
+                    ⚠ <strong>This model cannot use uploaded images.</strong> Switch to a model marked <strong>(img+)</strong> like Flux 2 Pro/Max/Flex or Seedream. For the best product poster results, switch to <strong>Gemini</strong> model.
+                </div>
+            </div> <button id="generateBtn" onclick="generateImage()"><span class="material-icons-round" style="font-size:18px;vertical-align:-4px;margin-right:6px">bolt</span>Generate Image</button> <!-- Error Box -->
             <div id="errorMsg" class="error-box">
                 <div class="error-box-header"> <span class="error-box-msg" id="errorText"></span> </div>
                 <div class="error-box-actions"> <button class="btn-retry" onclick="generateImage()">↺ Retry</button>
@@ -2148,8 +2245,7 @@
             <div id="resultSection" class="result-section">
                 <div class="image-wrap"> <img id="generatedImg" src="" alt="Generated Image"
                         onclick="openModal(this.src)">
-                    <div class="image-actions"> <button class="btn-download" onclick="downloadImage()">⬇
-                            Download</button> <button class="btn-regen" onclick="generateImage()">↺ Regenerate</button>
+                    <div class="image-actions"> <button class="btn-download" onclick="downloadImage()"><span class="material-icons-round" style="font-size:16px;vertical-align:-3px;margin-right:4px">download</span>Download</button> <button class="btn-regen" onclick="generateImage()"><span class="material-icons-round" style="font-size:16px;vertical-align:-3px;margin-right:4px">refresh</span>Regenerate</button>
                     </div>
                 </div>
             </div>
@@ -2173,8 +2269,8 @@
         <div class="ref-modal-box">
             <div class="ref-modal-title">📎 Reference Image</div>
             <div class="ref-modal-tabs">
-                <button class="ref-tab-btn active" onclick="switchRefTab('gallery')">🖼 Select from Gallery</button>
-                <button class="ref-tab-btn" onclick="switchRefTab('upload')">⬆ Upload Image</button>
+                <button class="ref-tab-btn active" onclick="switchRefTab('gallery')"><span class="material-icons-round" style="font-size:16px;vertical-align:-3px;margin-right:5px">photo_library</span>Select from Gallery</button>
+                <button class="ref-tab-btn" onclick="switchRefTab('upload')"><span class="material-icons-round" style="font-size:16px;vertical-align:-3px;margin-right:5px">upload</span>Upload Image</button>
             </div>
 
             <!-- Gallery Tab -->
@@ -2224,6 +2320,7 @@
         'use strict'; /* ── Constants ──────────────────────────────────────────────────── */
         const CAMPAIGN_SEARCH_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_fetch_2';
         const CAMPAIGN_PROMPT_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_prompt_2';
+        const SCENARIO_PROMPT_ENDPOINT = 'https://n8n.b2botix.ai/webhook/compaign_prompt_3';
         const MAX_FILE_SIZE_MB = 8;
         const CAMPAIGN_TIMEOUT_MS = 30_000;
         let activeModel = 'replicate';
@@ -2241,12 +2338,23 @@
             }
         }
 
+        function cleanPromptText(text) {
+            if (!text || typeof text !== 'string') return text;
+            return text
+                .trim()
+                .replace(/• /g, '\n• ')           // each bullet on its own line
+                .replace(/\. ([A-Z])/g, '.\n$1')  // new line at sentence boundaries
+                .replace(/: "([^"]+)"/g, ':\n  "$1"') // quoted values indented
+                .replace(/\n{3,}/g, '\n\n')        // collapse excess blank lines
+                .trim();
+        }
+
         function showToast(message, type = 'info', duration = 3500) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+            const icon = type === 'success' ? 'check_circle' : type === 'error' ? 'cancel' : 'info';
             toast.className = `toast ${type}`;
-            toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+            toast.innerHTML = `<span class="material-icons-round" style="font-size:18px;flex-shrink:0">${icon}</span><span>${message}</span>`;
             container.appendChild(toast);
             setTimeout(() => {
                 toast.style.animation = 'slideOut 0.25s ease forwards';
@@ -2357,7 +2465,71 @@
                 btn.disabled = false;
                 btn.innerHTML = 'Search';
             }
-        } /* ── Campaign: Generate Prompts ─────────────────────────────────── */
+        } /* ── Scenario Toggle ───────────────────────────────────────────── */
+        function toggleScenario() {
+            const body = document.getElementById('scenarioBody');
+            const arrow = document.getElementById('scenarioArrow');
+            const open = body.classList.toggle('open');
+            arrow.classList.toggle('open', open);
+        }
+
+        function setScenarioStatus(msg, type) {
+            const el = document.getElementById('scenarioStatus');
+            el.textContent = msg;
+            el.style.display = msg ? 'flex' : 'none';
+            el.className = 'campaign-status' + (msg ? ` ${type}` : '');
+        }
+
+        /* ── Scenario: Generate Prompts ─────────────────────────────────── */
+        async function generateScenarioPrompts() {
+            const scenario = document.getElementById('sc_scenario').value.trim();
+            if (!scenario) {
+                setScenarioStatus('Please describe your scenario before generating.', 'error');
+                return;
+            }
+            const btn = document.getElementById('scenarioGenerateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Generating Prompts...';
+            setScenarioStatus('', '');
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), CAMPAIGN_TIMEOUT_MS);
+            try {
+                const res = await fetch(SCENARIO_PROMPT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ scenario }),
+                    signal: controller.signal
+                });
+                clearTimeout(timeout);
+                if (!res.ok) throw new Error(`Server returned ${res.status} ${res.statusText}`);
+                const result = await res.json();
+                const prompts = Array.isArray(result) ? result : [result];
+                if (!prompts.length) throw new Error('No prompts returned');
+                const first = prompts[0];
+                const promptText = first.image_prompt || first.prompt || first.text || first.output || first.content || JSON.stringify(first);
+                const ta = document.getElementById('prompt');
+                ta.value = cleanPromptText(promptText);
+                ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                ta.focus();
+                ta.style.borderColor = '#22c55e';
+                ta.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.15)';
+                setTimeout(() => { ta.style.borderColor = ''; ta.style.boxShadow = ''; }, 1600);
+                // setScenarioStatus('✓ Prompt loaded — click Generate Image to create your image.', 'success');
+                showToast('Scenario prompt generated!', 'success');
+            } catch (err) {
+                clearTimeout(timeout);
+                if (err.name === 'AbortError') {
+                    setScenarioStatus('Request timed out. Try again.', 'error');
+                } else {
+                    setScenarioStatus(`Error: ${parseErrorMessage(err, 'Failed to generate prompts')}`, 'error');
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="material-icons-round" style="font-size:16px;vertical-align:-3px;margin-right:5px">auto_awesome</span>Generate Image Prompts';
+            }
+        }
+
+        /* ── Campaign: Generate Prompts ─────────────────────────────────── */
         async function generateCampaignPrompts() {
             const scenario = document.getElementById('cf_scenario').value.trim();
             if (!scenario) {
@@ -2415,10 +2587,10 @@
                 const prompts = Array.isArray(result) ? result : [result];
                 if (!prompts.length) throw new Error('No prompts returned');
                 const first = prompts[0];
-                const promptText = first.image_prompt || first.prompt || first.text || first.content || JSON.stringify(first);
+                const promptText = first.image_prompt || first.prompt || first.text || first.output || first.content || JSON.stringify(first);
                 const contentData = first.content_data || first.content || null;
                 const ta = document.getElementById('prompt');
-                ta.value = promptText;
+                ta.value = cleanPromptText(promptText);
                 currentContentData = (contentData && typeof contentData === 'object') ? contentData : null;
                 if (currentContentData) {
                     renderContentCard(currentContentData);
@@ -2439,7 +2611,7 @@
                 }
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '✦ Generate Image Prompts';
+                btn.innerHTML = '<span class="material-icons-round" style="font-size:16px;vertical-align:-3px;margin-right:5px">auto_awesome</span>Generate Image Prompts';
             }
         } /* ── Campaign: Render Prompt Cards ─────────────────────────────── */
         function renderCampaignPrompts(result) {
@@ -2518,7 +2690,8 @@
         function renderContentCard(data) {
             const card = document.getElementById('contentCard');
             const escape = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            const icons = { 'Whatsapp': '💬', 'WhatsApp': '💬', 'LinkedIn': '💼', 'Linkedin': '💼', 'Instagram': '📸', 'Facebook': '👍', 'Twitter': '🐦', 'X': '🐦' };
+            const icons = { 'Whatsapp': 'chat', 'WhatsApp': 'chat', 'LinkedIn': 'work', 'Linkedin': 'work', 'Instagram': 'photo_camera', 'Facebook': 'thumb_up', 'Twitter': 'alternate_email', 'X': 'alternate_email' };
+            const iconHtml = name => `<span class="material-icons-round" style="font-size:13px;vertical-align:-2px;margin-right:3px">${icons[name] || 'campaign'}</span>`;
 
             let html = '';
             let copyText = '';
@@ -2529,9 +2702,8 @@
                 copyText = data;
             } else if (typeof data === 'object' && data !== null) {
                 const platform = data.platform || data.Platform || '';
-                const icon = icons[platform] || '📢';
                 if (platform) {
-                    html += `<div class="content-card-platform">${icon} ${escape(platform)}</div>`;
+                    html += `<div class="content-card-platform">${iconHtml(platform)}${escape(platform)}</div>`;
                     copyText += `Platform: ${platform}\n\n`;
                 }
                 /* Render every key as a labeled section */
@@ -2565,6 +2737,17 @@
                 showToast('Could not copy content', 'error');
             }
         }
+        /* ── Image model warning ────────────────────────────────────────── */
+        const NO_IMAGE_MODELS = ['flux-1.1-pro', 'flux-pro', 'gemini-2.5-flash-image', 'nano-banana', 'nano-banana-2', 'nano-banana-pro', 'imagen-4', 'imagen-4-fast', 'imagen-4-ultra', 'imagen-3', 'imagen-3-fast'];
+
+        function checkImageModelWarning() {
+            const warn = document.getElementById('imageModelWarning');
+            if (!warn) return;
+            const hasProducts = sharedProductFiles.length > 0;
+            const model = document.getElementById('replicateModel').value;
+            warn.style.display = (hasProducts && NO_IMAGE_MODELS.includes(model)) ? 'block' : 'none';
+        }
+
         /* ── Model Switch ───────────────────────────────────────────────── */
         function switchModel(model) {
             activeModel = model;
@@ -2572,6 +2755,7 @@
             panels.forEach(m => {
                 document.getElementById(`${m}Options`).style.display = m === model ? 'block' : 'none';
             });
+            checkImageModelWarning();
             hideError();
             document.getElementById('resultSection').classList.remove('show');
             document.getElementById('resultPlaceholder').style.display = 'flex';
@@ -2640,7 +2824,7 @@
                 clearInterval(generateTimer);
                 loadingEl.classList.remove('show');
                 btn.disabled = false;
-                btn.innerHTML = '⚡ Generate Image';
+                btn.innerHTML = '<span class="material-icons-round" style="font-size:18px;vertical-align:-4px;margin-right:6px">bolt</span>Generate Image';
             }
         } /* ── Error Helpers ──────────────────────────────────────────────── */
         function showError(msg) {
@@ -2680,6 +2864,78 @@
                 reader.readAsDataURL(file);
             });
         }
+
+        /* ── Multi-Product file state (shared across all models) ───────── */
+        const productFilesMap = { replicate: [], gemini: [], claude: [] };
+        let sharedProductFiles = []; // single list synced to all providers
+
+        function attachMultiProductPreview(inputId, provider) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            input.addEventListener('change', function () {
+                Array.from(this.files).forEach(file => {
+                    const err = validateFile(file);
+                    if (err) { showToast(err, 'error', 5000); return; }
+                    const exists = sharedProductFiles.some(f => f.name === file.name && f.size === file.size);
+                    if (!exists) sharedProductFiles.push(file);
+                });
+                this.value = '';
+                renderAllProductThumbs();
+                updateProductCount();
+                checkImageModelWarning();
+            });
+        }
+
+        function renderAllProductThumbs() {
+            ['replicate', 'gemini', 'claude'].forEach(p => renderProductThumbs(p));
+        }
+
+        function renderProductThumbs(provider) {
+            const container = document.getElementById(`${provider}ProductThumbs`);
+            if (!container) return;
+            container.innerHTML = '';
+            sharedProductFiles.forEach((file, idx) => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const item = document.createElement('div');
+                    item.className = 'product-thumb-item';
+                    item.innerHTML = `<img src="${e.target.result}" alt="Product ${idx + 1}" title="${file.name}">
+                        <button class="product-thumb-remove" onclick="removeProductFile(${idx})" title="Remove">&times;</button>`;
+                    container.appendChild(item);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function updateProductCount() {
+            const count = sharedProductFiles.length;
+            ['replicate', 'gemini', 'claude'].forEach(provider => {
+                const inputEl = document.getElementById(`${provider}Product`);
+                if (!inputEl) return;
+                let badge = inputEl.parentElement.querySelector('.product-count-badge');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'product-count-badge';
+                    badge.style.cssText = 'font-size:11px;font-weight:600;color:#4f46e5;margin-left:6px;';
+                    inputEl.parentElement.querySelector('label').appendChild(badge);
+                }
+                badge.textContent = count > 0 ? `${count} file${count > 1 ? 's' : ''} selected` : '';
+            });
+        }
+
+        function removeProductFile(idx) {
+            sharedProductFiles.splice(idx, 1);
+            renderAllProductThumbs();
+            updateProductCount();
+            checkImageModelWarning();
+        }
+
+        function getProductFiles(provider) {
+            if (sharedProductFiles.length > 0) return sharedProductFiles;
+            const input = document.getElementById(`${provider}Product`);
+            return input ? Array.from(input.files) : [];
+        }
+
 
         function attachFilePreview(inputId, imgId, previewId) {
             const input = document.getElementById(inputId);
@@ -2721,8 +2977,12 @@
             const model = document.getElementById('claudeModel').value;
             const format = document.getElementById('claudeFormat').value;
             const logoFile = document.getElementById('claudeLogo').files[0];
-            const productFile = document.getElementById('claudeProduct').files[0];
-            const [logoData, productData] = await Promise.all([logoFile ? fileToBase64(logoFile) : Promise.resolve(null), productFile ? fileToBase64(productFile) : Promise.resolve(null),]);
+            const productFiles = getProductFiles('claude');
+            console.log('[Claude] product files:', productFiles.length);
+            const [logoData, ...productDataArray] = await Promise.all([
+                logoFile ? fileToBase64(logoFile) : Promise.resolve(null),
+                ...productFiles.map(f => fileToBase64(f))
+            ]);
             const res = await fetch('/proxy/claude/generate', {
                 method: 'POST',
                 headers: {
@@ -2733,7 +2993,7 @@
                     model,
                     format,
                     logoData,
-                    productData
+                    productDataArray: productDataArray.filter(Boolean).map(d => ({ base64: d.base64, mimeType: d.mimeType, name: d.name }))
                 })
             });
             const data = await res.json();
@@ -2782,10 +3042,14 @@
             });
         }
         async function generateGemini(prompt) {
-            const [logoData, productData] = await Promise.all([
-                document.getElementById('geminiLogo').files[0] ? fileToBase64(document.getElementById('geminiLogo').files[0]) : Promise.resolve(null),
-                document.getElementById('geminiProduct').files[0] ? fileToBase64(document.getElementById('geminiProduct').files[0]) : Promise.resolve(null),
+            const logoFile = document.getElementById('geminiLogo').files[0];
+            const productFiles = getProductFiles('gemini');
+            console.log('[Gemini] product files:', productFiles.length);
+            const [logoData, ...productDataArray] = await Promise.all([
+                logoFile ? fileToBase64(logoFile) : Promise.resolve(null),
+                ...productFiles.map(f => fileToBase64(f))
             ]);
+            const slim = d => d ? { base64: d.base64, mimeType: d.mimeType, name: d.name } : null;
             const res = await fetch('/proxy/gemini/generate', {
                 method: 'POST',
                 headers: {
@@ -2794,12 +3058,13 @@
                 body: JSON.stringify({
                     prompt,
                     model: document.getElementById('geminiModel').value,
-                    logoData: logoData ? { base64: logoData.base64, mimeType: logoData.mimeType, name: logoData.name } : null,
-                    productData: productData ? { base64: productData.base64, mimeType: productData.mimeType, name: productData.name } : null
+                    aspectRatio: document.getElementById('geminiAspect').value,
+                    logoData: slim(logoData),
+                    productDataArray: productDataArray.filter(Boolean).map(slim)
                 })
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error || data.message || `Gemini error ${res.status}`);
+            if (!res.ok) throw new Error(data.error?.message || data.error || data.message || `Gemini error ${res.status}`);
             if (!data.b64) throw new Error('No image data returned from Gemini.');
             return `data:${data.mimeType};base64,${data.b64}`;
         }
@@ -2825,9 +3090,12 @@
             const model = document.getElementById('replicateModel').value;
             const output_format = document.getElementById('replicateFormat').value;
 
-            const [logoData, productData] = await Promise.all([
-                document.getElementById('replicateLogo').files[0] ? fileToBase64(document.getElementById('replicateLogo').files[0]) : Promise.resolve(null),
-                document.getElementById('replicateProduct').files[0] ? fileToBase64(document.getElementById('replicateProduct').files[0]) : Promise.resolve(null),
+            const logoFile = document.getElementById('replicateLogo').files[0];
+            const productFiles = getProductFiles('replicate');
+            console.log('[Replicate] product files:', productFiles.length);
+            const [logoData, ...productDataArray] = await Promise.all([
+                logoFile ? fileToBase64(logoFile) : Promise.resolve(null),
+                ...productFiles.map(f => fileToBase64(f))
             ]);
 
             const slim = d => d ? { base64: d.base64, mimeType: d.mimeType, name: d.name } : null;
@@ -2838,7 +3106,7 @@
                 aspect_ratio: document.getElementById('replicateAspect').value,
                 seedream_size: document.getElementById('replicateSeedreamSize').value,
                 logoData: slim(logoData),
-                productData: slim(productData)
+                productDataArray: productDataArray.filter(Boolean).map(slim)
             };
 
             const res = await fetch('/proxy/replicate/generate', {
@@ -3185,13 +3453,13 @@
             }); /* File previews — all providers in one place */
             const fileMappings = [
                 ['claudeLogo', 'claudeLogoImg', 'claudeLogoPreview'],
-                ['claudeProduct', 'claudeProductImg', 'claudeProductPreview'],
                 ['geminiLogo', 'geminiLogoImg', 'geminiLogoPreview'],
-                ['geminiProduct', 'geminiProductImg', 'geminiProductPreview'],
                 ['replicateLogo', 'replicateLogoImg', 'replicateLogoPreview'],
-                ['replicateProduct', 'replicateProductImg', 'replicateProductPreview'],
             ];
             fileMappings.forEach(([input, img, preview]) => attachFilePreview(input, img, preview));
+            attachMultiProductPreview('claudeProduct', 'claude');
+            attachMultiProductPreview('geminiProduct', 'gemini');
+            attachMultiProductPreview('replicateProduct', 'replicate');
 
             // Add ▼ arrow to every select except the model selector (already has its own)
             document.querySelectorAll('select').forEach(sel => {

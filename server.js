@@ -7,7 +7,8 @@ const jwt = require('jsonwebtoken');
 const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-app.use(express.static(path.join(__dirname), { extensions: ['html'], redirect: false }));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'imagemodel.html')));
+app.get('/imagemodel.html', (req, res) => res.sendFile(path.join(__dirname, 'imagemodel.html')));
 
 const REPLICATE_BASE   = 'https://api.replicate.com/v1';
 const REPLICATE_TOKEN  = process.env.REPLICATE_TOKEN;
@@ -38,7 +39,7 @@ app.post('/proxy/kling/generate', async (req, res) => {
             aspect_ratio: aspect_ratio || '1:1',
             n: 1
         };
-        console.log('Kling request body:', JSON.stringify(requestBody));
+        console.log('Kling request:', { model: requestBody.model, aspect_ratio: requestBody.aspect_ratio, prompt: requestBody.prompt?.substring(0, 80) });
 
         // Step 1: Submit job
         const submitRes = await fetch('https://api.klingai.com/v1/images/generations', {
@@ -92,13 +93,13 @@ app.post('/proxy/kling/generate', async (req, res) => {
 // ── Claude: generate SVG ─────────────────────────────────────────────────────
 app.post('/proxy/claude/generate', async (req, res) => {
     try {
-        const { prompt, model, logoData, productData } = req.body;
+        const { prompt, model, logoData, productDataArray = [] } = req.body;
 
         const format = req.body.format || 'svg';
 
         const imageInstructions = [
-            logoData    ? '- A logo image is provided. Embed it using a base64 data URL in an <image> tag (SVG) or drawImage (Canvas). Place it exactly as described in the prompt.' : '',
-            productData ? '- A product image is provided. Embed it using a base64 data URL in an <image> tag (SVG) or drawImage (Canvas). Place it exactly as described in the prompt.' : ''
+            logoData                  ? '- A logo image is provided. Embed it using a base64 data URL in an <image> tag (SVG) or drawImage (Canvas). Place it exactly as described in the prompt.' : '',
+            productDataArray.length   ? `- ${productDataArray.length} product image(s) are provided. Embed each using a base64 data URL. Place them exactly as described in the prompt.` : ''
         ].filter(Boolean).join('\n');
 
         const systemPrompt = format === 'canvas'
@@ -139,15 +140,15 @@ ${imageInstructions}`;
                 messages: [{
                     role: 'user',
                     content: [
-                        ...(logoData    ? [{ type: 'image', source: { type: 'base64', media_type: logoData.mimeType,    data: logoData.base64    } }] : []),
-                        ...(productData ? [{ type: 'image', source: { type: 'base64', media_type: productData.mimeType, data: productData.base64 } }] : []),
+                        ...(logoData ? [{ type: 'image', source: { type: 'base64', media_type: logoData.mimeType, data: logoData.base64 } }] : []),
+                        ...productDataArray.map(p => ({ type: 'image', source: { type: 'base64', media_type: p.mimeType, data: p.base64 } })),
                         {
                             type: 'text',
                             text: [
-                                logoData    ? `LOGO_DATA_URL: data:${logoData.mimeType};base64,${logoData.base64}` : '',
-                                productData ? `PRODUCT_DATA_URL: data:${productData.mimeType};base64,${productData.base64}` : '',
-                                logoData    ? 'Use the LOGO_DATA_URL above as the src/href for the logo image element in your output code.' : '',
-                                productData ? 'Use the PRODUCT_DATA_URL above as the src/href for the product image element in your output code.' : '',
+                                logoData ? `LOGO_DATA_URL: data:${logoData.mimeType};base64,${logoData.base64}` : '',
+                                ...productDataArray.map((p, i) => `PRODUCT_DATA_URL_${i + 1}: data:${p.mimeType};base64,${p.base64}`),
+                                logoData ? 'Use the LOGO_DATA_URL above as the src/href for the logo image element in your output code.' : '',
+                                productDataArray.length ? `Use the PRODUCT_DATA_URL_1${productDataArray.length > 1 ? ` through PRODUCT_DATA_URL_${productDataArray.length}` : ''} above as the src/href for the product image element(s) in your output code.` : '',
                                 prompt
                             ].filter(Boolean).join('\n\n')
                         }
@@ -193,19 +194,30 @@ app.post('/proxy/gemini/generate', async (req, res) => {
     }
     geminiLastCall = Date.now();
     try {
-        const { prompt, model, logoData, productData } = req.body;
+        const { prompt, model, aspectRatio, logoData, productDataArray = [] } = req.body;
         const modelId = model || 'gemini-2.5-flash-image';
 
         const parts = [];
-        // Product image first — anchors canvas size/proportions
-        if (productData) {
-            parts.push({ inlineData: { mimeType: productData.mimeType, data: productData.base64 } });
-        }
-        // Logo second — reference for placement
+        // Product images first — anchor canvas size/proportions
+        productDataArray.forEach(p => parts.push({ inlineData: { mimeType: p.mimeType, data: p.base64 } }));
+        // Logo — reference for placement
         if (logoData) {
             parts.push({ inlineData: { mimeType: logoData.mimeType, data: logoData.base64 } });
         }
-        parts.push({ text: prompt });
+        // Inject product context into prompt so Gemini uses the uploaded images
+        const productPrefix = productDataArray.length
+            ? `Using the uploaded product image(s) as the actual product to feature, create a professional marketing poster. The product shown in the reference image(s) must appear prominently and clearly in the output. `
+            : '';
+        const logoSuffix = logoData ? ` Use the uploaded logo image as the company logo in the design.` : '';
+        parts.push({ text: `${productPrefix}${prompt}${logoSuffix}` });
+
+        // Inject aspect ratio as text hint — imageGenerationConfig is not a valid field
+        const aspectHint = aspectRatio && aspectRatio !== '1:1'
+            ? ` Output the image in ${aspectRatio} aspect ratio.`
+            : '';
+        // Append aspect hint to the text part
+        const textIdx = parts.findIndex(p => p.text !== undefined);
+        if (textIdx !== -1) parts[textIdx].text += aspectHint;
 
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${GEMINI_TOKEN}`,
@@ -221,8 +233,10 @@ app.post('/proxy/gemini/generate', async (req, res) => {
 
         const data = await response.json();
         console.log('Gemini response status:', response.status);
-
-        if (!response.ok) return res.status(response.status).json(data);
+        if (!response.ok) {
+            console.error('Gemini error body:', JSON.stringify(data));
+            return res.status(response.status).json(data);
+        }
 
         // Extract base64 image from response
         const responseParts = data?.candidates?.[0]?.content?.parts || [];
@@ -244,7 +258,7 @@ app.post('/proxy/gemini/generate', async (req, res) => {
 
 app.post('/proxy/replicate/generate', async (req, res) => {
     try {
-        const { prompt, model, width, height, aspect_ratio, output_format, seedream_size, logoData, productData } = req.body;
+        const { prompt, model, width, height, aspect_ratio, output_format, seedream_size, logoData, productDataArray = [] } = req.body;
 
         // Step 1: Submit prediction
         const modelMap = {
@@ -308,23 +322,37 @@ app.post('/proxy/replicate/generate', async (req, res) => {
 
         // Attach images based on what each model supports
         const rawImages = [];
-        if (logoData)    rawImages.push(logoData);
-        if (productData) rawImages.push(productData);
+        if (logoData) rawImages.push(logoData);
+        productDataArray.forEach(p => rawImages.push(p));
+
+        // Build enhanced prompt when product images are provided
+        const productPromptPrefix = productDataArray.length
+            ? `Create a professional product marketing poster prominently featuring the exact product(s) shown in the uploaded reference image(s). The product must be clearly visible and central to the design. `
+            : '';
+        const logoPromptSuffix = logoData
+            ? ` Include the company logo from the uploaded logo image.`
+            : '';
 
         if (rawImages.length > 0) {
             if (supportsInputImages.includes(model)) {
                 input.input_images = rawImages.map(img => `data:${img.mimeType};base64,${img.base64}`);
                 input.resolution   = '1 MP';
+                if (productDataArray.length > 0) {
+                    input.prompt = `${productPromptPrefix}${prompt}${logoPromptSuffix}`;
+                }
             } else if (supportsSeedreamImage.includes(model)) {
                 input.image_input = rawImages.map(img => `data:${img.mimeType};base64,${img.base64}`);
+                if (productDataArray.length > 0) {
+                    input.prompt = `${productPromptPrefix}${prompt}${logoPromptSuffix}`;
+                }
             } else if (supportsImageField.includes(model)) {
                 input.image = `data:${rawImages[0].mimeType};base64,${rawImages[0].base64}`;
             } else if (supportsStyleRef.includes(model)) {
                 input.style_reference_images = rawImages.map(img => `data:${img.mimeType};base64,${img.base64}`);
             } else if (noImageSupport.includes(model)) {
                 const imgContext = [
-                    logoData    ? `Include a company logo placed as specified. Logo file: ${logoData.name || 'logo'}.` : '',
-                    productData ? `Feature the product image prominently as specified. Product file: ${productData.name || 'product'}.` : ''
+                    logoData              ? `Include a company logo placed as specified.` : '',
+                    productDataArray.length ? `Feature product image(s) prominently as specified.` : ''
                 ].filter(Boolean).join(' ');
                 input.prompt = imgContext ? `${imgContext} ${prompt}` : prompt;
             }
